@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.getcwd())
 from modules.combination import comb
 import unittest
 
