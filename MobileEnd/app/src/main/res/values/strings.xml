@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Torch</string>
+    <string name="title_favorite">Favorite</string>
+    <string name="title_pair">Pair</string>
+    <string name="title_browse">Browse</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="UI_welcome_str">Welcome to TORCH</string>
+    <string name="curr_login_user">CURR_LOGIN_USER</string>
+
+    <string name="client_id">3088778948-19qd3b5ag17p6rde7vb7qbtm2ji9h3iu.apps.googleusercontent.com</string>
+    <string name="LOGGED">LOGGED</string>
+    <string name="GET_URL">placeholder</string>
+    <string name="UID">UID</string>
+    <string name="USERNAME">USERNAME</string>
+    <string name="LOG_OUT">log out</string>
+    <string name="UI_warning">Warning</string>
+    <string name="UI_logout_msg">Do you want to log out?</string>
+    <string name="YES">YES</string>
+    <string name="NO">NO</string>
+</resources>
