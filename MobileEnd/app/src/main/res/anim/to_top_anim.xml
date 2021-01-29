@@ -4,8 +4,8 @@
 
     <translate
         android:duration="300"
-        android:fromYDelta="100%"
-        android:toYDelta="0%" />
+        android:fromYDelta="0%"
+        android:toYDelta="-100%" />
 
     <scale
         android:fromXScale="1"
