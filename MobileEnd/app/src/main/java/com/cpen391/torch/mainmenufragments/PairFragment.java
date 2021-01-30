@@ -29,6 +29,7 @@ import com.cpen391.torch.R;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public class PairFragment extends Fragment {
@@ -38,6 +39,7 @@ public class PairFragment extends Fragment {
     private ArrayAdapter<String> bluetoothArrayAdapter;
     private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // "random" unique identifier
     private BluetoothSocket bluetoothSocket;
+    private String selectedAddr = "";
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -77,7 +79,6 @@ public class PairFragment extends Fragment {
         }
 
         bluetoothArrayAdapter = new ArrayAdapter<String>(Objects.requireNonNull(this.getContext()), android.R.layout.simple_list_item_1);
-        bluetoothArrayAdapter.add("broad_cast_addr_testing\nFF:FF:FF:FF:FF:FF");
         ListView deviceListView = view.findViewById(R.id.devices_list_view);
         deviceListView.setAdapter(bluetoothArrayAdapter);
         deviceListView.setOnItemClickListener((adapterView, view1, i, l) -> {
@@ -89,6 +90,15 @@ public class PairFragment extends Fragment {
         // Register for broadcasts when a device is discovered.
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         requireActivity().registerReceiver(receiver, filter);
+
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice device : pairedDevices) {
+                bluetoothArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+            }
+        } else {
+            bluetoothArrayAdapter.add("broad_cast_addr_testing\nFF:FF:FF:FF:FF:FF");
+        }
     }
 
     private void findDevice() {
@@ -113,9 +123,8 @@ public class PairFragment extends Fragment {
             bluetoothAdapter.cancelDiscovery();
             Toast.makeText(this.getContext(), "Discovery canceled.", Toast.LENGTH_LONG).show();
         } else {
-            bluetoothArrayAdapter.clear();
             bluetoothAdapter.startDiscovery();
-            Toast.makeText(this.getContext(), "Discovery started.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(), "Discovery started. If device is not found in 10s, please pair the device through system bluetooth", Toast.LENGTH_LONG).show();
 
         }
     }
@@ -123,6 +132,7 @@ public class PairFragment extends Fragment {
     private void connectToDevice(String info) {
         // Get the device MAC address, which is the last 17 chars in the View
         final String address = info.substring(info.length() - 17);
+        selectedAddr = address;
         final String name = info.substring(0, info.length() - 17);
 
         new Thread()
