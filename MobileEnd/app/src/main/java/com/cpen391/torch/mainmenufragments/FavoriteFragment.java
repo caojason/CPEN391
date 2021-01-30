@@ -76,7 +76,8 @@ public class FavoriteFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
         }
 
-        Objects.requireNonNull(getActivity()).runOnUiThread(() -> Toast.makeText(this.getContext(), "refreshing", Toast.LENGTH_LONG).show());
+        Objects.requireNonNull(getActivity()).runOnUiThread(() ->
+                Toast.makeText(this.getContext(), "refreshing", Toast.LENGTH_LONG).show());
     }
 
 }

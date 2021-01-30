@@ -22,4 +22,7 @@
     <string name="UI_distance_from_you">Distance from you %d</string>
     <string name="UI_click_here_for_details">Click here for details</string>
     <string name="UI_store_image">store image</string>
+    <string name="UI_Bluetooth_not_supported">Bluetooth not supported.</string>
+    <string name="UI_find_your_device">Find your device</string>
+    <string name="OK">OK</string>
 </resources>
