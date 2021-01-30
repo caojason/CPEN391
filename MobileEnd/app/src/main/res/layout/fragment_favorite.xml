@@ -12,7 +12,7 @@
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/browse_refresh_layout">
+        android:id="@+id/favorite_refresh_layout">
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">

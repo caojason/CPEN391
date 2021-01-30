@@ -12,8 +12,7 @@
         android:id="@+id/browse_refresh_layout">
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/nested_scroll_view">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/content_layout"

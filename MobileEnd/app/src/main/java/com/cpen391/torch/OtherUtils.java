@@ -2,12 +2,6 @@ package com.cpen391.torch;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.util.Base64;
 import android.util.Log;
 
@@ -31,7 +25,7 @@ public class OtherUtils {
 
     public static boolean checkStoreName(String storeName) {
         //check if the username is valid or not
-        return Pattern.matches("^[aA-zZ0-9_-]{3,15}$", storeName);
+        return Pattern.matches("^[aA-zZ0-9_-\\u4e00-\\u9fa5]{2,16}$", storeName);
     }
 
 
@@ -54,27 +48,8 @@ public class OtherUtils {
         return BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
     }
 
-    public static Bitmap scaleImage(Bitmap image) {
-        //used for scaling image and making the image into a circle shape to fit in the profile image
-        int radius = 200;
-        Bitmap scaled = Bitmap.createScaledBitmap(image, 2 * radius, 2 * radius, true);
-        Bitmap result = null;
-        try {
-            result = Bitmap.createBitmap(2 * radius, 2 * radius, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(result);
-
-            Paint paint = new Paint();
-            Rect rect = new Rect(0, 0, 2 * radius, 2 * radius);
-            paint.setAntiAlias(true);
-            canvas.drawARGB(0, 0, 0, 0);
-            paint.setColor(Color.WHITE);
-            canvas.drawCircle(radius, radius, radius, paint);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-            canvas.drawBitmap(scaled, rect, rect, paint);
-        } catch (Exception e) {
-            Log.d("Image", "Image scaling failed");
-        }
-        return result;
+    public static Bitmap scaleImage(Bitmap image, int width, int height) {
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
     /*
