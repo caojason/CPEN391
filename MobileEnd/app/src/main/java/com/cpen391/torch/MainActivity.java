@@ -1,17 +1,12 @@
 package com.cpen391.torch;
 
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -31,20 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private Button logOutButton;
     private boolean clicked;
     private SharedPreferences sp;
-
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            assert action != null;
-            if (action.equals(BluetoothDevice.ACTION_FOUND)) {
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                assert device != null;
-                String name = device.getName();
-                String address = device.getAddress();
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +50,6 @@ public class MainActivity extends AppCompatActivity {
         logOutButton = findViewById(R.id.log_out_btn);
         logOutButton.setVisibility(View.INVISIBLE);
         logOutButton.setOnClickListener(view -> checkForLogout());
-
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        registerReceiver(receiver, filter);
     }
 
     private void onMenuFabClicked() {

@@ -28,5 +28,11 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="16dp"
             android:choiceMode="singleChoice" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_finished_text"
+            android:layout_margin="16dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
