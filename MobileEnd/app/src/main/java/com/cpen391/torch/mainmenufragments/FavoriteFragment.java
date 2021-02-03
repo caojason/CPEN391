@@ -1,5 +1,6 @@
 package com.cpen391.torch.mainmenufragments;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
+import com.cpen391.torch.DetailsActivity;
 import com.cpen391.torch.OtherUtils;
 import com.cpen391.torch.R;
 
@@ -57,7 +60,7 @@ public class FavoriteFragment extends Fragment {
             listBlock.setLayoutParams(layoutParams);
 
             TextView storeNameText = listBlock.findViewById(R.id.store_name);
-            storeNameText.setText(String.format(getString(R.string.UI_store_name_placeholder), i));
+            storeNameText.setText(String.format(getString(R.string.UI_store_name_placeholder), String.valueOf(i)));
 
             TextView distanceText = listBlock.findViewById(R.id.distance_text);
             distanceText.setText(String.format(getString(R.string.UI_distance_from_you), i));
@@ -66,6 +69,10 @@ public class FavoriteFragment extends Fragment {
             Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test_img);
             imageBitmap = OtherUtils.scaleImage(imageBitmap, 100, 100);
             storeImageView.setImageBitmap(imageBitmap);
+
+            Button button = listBlock.findViewById(R.id.details_button);
+            int finalI = i;
+            button.setOnClickListener(view1 -> enterDetails(String.valueOf(finalI)));
 
             contentLayout.addView(listBlock);
         }
@@ -78,6 +85,12 @@ public class FavoriteFragment extends Fragment {
 
         Objects.requireNonNull(getActivity()).runOnUiThread(() ->
                 Toast.makeText(this.getContext(), "refreshing", Toast.LENGTH_LONG).show());
+    }
+
+    private void enterDetails(String storeName) {
+        Intent i = new Intent(getActivity(), DetailsActivity.class);
+        i.putExtra(getString(R.string.Intent_storeName_attribute), storeName);
+        startActivity(i);
     }
 
 }

@@ -1,7 +1,10 @@
 package com.cpen391.torch;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -14,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -26,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private Button logOutButton;
     private boolean clicked;
     private SharedPreferences sp;
+    private final static int PERMISSION_CODE = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,25 @@ public class MainActivity extends AppCompatActivity {
         logOutButton = findViewById(R.id.log_out_btn);
         logOutButton.setVisibility(View.INVISIBLE);
         logOutButton.setOnClickListener(view -> checkForLogout());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                        MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},
+                        PERMISSION_CODE);
+            }
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    MainActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSION_CODE);
+        }
     }
 
     private void onMenuFabClicked() {

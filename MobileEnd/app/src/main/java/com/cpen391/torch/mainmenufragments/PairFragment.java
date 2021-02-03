@@ -9,15 +9,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,10 +24,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 
+import com.cpen391.torch.OtherUtils;
 import com.cpen391.torch.R;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -56,12 +52,13 @@ public class PairFragment extends Fragment {
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 assert device != null;
+                if (OtherUtils.stringIsNullOrEmpty(device.getName()) || device.getName().equals(getString(R.string.NULL))) return;
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                     bluetoothArrayAdapter.add(device.getName() + "\n" + device.getAddress());
                     bluetoothArrayAdapter.notifyDataSetChanged();
                 }
             } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
-                textView.setText("Search finished");
+                textView.setText(R.string.UI_search_finished);
             }
         }
     };
@@ -99,10 +96,8 @@ public class PairFragment extends Fragment {
 
 
         // Register for broadcasts when a device is discovered.
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        requireActivity().registerReceiver(receiver, filter);
-        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        requireActivity().registerReceiver(receiver, filter);
+        requireActivity().registerReceiver(receiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        requireActivity().registerReceiver(receiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
 
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
         if (pairedDevices.size() > 0) {
@@ -139,6 +134,7 @@ public class PairFragment extends Fragment {
             Toast.makeText(this.getContext(), "Discovery canceled.", Toast.LENGTH_LONG).show();
         } else {
             bluetoothAdapter.startDiscovery();
+            textView.setText("");
             Toast.makeText(this.getContext(), "Discovery started. If device is not found in 10s, please pair the device through system bluetooth", Toast.LENGTH_LONG).show();
 
         }
@@ -150,46 +146,12 @@ public class PairFragment extends Fragment {
         selectedAddr = address;
         final String name = info.substring(0, info.length() - 17);
 
-        LinearLayout enterPinLayout = new LinearLayout(this.getContext());
-        enterPinLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams layoutParams =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(16, 16, 16, 16);
-
-        TextView enterPinText = new TextView(this.getContext());
-        enterPinText.setText("Please enter pin, default should be 1234");
-        enterPinText.setLayoutParams(layoutParams);
-        enterPinLayout.addView(enterPinText);
-
-
-        EditText pinInput = new EditText(this.getContext());
-        pinInput.setLayoutParams(layoutParams);
-        pinInput.setHint("e.g. 1234");
-        pinInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                pin = editable.toString();
-            }
-        });
-        enterPinLayout.addView(pinInput);
-
         Thread t = new Thread()
         {
             public void run() {
                 boolean fail = false;
 
                 BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
-                device.setPin(pin.getBytes(StandardCharsets.UTF_8));
 
                 try {
                     bluetoothSocket = createBluetoothSocket(device);
@@ -223,13 +185,6 @@ public class PairFragment extends Fragment {
             }
         };
 
-        new AlertDialog.Builder(this.getContext())
-                .setTitle("Connecting to device")
-                .setView(enterPinLayout)
-                .setPositiveButton(R.string.OK, (dialogInterface, i) -> {dialogInterface.dismiss(); t.start();})
-                .show();
-
-
     }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
@@ -241,6 +196,20 @@ public class PairFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         //unregister the ACTION_FOUND receiver.
-//        Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
+        Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //unregister the ACTION_FOUND receiver.
+        Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Objects.requireNonNull(getActivity()).registerReceiver(receiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        Objects.requireNonNull(getActivity()).registerReceiver(receiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
     }
 }

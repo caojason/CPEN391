@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailsActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/details_scroll_view">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/details_view_store_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/UI_store_name_placeholder"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:id="@+id/details_view_distance_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/UI_distance_from_you"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp" />
+
+            <fragment
+                class="com.google.android.gms.maps.SupportMapFragment"
+                android:id="@+id/details_view_map_fragment"
+                android:layout_width="match_parent"
+                android:layout_margin="16dp"
+                android:layout_height="200dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="8dp"
+                android:background="@drawable/textview_rect_border">
+
+                <com.anychart.AnyChartView
+                    android:id="@+id/chart_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:layout_margin="16dp" />
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/progress_bar"
+                    android:layout_gravity="center_horizontal"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/switch_day_linear_layout">
+                    <TextView
+                        android:id="@+id/sunday_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/UI_sunday" />
+
+                    <TextView
+                        android:id="@+id/monday_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/UI_monday" />
+
+                    <TextView
+                        android:id="@+id/tuesday_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/UI_tuesday" />
+
+                    <TextView
+                        android:id="@+id/wednesday_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/UI_wednesday" />
+
+                    <TextView
+                        android:id="@+id/thursday_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/UI_thursday" />
+
+                    <TextView
+                        android:id="@+id/friday_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/UI_friday" />
+
+                    <TextView
+                        android:id="@+id/saturday_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/UI_saturday" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@string/UI_picture_explanation" />
+
+
+            <ImageView
+                android:id="@+id/analysis_pic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:src="@drawable/test_img"
+                android:contentDescription="@string/picture_for_analyzing" />
+
+            <Button
+                android:id="@+id/add_to_favorite_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/UI_add_to_favorite"
+                android:textAllCaps="false" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
