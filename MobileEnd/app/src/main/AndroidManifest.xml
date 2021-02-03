@@ -51,7 +51,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".DetailsActivity" android:screenOrientation="portrait" />
+        <activity android:name=".DetailsActivity" android:screenOrientation="portrait" android:hardwareAccelerated="false"/>
     </application>
 
 </manifest>

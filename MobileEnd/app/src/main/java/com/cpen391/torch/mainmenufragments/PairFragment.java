@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,6 @@ public class PairFragment extends Fragment {
     private BluetoothSocket bluetoothSocket;
     private TextView textView;
     private String selectedAddr = "";
-    private String pin = "";
 
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -84,6 +84,7 @@ public class PairFragment extends Fragment {
                     .setMessage("Please make sure you have turned on bluetooth before proceeding")
                     .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
                     .show();
+            return;
         }
 
         bluetoothArrayAdapter = new ArrayAdapter<String>(Objects.requireNonNull(this.getContext()), android.R.layout.simple_list_item_1);
@@ -196,20 +197,30 @@ public class PairFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         //unregister the ACTION_FOUND receiver.
-        Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
+        try {
+            Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
+        } catch (Exception e) {
+            Log.d("D", e.getMessage() + "");
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         //unregister the ACTION_FOUND receiver.
-        Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
+        try {
+            Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
+        } catch (Exception e) {
+            Log.d("D", e.getMessage() + "");
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Objects.requireNonNull(getActivity()).registerReceiver(receiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-        Objects.requireNonNull(getActivity()).registerReceiver(receiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+        if (bluetoothAdapter != null) {
+            Objects.requireNonNull(getActivity()).registerReceiver(receiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+            Objects.requireNonNull(getActivity()).registerReceiver(receiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+        }
     }
 }
