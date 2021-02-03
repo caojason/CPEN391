@@ -41,4 +41,5 @@
     <string name="UI_Time_in_day">Time in day</string>
     <string name="UI_search_finished">Search finished</string>
     <string name="NULL">null</string>
+    <string name="logo">LOGO</string>
 </resources>
