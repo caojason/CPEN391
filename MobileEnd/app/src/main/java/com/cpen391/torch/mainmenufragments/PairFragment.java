@@ -24,9 +24,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-
 import com.cpen391.torch.OtherUtils;
 import com.cpen391.torch.R;
+import com.cpen391.torch.StoreInfoActivity;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -40,8 +40,10 @@ public class PairFragment extends Fragment {
     private ArrayAdapter<String> bluetoothArrayAdapter;
     private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // "random" unique identifier
     private BluetoothSocket bluetoothSocket;
-    private TextView textView;
+    private TextView searchFinishedAlertText;
+
     private String selectedAddr = "";
+
 
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -52,13 +54,14 @@ public class PairFragment extends Fragment {
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 assert device != null;
-                if (OtherUtils.stringIsNullOrEmpty(device.getName()) || device.getName().equals(getString(R.string.NULL))) return;
+                if (OtherUtils.stringIsNullOrEmpty(device.getName()) || device.getName().equals(getString(R.string.NULL)))
+                    return;
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                     bluetoothArrayAdapter.add(device.getName() + "\n" + device.getAddress());
                     bluetoothArrayAdapter.notifyDataSetChanged();
                 }
             } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
-                textView.setText(R.string.UI_search_finished);
+                searchFinishedAlertText.setText(R.string.UI_search_finished);
             }
         }
     };
@@ -91,7 +94,7 @@ public class PairFragment extends Fragment {
         ListView deviceListView = view.findViewById(R.id.devices_list_view);
         deviceListView.setAdapter(bluetoothArrayAdapter);
         deviceListView.setOnItemClickListener((adapterView, view1, i, l) -> {
-            String info = ((TextView)view1).getText().toString();
+            String info = ((TextView) view1).getText().toString();
             connectToDevice(info);
         });
 
@@ -109,7 +112,7 @@ public class PairFragment extends Fragment {
             bluetoothArrayAdapter.add("broad_cast_addr_testing\nFF:FF:FF:FF:FF:FF");
         }
 
-        textView = view.findViewById(R.id.search_finished_text);
+        searchFinishedAlertText = view.findViewById(R.id.search_finished_text);
     }
 
     private void findDevice() {
@@ -135,7 +138,7 @@ public class PairFragment extends Fragment {
             Toast.makeText(this.getContext(), "Discovery canceled.", Toast.LENGTH_LONG).show();
         } else {
             bluetoothAdapter.startDiscovery();
-            textView.setText("");
+            searchFinishedAlertText.setText("");
             Toast.makeText(this.getContext(), "Discovery started. If device is not found in 10s, please pair the device through system bluetooth", Toast.LENGTH_LONG).show();
 
         }
@@ -147,8 +150,7 @@ public class PairFragment extends Fragment {
         selectedAddr = address;
         final String name = info.substring(0, info.length() - 17);
 
-        Thread t = new Thread()
-        {
+        Thread t = new Thread() {
             public void run() {
                 boolean fail = false;
 
@@ -174,7 +176,7 @@ public class PairFragment extends Fragment {
                                 Toast.makeText(getContext(), "Socket creation failed", Toast.LENGTH_SHORT).show());
                     }
                 }
-                if(!fail) {
+                if (!fail) {
                     Objects.requireNonNull(getActivity()).runOnUiThread(() ->
                             Toast.makeText(getContext(), name + " pairing succeed", Toast.LENGTH_SHORT).show());
                     try {
@@ -182,15 +184,23 @@ public class PairFragment extends Fragment {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    setupStoreInfo();
                 }
             }
         };
 
+        t.start();
     }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
-        return  device.createRfcommSocketToServiceRecord(BTMODULEUUID);
+        return device.createRfcommSocketToServiceRecord(BTMODULEUUID);
         //creates secure outgoing connection with BT device using UUID
+    }
+
+    private void setupStoreInfo() {
+        Intent i = new Intent(this.getActivity(), StoreInfoActivity.class);
+        i.putExtra(getString(R.string.MAC_ADDR), selectedAddr);
+        startActivity(i);
     }
 
     @Override

@@ -19,7 +19,7 @@
     <string name="YES">YES</string>
     <string name="NO">NO</string>
     <string name="UI_store_name_placeholder">store_name_%s</string>
-    <string name="UI_distance_from_you">Distance from you %d</string>
+    <string name="UI_distance_from_you">Distance from you: %s</string>
     <string name="UI_click_here_for_details">Click here for details</string>
     <string name="UI_store_image">store image</string>
     <string name="UI_Bluetooth_not_supported">Bluetooth not supported.</string>
@@ -42,4 +42,21 @@
     <string name="UI_search_finished">Search finished</string>
     <string name="NULL">null</string>
     <string name="logo">LOGO</string>
+    <string name="UI_gps_starting_notification">Starting GPS. Please press get location again after GPS is enabled</string>
+    <string name="please_enter_your_store_name">Please enter your store name:</string>
+    <string name="store_name_hint">3-15 EN characters</string>
+    <string name="UI_store_name_invalid">Store name invalid, please make sure your store name does not contain any special characters and spaces</string>
+    <string name="UI_get_location_hint">if you want to share the location of your store, please press the button to get CURRENT location as your store location</string>
+    <string name="UI_get_current_location">Get current location</string>
+    <string name="UI_store_logo_hint">Your store logo. (Can be left blank)</string>
+    <string name="UI_finish">finish</string>
+    <string name="UI_location_val">Your current location is %f, %f</string>
+    <string name="UI_store_info_edit_warning">Do you want to discard editing the store info?</string>
+    <string name="MAC_ADDR">MAC_ADDR</string>
+    <string name="FAVORITES">Favorites</string>
+    <string name="STORE_INFO">STORE_INFO</string>
+    <string name="UI_distance_notification">please refresh after you enabled GPS</string>
+    <string name="km_distance">%.1f km</string>
+    <string name="meter_distance">%.1f m</string>
+    <string name="UI_Your_favorites">Your favorites</string>
 </resources>

@@ -22,7 +22,6 @@ import com.anychart.enums.Position;
 import com.anychart.enums.TooltipPositionMode;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -39,7 +38,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         String storeName = getIntent().getStringExtra(getString(R.string.Intent_storeName_attribute));
-        int distance = getIntent().getIntExtra(getString(R.string.Intent_distance_attribute), 0);
+        String distance = getIntent().getStringExtra(getString(R.string.Intent_distance_attribute));
 
         TextView storeNameText = findViewById(R.id.details_view_store_name);
         storeNameText.setText(String.format(getString(R.string.UI_store_name_placeholder), storeName));

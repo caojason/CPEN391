@@ -25,7 +25,8 @@ public class OtherUtils {
 
     public static boolean checkStoreName(String storeName) {
         //check if the username is valid or not
-        return Pattern.matches("^[aA-zZ0-9_-\\u4e00-\\u9fa5]{2,16}$", storeName);
+        if (stringIsNullOrEmpty(storeName)) return false;
+        return Pattern.matches("^[aA-zZ0-9_-]{3,15}$", storeName);
     }
 
 

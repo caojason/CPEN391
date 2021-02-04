@@ -25,6 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -50,8 +51,11 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity android:name=".DetailsActivity" android:screenOrientation="portrait" android:hardwareAccelerated="false"/>
+        <activity
+            android:name=".DetailsActivity"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait" />
+        <activity android:name=".StoreInfoActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
