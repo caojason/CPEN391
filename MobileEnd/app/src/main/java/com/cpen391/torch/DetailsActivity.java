@@ -15,6 +15,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anychart.APIlib;
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
@@ -147,7 +148,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         }
         LatLng storeLoc = new LatLng(storeInfo.getLatitude(), storeInfo.getLongitude());
         mMap.addMarker(new MarkerOptions().position(storeLoc).title(storeInfo.getStoreName()));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(storeLoc));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(storeLoc, 12.0f));
 
         ScrollView parentScrollView = findViewById(R.id.details_scroll_view);
         mMap.setOnCameraMoveListener(() -> parentScrollView.requestDisallowInterceptTouchEvent(true));
@@ -193,6 +194,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     private void setupChart(String day) {
         AnyChartView chartView = findViewById(R.id.chart_view);
+        APIlib.getInstance().setActiveAnyChartView(chartView);
         ProgressBar progressBar = findViewById(R.id.progress_bar);
         chartView.setProgressBar(progressBar);
         Cartesian cartesian = AnyChart.column();

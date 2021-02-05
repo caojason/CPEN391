@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -27,6 +28,10 @@ import androidx.fragment.app.Fragment;
 import com.cpen391.torch.OtherUtils;
 import com.cpen391.torch.R;
 import com.cpen391.torch.StoreInfoActivity;
+import com.cpen391.torch.data.StoreInfo;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -152,6 +157,7 @@ public class PairFragment extends Fragment {
 
         Thread t = new Thread() {
             public void run() {
+                //TODO: check if the address has been used on the server, if so, do not proceed
                 boolean fail = false;
 
                 BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
@@ -199,8 +205,33 @@ public class PairFragment extends Fragment {
 
     private void setupStoreInfo() {
         Intent i = new Intent(this.getActivity(), StoreInfoActivity.class);
+        i.putExtra(getString(R.string.STORE_INFO), getStoreInfo());
         i.putExtra(getString(R.string.MAC_ADDR), selectedAddr);
         startActivity(i);
+    }
+
+    private boolean checkIfExists() {
+        return false;
+    }
+
+    private String getStoreInfo() {
+        SharedPreferences sp = getActivity().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
+        String favoriteListStr = sp.getString(getString(R.string.FAVORITES), "");
+        String userId = sp.getString(getString(R.string.UID), "");
+        Gson g = new Gson();
+        try {
+            JSONArray favorites = new JSONArray(favoriteListStr);
+            for (int  i = 0; i < favorites.length(); i++) {
+                String str = favorites.getString(i);
+                StoreInfo info = g.fromJson(str, StoreInfo.class);
+                if (info.getStoreOwnerId().equals(userId) && info.getMacAddr().equals(selectedAddr)) {
+                    return str;
+                }
+            }
+        } catch (Exception e) {
+            return "";
+        }
+        return "";
     }
 
     @Override

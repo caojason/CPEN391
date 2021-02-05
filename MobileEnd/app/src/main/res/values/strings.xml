@@ -15,6 +15,7 @@
     <string name="YES">YES</string>
     <string name="NO">NO</string>
     <string name="OK">OK</string>
+    <string name="CANCEL">Cancel</string>
     <string name="NULL">null</string>
 
     <string name="UID">UID</string>
@@ -65,6 +66,7 @@
     <string name="km_distance">%.1f km</string>
     <string name="meter_distance">%.1f m</string>
     <string name="UI_Your_favorites">Your favorites</string>
+    <string name="UI_entering_details">Entering details</string>
 
     <string name="Intent_distance_attribute">Distance</string>
 
@@ -89,4 +91,5 @@
     <string name="UI_loc_get_failed">Cannot get location, please try again later</string>
     <string name="UI_request_permission">Request permission</string>
     <string name="UI_no_permission">Please ask the owner for permission to see detailed analysis</string>
+
 </resources>
