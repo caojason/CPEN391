@@ -23,6 +23,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.cpen391.torch.DetailsActivity;
 import com.cpen391.torch.OtherUtils;
 import com.cpen391.torch.R;
+import com.cpen391.torch.data.StoreInfo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -78,23 +79,33 @@ public class BrowseFragment extends Fragment implements OnMapReadyCallback {
         layoutParams.setMargins(8,16,8,0);
 
         for (int i = 0; i < 3; i++) {
+            Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test_img);
+            imageBitmap = OtherUtils.scaleImage(imageBitmap, 100, 100);
+            String encodedString = OtherUtils.encodeImage(imageBitmap);
+            StoreInfo storeInfo = new StoreInfo(
+                    String.format(getString(R.string.UI_store_name_placeholder), String.valueOf(i)),
+                    "-1",
+                    -1,
+                    -1,
+                    "FF:FF:FF:FF:FF:FF",
+                    encodedString,
+                    false
+            );
+
             View listBlock = getLayoutInflater().inflate(R.layout.list_block_layout, contentLayout, false);
             listBlock.setLayoutParams(layoutParams);
 
             TextView storeNameText = listBlock.findViewById(R.id.store_name);
-            storeNameText.setText(String.format(getString(R.string.UI_store_name_placeholder), String.valueOf(i)));
+            storeNameText.setText(storeInfo.getStoreName());
 
             TextView distanceText = listBlock.findViewById(R.id.distance_text);
-            distanceText.setText(String.format(getString(R.string.UI_distance_from_you), i));
+            distanceText.setText(String.format(getString(R.string.UI_distance_from_you), "s"));
 
             ImageView storeImageView = listBlock.findViewById(R.id.store_image);
-            Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test_img);
-            imageBitmap = OtherUtils.scaleImage(imageBitmap, 100, 100);
             storeImageView.setImageBitmap(imageBitmap);
 
             Button button = listBlock.findViewById(R.id.details_button);
-            int finalI = i;
-            button.setOnClickListener(view1 -> enterDetails(String.valueOf(finalI), finalI));
+            button.setOnClickListener(view1 -> enterDetails(storeInfo.toJson(), "1 km"));
 
             contentLayout.addView(listBlock);
         }
@@ -149,9 +160,9 @@ public class BrowseFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
-    private void enterDetails(String storeName, int distance) {
+    private void enterDetails(String storeInfo, String distance) {
         Intent i = new Intent(getActivity(), DetailsActivity.class);
-        i.putExtra(getString(R.string.Intent_storeName_attribute), storeName);
+        i.putExtra(getString(R.string.STORE_INFO), storeInfo);
         i.putExtra(getString(R.string.Intent_distance_attribute), distance);
         startActivity(i);
     }

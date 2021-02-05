@@ -13,14 +13,16 @@ public class StoreInfo {
     private double longitude;
     private String macAddr;
     private String encodedLogo;
+    private boolean hasPermission;
 
-    public StoreInfo(String storeName, String storeOwnerId, double latitude, double longitude, String macAddr, String encodedLogo) {
+    public StoreInfo(String storeName, String storeOwnerId, double latitude, double longitude, String macAddr, String encodedLogo, boolean hasPermission) {
         this.storeName = storeName;
         this.storeOwnerId = storeOwnerId;
         this.latitude = latitude;
         this.longitude = longitude;
         this.macAddr = macAddr;
         this.encodedLogo = encodedLogo;
+        this.hasPermission = hasPermission;
     }
 
     public String getStoreName() {
@@ -49,6 +51,10 @@ public class StoreInfo {
 
     public Bitmap getLogo() {
         return OtherUtils.decodeImage(encodedLogo);
+    }
+
+    public boolean isHasPermission() {
+        return hasPermission;
     }
 
     public String toJson() {

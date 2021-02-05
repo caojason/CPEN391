@@ -2,8 +2,13 @@ package com.cpen391.torch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -20,12 +25,16 @@ import com.anychart.enums.Anchor;
 import com.anychart.enums.HoverMode;
 import com.anychart.enums.Position;
 import com.anychart.enums.TooltipPositionMode;
+import com.cpen391.torch.data.StoreInfo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +42,31 @@ import java.util.List;
 public class DetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+    private SharedPreferences sp;
+    private static SharedPreferences.OnSharedPreferenceChangeListener onFavoriteChangedListener;
+
+    private StoreInfo storeInfo;
+
+    private Button addToFavoriteButton;
+    private TextView storeNameText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        String storeName = getIntent().getStringExtra(getString(R.string.Intent_storeName_attribute));
-        String distance = getIntent().getStringExtra(getString(R.string.Intent_distance_attribute));
 
-        TextView storeNameText = findViewById(R.id.details_view_store_name);
-        storeNameText.setText(String.format(getString(R.string.UI_store_name_placeholder), storeName));
+        sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
+        onFavoriteChangedListener = (sp, key) -> onFavoriteChanged(key);
+        sp.registerOnSharedPreferenceChangeListener(onFavoriteChangedListener);
+
+        String distance = getIntent().getStringExtra(getString(R.string.Intent_distance_attribute));
+        String storeInfoString = getIntent().getStringExtra(getString(R.string.STORE_INFO));
+        Gson g = new Gson();
+        storeInfo = g.fromJson(storeInfoString, StoreInfo.class);
+
+        storeNameText = findViewById(R.id.details_view_store_name);
+        storeNameText.setText(String.format(getString(R.string.UI_store_name_placeholder), storeInfo.getStoreName()));
 
         TextView distanceText = findViewById(R.id.details_view_distance_text);
         distanceText.setText(String.format(getString(R.string.UI_distance_from_you), distance));
@@ -49,40 +74,121 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.details_view_map_fragment);
         mapFragment.getMapAsync(this);
 
-        Button addToFavoriteButton = findViewById(R.id.add_to_favorite_button);
-        addToFavoriteButton.setOnClickListener(v -> addToFavorite());
+        TextView analysisPicExplainText = findViewById(R.id.analysis_pic_explain);
+        ImageView analysisPic = findViewById(R.id.analysis_pic);
+        Button requestPicButton = findViewById(R.id.request_pic_button);
+        LinearLayout detailsLinearLayout = findViewById(R.id.details_linear_layout);
+
+        if (!storeInfo.isHasPermission()) {
+            analysisPicExplainText.setText(R.string.UI_no_permission);
+            detailsLinearLayout.removeView(analysisPic);
+            requestPicButton.setOnClickListener(v -> requestForPermission());
+        } else {
+            detailsLinearLayout.removeView(requestPicButton);
+        }
+
+        addToFavoriteButton = findViewById(R.id.add_to_favorite_button);
+        setupFavoriteButton();
 
         LinearLayout switchDayLayout = findViewById(R.id.switch_day_linear_layout);
+
+        String[] dates = getResources().getStringArray(R.array.dates);
+
         for (int i = 0; i < switchDayLayout.getChildCount(); i++) {
             if (!(switchDayLayout.getChildAt(i) instanceof TextView)) continue;
             TextView btn= (TextView)switchDayLayout.getChildAt(i);
-            String day = btn.getText().toString();
+            String day = dates[i];
             btn.setOnClickListener(v -> switchDay(day));
         }
-        setupChart(getString(R.string.UI_sunday));
+        setupChart(dates[0]);
+    }
+
+    private void setupFavoriteButton() {
+        String userId = sp.getString(getString(R.string.UID), "");
+        if (userId.equals(storeInfo.getStoreOwnerId())) {
+            //check if the user is the owner
+            addToFavoriteButton.setText(R.string.UI_update_info);
+            addToFavoriteButton.setOnClickListener(v -> updateInfo());
+        } else if (checkInList()){
+            //check if the store is already in user's favorite list
+            addToFavoriteButton.setVisibility(View.INVISIBLE);
+            addToFavoriteButton.setClickable(false);
+        } else {
+            //can add to favorite list
+            addToFavoriteButton.setOnClickListener(v -> addToFavorite());
+        }
+
+    }
+
+    private boolean checkInList() {
+        String favoriteListStr = sp.getString(getString(R.string.FAVORITES), "");
+        Gson g = new Gson();
+        try {
+            JSONArray favoriteList = new JSONArray(favoriteListStr);
+            for (int i = 0; i < favoriteList.length(); i++) {
+                String str = favoriteList.getString(i);
+                StoreInfo currInfo = g.fromJson(str, StoreInfo.class);
+                if (currInfo.getStoreName().equals(storeInfo.getStoreName()) && currInfo.getMacAddr().equals(storeInfo.getMacAddr())) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            Log.d("D", "parse json error");
+        }
+        return false;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        if (storeInfo.getLatitude() == -1 || storeInfo.getLongitude() == -1) {
+            Toast.makeText(this, R.string.UI_no_loc, Toast.LENGTH_SHORT).show();
+        }
+        LatLng storeLoc = new LatLng(storeInfo.getLatitude(), storeInfo.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(storeLoc).title(storeInfo.getStoreName()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(storeLoc));
 
         ScrollView parentScrollView = findViewById(R.id.details_scroll_view);
         mMap.setOnCameraMoveListener(() -> parentScrollView.requestDisallowInterceptTouchEvent(true));
         mMap.setOnCameraIdleListener(() -> parentScrollView.requestDisallowInterceptTouchEvent(false));
     }
 
+    private void updateInfo() {
+        Intent i = new Intent(this, StoreInfoActivity.class);
+        i.putExtra(getString(R.string.MAC_ADDR), storeInfo.getMacAddr());
+        i.putExtra(getString(R.string.STORE_INFO), storeInfo.toJson());
+        startActivity(i);
+    }
+
     private void addToFavorite() {
         Toast.makeText(this, "Added to favorite", Toast.LENGTH_SHORT).show();
+        String previousList = sp.getString(getString(R.string.FAVORITES), "");
+        String updatedJson = "";
+        if (OtherUtils.stringIsNullOrEmpty(previousList)) {
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(storeInfo.toJson());
+            updatedJson = jsonArray.toString();
+            sp.edit().putString(getString(R.string.FAVORITES), updatedJson).apply();
+        } else {
+            try {
+                JSONArray jsonArray = new JSONArray(previousList);
+                jsonArray.put(storeInfo.toJson());
+                updatedJson = jsonArray.toString();
+                sp.edit().putString(getString(R.string.FAVORITES), updatedJson).apply();
+            } catch (Exception e) {
+                Log.d("D", "malformed json");
+            }
+        }
+    }
+
+    private void requestForPermission() {
+        Toast.makeText(this, getString(R.string.UI_request_permission), Toast.LENGTH_SHORT).show();
     }
 
     private void switchDay(String day) {
         Toast.makeText(this, String.format("Swtiched to %s", day), Toast.LENGTH_SHORT).show();
-        //setupChart(day);
+        setupChart(day);
     }
 
     private void setupChart(String day) {
@@ -125,5 +231,53 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         cartesian.yAxis(0).title(getString(R.string.UI_Customer_counts));
 
         chartView.setChart(cartesian);
+    }
+
+    private void onFavoriteChanged(String key) {
+        if (key.equals(getString(R.string.FAVORITES))) {
+            String favoriteListString = sp.getString(key, "");
+            Gson g = new Gson();
+            StoreInfo newInfo = null;
+            try {
+                JSONArray favoriteList = new JSONArray(favoriteListString);
+                for (int i = 0; i < favoriteList.length(); i++) {
+                    String str = favoriteList.getString(i);
+                    newInfo = g.fromJson(str, StoreInfo.class);
+                    if (newInfo == null) continue;
+                    if (newInfo.getMacAddr().equals(storeInfo.getMacAddr())) break;
+                }
+            } catch (Exception e) {
+                Log.d("D", "malformed list");
+            }
+            if (newInfo != null) {
+                storeInfo = newInfo;
+                storeNameText.setText(storeInfo.getStoreName());
+                setupFavoriteButton();
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (onFavoriteChangedListener != null) {
+            sp.unregisterOnSharedPreferenceChangeListener(onFavoriteChangedListener);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (onFavoriteChangedListener != null) {
+            sp.registerOnSharedPreferenceChangeListener(onFavoriteChangedListener);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (onFavoriteChangedListener != null) {
+            sp.unregisterOnSharedPreferenceChangeListener(onFavoriteChangedListener);
+        }
     }
 }

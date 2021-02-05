@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:id="@+id/details_scroll_view">
         <LinearLayout
+            android:id="@+id/details_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -122,6 +123,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/analysis_pic_explain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
@@ -135,6 +137,14 @@
                 android:layout_margin="16dp"
                 android:src="@drawable/test_img"
                 android:contentDescription="@string/picture_for_analyzing" />
+
+            <Button
+                android:id="@+id/request_pic_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/UI_request_permission"
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/add_to_favorite_button"

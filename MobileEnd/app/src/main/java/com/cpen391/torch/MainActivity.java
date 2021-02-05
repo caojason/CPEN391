@@ -1,11 +1,16 @@
 package com.cpen391.torch;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -23,6 +28,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private Animation fromTop;
@@ -31,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean clicked;
     private SharedPreferences sp;
     private final static int PERMISSION_CODE = 11;
+    private final static int GPS_PERMISSION = 14;
+
+    private LocationListener locationListener;
+    private LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +84,48 @@ public class MainActivity extends AppCompatActivity {
                     MainActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     PERMISSION_CODE);
+        }
+
+        setupLocationManager();
+        requestGPSUpdates();
+    }
+
+    private void setupLocationManager() {
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+
+            public void onLocationChanged(Location location) {
+            }
+
+            public void onProviderDisabled(String provider) {
+            }
+
+            public void onProviderEnabled(String provider) {
+            }
+
+            public void onStatusChanged(String provider, int status,
+                                        Bundle extras) {
+                locationManager.removeUpdates(locationListener);
+            }
+        };
+    }
+
+    private void requestGPSUpdates() {
+        if (locationManager == null) {
+            setupLocationManager();
+        }
+        List<String> providers = locationManager.getProviders(true);
+        for (String provider : providers) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                        this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                        GPS_PERMISSION);
+            }
+            locationManager.requestLocationUpdates(provider, 1000, 0, locationListener);
         }
     }
 
@@ -119,4 +172,29 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.finishAffinity(this);
     }
 
+    @Override
+    protected void onPause() {
+        try {
+            locationManager.removeUpdates(locationListener);
+        } catch (Exception e) {
+            Log.d("D", "remove location listener failed");
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        try {
+            locationManager.removeUpdates(locationListener);
+        } catch (Exception e) {
+            Log.d("D", "remove location listener failed");
+        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        requestGPSUpdates();
+    }
 }

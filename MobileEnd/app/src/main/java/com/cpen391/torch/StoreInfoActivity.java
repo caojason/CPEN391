@@ -21,7 +21,6 @@ import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -104,12 +103,18 @@ public class StoreInfoActivity extends AppCompatActivity {
         });
 
         TextView locationTextView = findViewById(R.id.location_textView);
+        if (latitude != -1 && longitude != -1) {
+            locationTextView.setText(String.format(getString(R.string.UI_location_val), longitude, latitude));
+        }
 
         Button getLocationButton = findViewById(R.id.get_location_button);
         getLocationButton.setOnClickListener(v1 -> getLocation(locationTextView));
 
         storeLogoButton = findViewById(R.id.store_logo_change_button);
         storeLogoButton.setOnClickListener(v1 -> setStoreLogo());
+        if (storeLogo != null) {
+            storeLogoButton.setImageBitmap(storeLogo);
+        }
 
         Button finishButton = findViewById(R.id.finish_store_info_editing_button);
         finishButton.setOnClickListener(v -> finishEditing());
@@ -154,7 +159,7 @@ public class StoreInfoActivity extends AppCompatActivity {
                 latitude = location.getLatitude();
                 textView.setText(String.format(getString(R.string.UI_location_val), longitude, latitude));
             } else {
-                textView.setText("Cannot get location, please try again later");
+                textView.setText(R.string.UI_loc_get_failed);
             }
         }
     }
@@ -204,7 +209,7 @@ public class StoreInfoActivity extends AppCompatActivity {
 
         String userId = sp.getString(getString(R.string.UID), "");
 
-        StoreInfo storeInfo = new StoreInfo(newStoreName, userId, latitude, longitude, macAddr, OtherUtils.encodeImage(storeLogo));
+        StoreInfo storeInfo = new StoreInfo(newStoreName, userId, latitude, longitude, macAddr, OtherUtils.encodeImage(storeLogo), true);
         updateFavoriteList(storeInfo);
 
         goBackToHome();
@@ -221,7 +226,7 @@ public class StoreInfoActivity extends AppCompatActivity {
         } else {
             try {
                 JSONArray jsonArray = new JSONArray(previousList);
-                jsonArray.put(newInfo);
+                jsonArray.put(newInfo.toJson());
                 updatedJson = jsonArray.toString();
                 sp.edit().putString(getString(R.string.FAVORITES), updatedJson).apply();
             } catch (Exception e) {

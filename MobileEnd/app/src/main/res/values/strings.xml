@@ -5,43 +5,42 @@
     <string name="title_browse">Browse</string>
     <string name="title_activity_maps">Map</string>
 
+    <string name="GET_URL">placeholder</string>
+    <string name="client_id">3088778948-19qd3b5ag17p6rde7vb7qbtm2ji9h3iu.apps.googleusercontent.com</string>
+
+    <string name="LOGGED">LOGGED</string>
+
     <string name="UI_welcome_str">Welcome to TORCH</string>
     <string name="curr_login_user">CURR_LOGIN_USER</string>
+    <string name="YES">YES</string>
+    <string name="NO">NO</string>
+    <string name="OK">OK</string>
+    <string name="NULL">null</string>
 
-    <string name="client_id">3088778948-19qd3b5ag17p6rde7vb7qbtm2ji9h3iu.apps.googleusercontent.com</string>
-    <string name="LOGGED">LOGGED</string>
-    <string name="GET_URL">placeholder</string>
     <string name="UID">UID</string>
     <string name="USERNAME">USERNAME</string>
+    <string name="logo">LOGO</string>
+    <string name="MAC_ADDR">MAC_ADDR</string>
+    <string name="FAVORITES">Favorites</string>
+    <string name="STORE_INFO">STORE_INFO</string>
+
     <string name="LOG_OUT">log out</string>
     <string name="UI_warning">Warning</string>
     <string name="UI_logout_msg">Do you want to log out?</string>
-    <string name="YES">YES</string>
-    <string name="NO">NO</string>
+
+    <!--    list block strings-->
     <string name="UI_store_name_placeholder">store_name_%s</string>
     <string name="UI_distance_from_you">Distance from you: %s</string>
     <string name="UI_click_here_for_details">Click here for details</string>
     <string name="UI_store_image">store image</string>
+    <string name="UI_your_store_name">Your store: %s</string>
+
+    <!--    pairing fragment strings-->
     <string name="UI_Bluetooth_not_supported">Bluetooth not supported.</string>
     <string name="UI_find_your_device">Find your device</string>
-    <string name="OK">OK</string>
-    <string name="UI_sunday">SUN</string>
-    <string name="UI_monday">MON</string>
-    <string name="UI_tuesday">TUE</string>
-    <string name="UI_wednesday">WED</string>
-    <string name="UI_thursday">THU</string>
-    <string name="UI_friday">FRI</string>
-    <string name="UI_saturday">SAT</string>
-    <string name="UI_picture_explanation">Picture when the store is the most crowded</string>
-    <string name="Intent_storeName_attribute">StoreName</string>
-    <string name="UI_add_to_favorite">Add to favorite</string>
-    <string name="Intent_distance_attribute">Distance</string>
-    <string name="picture_for_analyzing">Picture for analyzing</string>
-    <string name="UI_Customer_counts">Customer counts</string>
-    <string name="UI_Time_in_day">Time in day</string>
     <string name="UI_search_finished">Search finished</string>
-    <string name="NULL">null</string>
-    <string name="logo">LOGO</string>
+
+    <!--    editing activity strings-->
     <string name="UI_gps_starting_notification">Starting GPS. Please press get location again after GPS is enabled</string>
     <string name="please_enter_your_store_name">Please enter your store name:</string>
     <string name="store_name_hint">3-15 EN characters</string>
@@ -52,11 +51,42 @@
     <string name="UI_finish">finish</string>
     <string name="UI_location_val">Your current location is %f, %f</string>
     <string name="UI_store_info_edit_warning">Do you want to discard editing the store info?</string>
-    <string name="MAC_ADDR">MAC_ADDR</string>
-    <string name="FAVORITES">Favorites</string>
-    <string name="STORE_INFO">STORE_INFO</string>
+
+    <!--    details activity strings-->
+    <string name="UI_picture_explanation">Picture when the store is the most crowded</string>
+    <string name="UI_add_to_favorite">Add to favorite</string>
+    <string name="picture_for_analyzing">Picture for analyzing</string>
+    <string name="UI_Customer_counts">Customer counts</string>
+    <string name="UI_Time_in_day">Time in day</string>
+
+
+
     <string name="UI_distance_notification">please refresh after you enabled GPS</string>
     <string name="km_distance">%.1f km</string>
     <string name="meter_distance">%.1f m</string>
     <string name="UI_Your_favorites">Your favorites</string>
+
+    <string name="Intent_distance_attribute">Distance</string>
+
+    <string-array name="dates">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+    <string name="UI_sunday">SUN</string>
+    <string name="UI_monday">MON</string>
+    <string name="UI_tuesday">TUE</string>
+    <string name="UI_wednesday">WED</string>
+    <string name="UI_thursday">THU</string>
+    <string name="UI_friday">FRI</string>
+    <string name="UI_saturday">SAT</string>
+    <string name="UI_no_loc">The store owner did not share the store location</string>
+    <string name="UI_update_info">Update info</string>
+    <string name="UI_loc_get_failed">Cannot get location, please try again later</string>
+    <string name="UI_request_permission">Request permission</string>
+    <string name="UI_no_permission">Please ask the owner for permission to see detailed analysis</string>
 </resources>

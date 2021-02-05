@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -43,6 +42,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FavoriteFragment extends Fragment {
 
+    private String userId;
     private LinearLayout contentLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
     private SharedPreferences sp;
@@ -63,6 +63,7 @@ public class FavoriteFragment extends Fragment {
         sp = Objects.requireNonNull(getActivity()).getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
 
         String favoriteList = sp.getString(getString(R.string.FAVORITES), "");
+        userId = sp.getString(getString(R.string.UID), "");
 
         contentLayout = view.findViewById(R.id.content_layout);
 
@@ -84,6 +85,7 @@ public class FavoriteFragment extends Fragment {
         setupFavoriteList(favoriteList);
     }
 
+
     private void refresh() {
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
@@ -103,6 +105,7 @@ public class FavoriteFragment extends Fragment {
 
     private void setupFavoriteList(String favoriteList) {
         contentLayout.removeAllViews();
+
         try {
             JSONArray jsonArray = new JSONArray(favoriteList);
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -127,6 +130,11 @@ public class FavoriteFragment extends Fragment {
         TextView storeNameText = listBlock.findViewById(R.id.store_name);
         storeNameText.setText(storeInfo.getStoreName());
 
+        if (storeInfo.getStoreOwnerId().equals(userId)) {
+            storeNameText.setText(String.format(getString(R.string.UI_your_store_name), storeInfo.getStoreName()));
+            storeNameText.setTextColor(getResources().getColor(R.color.colorGolden));
+        }
+
         TextView distanceText = listBlock.findViewById(R.id.distance_text);
 
         String distanceString = calculateDistance(storeInfo.getLongitude(), storeInfo.getLatitude());
@@ -138,14 +146,15 @@ public class FavoriteFragment extends Fragment {
         storeImageView.setImageBitmap(imageBitmap);
 
         Button button = listBlock.findViewById(R.id.details_button);
-        button.setOnClickListener(view1 -> enterDetails(storeInfo.getStoreName(), distanceString));
+        button.setOnClickListener(view1 -> enterDetails(storeInfo, distanceString));
 
         contentLayout.addView(listBlock);
     }
 
     private String calculateDistance(double longitude, double latitude) {
         double distance = 0;
-        LocationManager locationManager = (LocationManager) Objects.requireNonNull(getActivity()).getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) Objects.requireNonNull(getActivity())
+                .getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             Toast.makeText(this.getContext(), R.string.UI_distance_notification, Toast.LENGTH_SHORT).show();
@@ -160,8 +169,8 @@ public class FavoriteFragment extends Fragment {
                         PERMISSION_CODE1);
             }
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            float[] results = new float[1];
             if (location != null && longitude != -1 && latitude != -1) {
-                float[] results = new float[1];
                 Location.distanceBetween(latitude, longitude, location.getLatitude(), location.getLongitude(), results);
                 distance = results[0];
             }
@@ -177,9 +186,9 @@ public class FavoriteFragment extends Fragment {
         }
     }
 
-    private void enterDetails(String storeName, String distanceString) {
+    private void enterDetails(StoreInfo storeInfo, String distanceString) {
         Intent i = new Intent(getActivity(), DetailsActivity.class);
-        i.putExtra(getString(R.string.Intent_storeName_attribute), storeName);
+        i.putExtra(getString(R.string.STORE_INFO), storeInfo.toJson());
         i.putExtra(getString(R.string.Intent_distance_attribute), distanceString);
         startActivity(i);
     }
