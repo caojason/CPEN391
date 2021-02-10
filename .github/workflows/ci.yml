@@ -25,10 +25,11 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        cd serverside
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Run tests
       run: |
-        cd serverside
-        for f in tests/*Test.py; do python3 $f ; done;
+        coverage run -m --source=. pytest
+        coverage report
       
