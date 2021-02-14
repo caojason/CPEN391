@@ -124,26 +124,6 @@ public class OtherUtils {
         return jsonObject.toString();
     }
 
-    /*
-     * function used for downloading images from url link
-     * mostly used in creating quiz
-     * may also be used for downloading user profile image
-     * */
-    public static Bitmap getBitmapFromUrl(String urlLink) {
-        try {
-            URL url = new URL(urlLink);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-
-            InputStream input = connection.getInputStream();
-            return BitmapFactory.decodeStream(input);
-        } catch (Exception e) {
-            Log.d("get_bitmap_err", e.getMessage() + "");
-            return null;
-        }
-    }
-
     /**
      * get string content from the server,
      * on success, return the content retrieved from the server
@@ -176,7 +156,7 @@ public class OtherUtils {
     }
 
     public static void deleteRequest(String params) {
-        String urlLink = "http://quizzical.canadacentral.cloudapp.azure.com/classes/delete?" + params;
+        String urlLink = "" + params;
         Log.d("html_delete", "deleting: " + urlLink);
         try {
             URL url = new URL(urlLink);
