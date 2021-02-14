@@ -1,7 +1,7 @@
 from PIL import Image
 import numpy
 
-img = Image.open("logo.png")
+img = Image.open("60x60.png")
 
 arr = numpy.array(img)
 

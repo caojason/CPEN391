@@ -1,8 +1,8 @@
 import numpy
 from PIL import Image
 
-HEIGHT = 636
-WIDTH = 636
+HEIGHT = 60
+WIDTH = 60
 DEPTH = 3
 
 arr = numpy.zeros([HEIGHT, WIDTH, DEPTH], dtype=numpy.uint8)
