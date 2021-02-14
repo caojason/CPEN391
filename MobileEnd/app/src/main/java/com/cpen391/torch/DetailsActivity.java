@@ -184,6 +184,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void requestForPermission() {
+        //TODO: implement this
         Toast.makeText(this, getString(R.string.UI_request_permission), Toast.LENGTH_SHORT).show();
     }
 
@@ -193,6 +194,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void setupChart(String day) {
+        //BUG: cannot switch day
         AnyChartView chartView = findViewById(R.id.chart_view);
         APIlib.getInstance().setActiveAnyChartView(chartView);
         ProgressBar progressBar = findViewById(R.id.progress_bar);
