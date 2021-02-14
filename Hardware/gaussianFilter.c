@@ -1,22 +1,23 @@
 #include <stdio.h>
 #include <math.h>
 
-//use gcc imgReader.c -lm -o imgReader.o
+//use gcc gaussianFilter.c -lm -o gaussianFilter.o
+#define HEIGHT 3
+#define WIDTH 3
+#define DEPTH 3
 
 void kernelGeneration(double k[][3]);
-void doGaussian(char img[636][636][4], int height, int width, int depth, double k[][3], char out[636][636][4]);
+void doGaussian(char img[HEIGHT][WIDTH][DEPTH], double k[][3], char out[HEIGHT][WIDTH][DEPTH]);
 
 int main() {
     FILE* fp;
-    int width = 636;
-    int height = 636;
-    int depth = 4;
-    char img[height][width][depth];
+
+    char img[HEIGHT][WIDTH][DEPTH];
     fp = fopen("bytes.txt", "r+");
 
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            for (int k = 0; k < depth; k++) {
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            for (int k = 0; k < DEPTH; k++) {
                 char buff;
                 img[i][j][k] = fgetc(fp);
             }
@@ -26,15 +27,15 @@ int main() {
     double k[3][3];
     kernelGeneration(k);
 
-    char out[height][width][depth];
+    char out[HEIGHT][WIDTH][DEPTH];
 
-    doGaussian(img, height, width, depth, k, out);
+    doGaussian(img, k, out);
 
     FILE* newFp;
     newFp = fopen("out.txt", "w+");
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            for (int k = 0; k < depth; k++) {
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            for (int k = 0; k < DEPTH; k++) {
                 fputc(out[i][j][k], newFp);
             }
         }
@@ -70,27 +71,26 @@ void kernelGeneration(double k[][3]) {
     }
 }
 
-void doGaussian(char img[636][636][4], int height, int width, int depth, double k[][3], char out[636][636][4]) {
+void doGaussian(char img[HEIGHT][WIDTH][DEPTH], double k[][3], char out[HEIGHT][WIDTH][DEPTH]) {
     
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            for (int d = 0; d < depth - 1; d++) {
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            for (int d = 0; d < DEPTH; d++) {
                 //because the filter is double, we need to calculate the double value first and convert back to char
                 double sum = 0.0;
                 for (int kr = -1; kr <= 1; kr++) {
                     for (int kc = -1; kc <=1; kc++) {
                         //make sure the row and the col are within the data range
                         //this is equivalent to extending around the image by the edge value
-                        int pixelRow = (i+kr < 0) ? 0 : ((i+kr >= height) ? height - 1 : i+kr); 
-                        int pixelCol = (j+kc < 0) ? 0 : ((j+kc >= width) ? width - 1 : j+kc);
+                        int pixelRow = (i+kr < 0) ? 0 : ((i+kr >= HEIGHT) ? HEIGHT - 1 : i+kr); 
+                        int pixelCol = (j+kc < 0) ? 0 : ((j+kc >= WIDTH) ? WIDTH - 1 : j+kc);
                         sum += k[kr+1][kc+1] * img[pixelRow][pixelCol][d];
                     }
                 }
                 //firstly, cast the sum to an int, then and with 255 for a valid RGBA value, then turn it into a char (1 byte)
+                sum = round(sum);
                 out[i][j][d] = (char)((0xFF) & (int)sum);
             }
-            //the final depth is alpha, we don't need to do gaussian on it
-            out[i][j][depth - 1] = img[i][j][depth - 1];
         }
     }
 }
