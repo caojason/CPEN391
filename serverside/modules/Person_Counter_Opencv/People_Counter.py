@@ -61,12 +61,12 @@ def non_max_suppression_fast(boxes, overlapThresh):
 
 def main():
     #define the video file here, or put 0 to use your webcam.
-    cap = cv2.VideoCapture('testVideo3.mp4')
+    cap = cv2.VideoCapture('test_video.mp4')
     MaxLpc=0
     fps_start_time = datetime.datetime.now()
     fps = 0
     total_frames = 0
-    
+    OPC=0
     object_id_list=[]
     
     while True:
@@ -124,6 +124,7 @@ def main():
 
        
         lpc_count=len(objects)
+        OPC=len(object_id_list)
         lpc_txt="LPC:{}".format(lpc_count)
         cv2.putText(frame,lpc_txt,(5,55),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(0,0,255),1)
         
