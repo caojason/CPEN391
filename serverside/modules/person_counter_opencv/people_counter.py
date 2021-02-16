@@ -8,8 +8,8 @@ sys.path.append(os.getcwd())
 from .centroidtracker import CentroidTracker
 
 
-protopath = "MobileNetSSD_deploy.prototxt"
-modelpath = "MobileNetSSD_deploy.caffemodel"
+protopath = os.path.join(os.getcwd(), "MobileNetSSD_deploy.prototxt")
+modelpath = os.path.join(os.getcwd(), "MobileNetSSD_deploy.caffemodel")
 detector = cv2.dnn.readNetFromCaffe(prototxt=protopath, caffeModel=modelpath)
 tracker=CentroidTracker(maxDisappeared=80,maxDistance=90)
 
