@@ -59,18 +59,20 @@ def non_max_suppression_fast(boxes, overlapThresh):
 
 
 
-def main():
+def people_counter():
     #define the video file here, or put 0 to use your webcam.
-    cap = cv2.VideoCapture('test_video.mp4')
+    cap = cv2.VideoCapture('testVideo2.mp4')
     MaxLpc=0
     fps_start_time = datetime.datetime.now()
     fps = 0
     total_frames = 0
-    OPC=0
     object_id_list=[]
-    
+    counter=0
+    lpc_array=[]
     while True:
         ret, frame = cap.read()
+        if frame is None:
+            break
         frame = imutils.resize(frame, width=600)
         total_frames = total_frames + 1
 
@@ -112,7 +114,7 @@ def main():
             text="ID: {}".format(objectId)
             cv2.putText(frame,text,(x1,y1-5),cv2.FONT_HERSHEY_COMPLEX_SMALL,0.8,(0,0,255),1)
             
-            
+        counter=counter+1    
         fps_end_time = datetime.datetime.now()
         time_diff = fps_end_time - fps_start_time
         if time_diff.seconds == 0:
@@ -121,13 +123,9 @@ def main():
             fps = (total_frames / time_diff.seconds)
 
         fps_text = "FPS: {:.2f}".format(fps)
-
-       
         lpc_count=len(objects)
-        OPC=len(object_id_list)
         lpc_txt="LPC:{}".format(lpc_count)
         cv2.putText(frame,lpc_txt,(5,55),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(0,0,255),1)
-        
         timenow=datetime.datetime.now()
         timeText="{}".format(timenow)
         cv2.putText(frame, timeText, (5, 15), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
@@ -135,15 +133,19 @@ def main():
         if MaxLpc < lpc_count:
             MaxLpc=lpc_count
             cv2.imwrite('output.jpg',frame)
-      
+        if counter == 35:
+            lpc_array.append(lpc_count)
+            counter=0
         cv2.imshow("Application", frame)
+       
         key = cv2.waitKey(1)
         if key == ord('q'):
             break
-
+    
     cv2.destroyAllWindows()
+    return lpc_array
 
 def counter_test():
     return 1
 
-main()
+people_counter()
