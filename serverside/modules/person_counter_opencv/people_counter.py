@@ -2,11 +2,14 @@ import cv2
 import datetime
 import imutils
 import numpy as np
-from centroidtracker import CentroidTracker
+import sys
+import os
+sys.path.append(os.getcwd())
+from .centroidtracker import CentroidTracker
 
 
-protopath = "MobileNetSSD_deploy.prototxt"
-modelpath = "MobileNetSSD_deploy.caffemodel"
+protopath = os.path.join(os.getcwd(), "modules", "person_counter_opencv", "MobileNetSSD_deploy.prototxt")
+modelpath = os.path.join(os.getcwd(), "modules", "person_counter_opencv", "MobileNetSSD_deploy.caffemodel")
 detector = cv2.dnn.readNetFromCaffe(prototxt=protopath, caffeModel=modelpath)
 tracker=CentroidTracker(maxDisappeared=80,maxDistance=90)
 
@@ -143,3 +146,7 @@ def people_counter():
     cv2.destroyAllWindows()
     return OPC
 
+def counter_test():
+    return 1
+
+people_counter()
