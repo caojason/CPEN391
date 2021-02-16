@@ -68,7 +68,6 @@ def people_counter():
     total_frames = 0
     object_id_list=[]
     counter=0
-    lpc_array=[]
     while True:
         ret, frame = cap.read()
         if frame is None:
@@ -124,6 +123,7 @@ def people_counter():
 
         fps_text = "FPS: {:.2f}".format(fps)
         lpc_count=len(objects)
+        OPC=len(object_id_list)
         lpc_txt="LPC:{}".format(lpc_count)
         cv2.putText(frame,lpc_txt,(5,55),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(0,0,255),1)
         timenow=datetime.datetime.now()
@@ -133,9 +133,7 @@ def people_counter():
         if MaxLpc < lpc_count:
             MaxLpc=lpc_count
             cv2.imwrite('output.jpg',frame)
-        if counter == 35:
-            lpc_array.append(lpc_count)
-            counter=0
+       
         cv2.imshow("Application", frame)
        
         key = cv2.waitKey(1)
@@ -143,5 +141,5 @@ def people_counter():
             break
     
     cv2.destroyAllWindows()
-    return lpc_array
+    return OPC
 
