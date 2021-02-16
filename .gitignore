@@ -1,1 +1,4 @@
 serverside/modules/__pycache__
+serverside/tests/__pycache__
+serverside/.pytest_cache
+serverside/modules/Person_Counter_Opencv/__pycache__

@@ -143,5 +143,7 @@ def main():
 
     cv2.destroyAllWindows()
 
+def counter_test():
+    return 1
 
 main()
