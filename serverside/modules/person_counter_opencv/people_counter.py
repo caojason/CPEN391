@@ -5,7 +5,7 @@ import numpy as np
 import sys
 import os
 sys.path.append(os.getcwd())
-from centroidtracker import CentroidTracker
+from .centroidtracker import CentroidTracker
 
 
 protopath = "MobileNetSSD_deploy.prototxt"
