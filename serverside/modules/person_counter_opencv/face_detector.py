@@ -10,14 +10,14 @@ import cv2
 import os
 import datetime
 
-proto_txt_path = 'deploy.prototxt'
-model_path = 'res10_300x300_ssd_iter_140000.caffemodel'
+proto_txt_path = os.path.join(os.getcwd(), "modules", "person_counter_opencv",'deploy.prototxt')
+model_path = os.path.join(os.getcwd(), "modules", "person_counter_opencv",'res10_300x300_ssd_iter_140000.caffemodel')
 face_detector = cv2.dnn.readNetFromCaffe(proto_txt_path, model_path)
 
-mask_detector = load_model('mask_detector.model')
+mask_detector = load_model(os.path.join(os.getcwd(), "modules", "person_counter_opencv",'mask_detector.model'))
 
 def facemask_detector():
-    cap = cv2.VideoCapture('mask.mp4')
+    cap = cv2.VideoCapture(os.path.join(os.getcwd(), "modules", "person_counter_opencv",'mask.mp4'))
     count=0
     tempx=[]
     tempy=[]
