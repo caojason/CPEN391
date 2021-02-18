@@ -2,17 +2,17 @@
 #include <math.h>
 
 //use gcc gaussianFilter.c -lm -o gaussianFilter.o
-#define HEIGHT 3
-#define WIDTH 3
+#define HEIGHT 60
+#define WIDTH 60
 #define DEPTH 3
 
 void kernelGeneration(double k[][3]);
-void doGaussian(char img[HEIGHT][WIDTH][DEPTH], double k[][3], char out[HEIGHT][WIDTH][DEPTH]);
+void doGaussian(unsigned char img[HEIGHT][WIDTH][DEPTH], double k[][3], unsigned char out[HEIGHT][WIDTH][DEPTH]);
 
 int main() {
     FILE* fp;
 
-    char img[HEIGHT][WIDTH][DEPTH];
+    unsigned char img[HEIGHT][WIDTH][DEPTH];
     fp = fopen("bytes.txt", "r+");
 
     for (int i = 0; i < HEIGHT; i++) {
@@ -27,7 +27,7 @@ int main() {
     double k[3][3];
     kernelGeneration(k);
 
-    char out[HEIGHT][WIDTH][DEPTH];
+    unsigned char out[HEIGHT][WIDTH][DEPTH];
 
     doGaussian(img, k, out);
 
@@ -71,7 +71,7 @@ void kernelGeneration(double k[][3]) {
     }
 }
 
-void doGaussian(char img[HEIGHT][WIDTH][DEPTH], double k[][3], char out[HEIGHT][WIDTH][DEPTH]) {
+void doGaussian(unsigned char img[HEIGHT][WIDTH][DEPTH], double k[][3], unsigned char out[HEIGHT][WIDTH][DEPTH]) {
     
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
@@ -84,12 +84,12 @@ void doGaussian(char img[HEIGHT][WIDTH][DEPTH], double k[][3], char out[HEIGHT][
                         //this is equivalent to extending around the image by the edge value
                         int pixelRow = (i+kr < 0) ? 0 : ((i+kr >= HEIGHT) ? HEIGHT - 1 : i+kr); 
                         int pixelCol = (j+kc < 0) ? 0 : ((j+kc >= WIDTH) ? WIDTH - 1 : j+kc);
-                        sum += k[kr+1][kc+1] * img[pixelRow][pixelCol][d];
+                        sum += k[kr+1][kc+1] * (double)img[pixelRow][pixelCol][d];
                     }
                 }
                 //firstly, cast the sum to an int, then and with 255 for a valid RGBA value, then turn it into a char (1 byte)
-                sum = round(sum);
-                out[i][j][d] = (char)((0xFF) & (int)sum);
+                int int_sum = (int)round(sum);                
+                out[i][j][d] = (char)int_sum;
             }
         }
     }
