@@ -180,6 +180,7 @@ public class BrowseFragment extends Fragment implements OnMapReadyCallback {
                         this.getActivity(),
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                         PERMISSION_CODE);
+                return "";
             }
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             float[] results = new float[1];
@@ -209,7 +210,7 @@ public class BrowseFragment extends Fragment implements OnMapReadyCallback {
             swipeRefreshLayout.setRefreshing(false);
         }
         //TODO: read from server
-        contentLayout.removeAllViews();
+        Objects.requireNonNull(getActivity()).runOnUiThread(() -> contentLayout.removeAllViews());
         for (int i = 0; i < storeInfoList.size(); i++) {
             StoreInfo storeInfo = storeInfoList.get(i);
             View listBlock = getLayoutInflater().inflate(R.layout.list_block_layout, contentLayout, false);
@@ -228,7 +229,7 @@ public class BrowseFragment extends Fragment implements OnMapReadyCallback {
             Button button = listBlock.findViewById(R.id.details_button);
             button.setOnClickListener(view1 -> enterDetails(storeInfo.toJson(), distanceString));
 
-            contentLayout.addView(listBlock);
+            Objects.requireNonNull(getActivity()).runOnUiThread(() -> contentLayout.addView(listBlock));
         }
         Objects.requireNonNull(getActivity()).runOnUiThread(() -> Toast.makeText(this.getContext(), "refreshing", Toast.LENGTH_LONG).show());
     }
