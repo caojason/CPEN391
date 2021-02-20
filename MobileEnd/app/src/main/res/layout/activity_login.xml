@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/init_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,10 +32,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:src="@mipmap/torch_icon_foreground"
             android:layout_gravity="center"
-            android:contentDescription="@string/logo" />
+            android:layout_margin="8dp"
+            android:contentDescription="@string/logo"
+            android:src="@mipmap/torch_icon_foreground" />
 
     </LinearLayout>
 

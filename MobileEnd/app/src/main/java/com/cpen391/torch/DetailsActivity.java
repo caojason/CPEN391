@@ -15,6 +15,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.anychart.APIlib;
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
@@ -34,11 +41,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -48,9 +61,10 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private static SharedPreferences.OnSharedPreferenceChangeListener onFavoriteChangedListener;
 
     private StoreInfo storeInfo;
-
+    private static final String PermissionURL = "http://52.188.108.13:3000/home/request/"; //Add the storeOwnerID before use
     private Button addToFavoriteButton;
     private TextView storeNameText;
+    private RequestQueue mRequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +74,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
         onFavoriteChangedListener = (sp, key) -> onFavoriteChanged(key);
         sp.registerOnSharedPreferenceChangeListener(onFavoriteChangedListener);
-
+        mRequestQueue = Volley.newRequestQueue(this);
         String distance = getIntent().getStringExtra(getString(R.string.Intent_distance_attribute));
         String storeInfoString = getIntent().getStringExtra(getString(R.string.STORE_INFO));
         Gson g = new Gson();
@@ -100,6 +114,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             TextView btn= (TextView)switchDayLayout.getChildAt(i);
             String day = dates[i];
             btn.setOnClickListener(v -> switchDay(day));
+
         }
         setupChart(dates[0]);
     }
@@ -186,21 +201,45 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private void requestForPermission() {
         //TODO: implement this
         Toast.makeText(this, getString(R.string.UI_request_permission), Toast.LENGTH_SHORT).show();
+        String requestURL=PermissionURL+storeInfo.getStoreOwnerId();
+        JSONObject postPermission=new JSONObject();
+
+        JsonObjectRequest postRequest=new JsonObjectRequest(Request.Method.POST, requestURL, postPermission, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("Response:",response.toString());
+                Toast.makeText(getApplicationContext(),"Permission Granted",Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Failed", "post request failed");
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Failed to get the permission", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mRequestQueue.add(postRequest);
+
     }
 
     private void switchDay(String day) {
         Toast.makeText(this, String.format("Swtiched to %s", day), Toast.LENGTH_SHORT).show();
+        AnyChartView chartView = findViewById(R.id.chart_view);
         setupChart(day);
     }
 
     private void setupChart(String day) {
         //BUG: cannot switch day
         AnyChartView chartView = findViewById(R.id.chart_view);
+        if(chartView.isActivated()) {
+            chartView.clear();
+        }
         APIlib.getInstance().setActiveAnyChartView(chartView);
         ProgressBar progressBar = findViewById(R.id.progress_bar);
         chartView.setProgressBar(progressBar);
         Cartesian cartesian = AnyChart.column();
 
+        cartesian.title(String.format("Volume on %s", day));
         List<DataEntry> data = new ArrayList<>();
         data.add(new ValueDataEntry("08:00", 1));
         data.add(new ValueDataEntry("09:00", 2));
@@ -223,7 +262,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
                 .format("{%Value}{groupsSeparator: }");
 
         cartesian.animation(false);
-        cartesian.title(String.format("Volume on %s", day));
+
 
         cartesian.yScale().minimum(0d);
         cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
