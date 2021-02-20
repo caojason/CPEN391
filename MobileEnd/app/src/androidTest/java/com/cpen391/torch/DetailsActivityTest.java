@@ -17,14 +17,13 @@ public class DetailsActivityTest {
     public ActivityTestRule<StoreInfoActivity> detailsActivityActivityTestRule = new ActivityTestRule<>(StoreInfoActivity.class);
 
     @Test
-    public void testSwitchTabs() {
+    public void testRequestPermission() {
         //click the browse button
         Espresso.onView(ViewMatchers.withText("Request permission")).perform(ViewActions.click());
 
         //check if something is present
         Espresso.onView(ViewMatchers.withText("Request permission"))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-
 
     }
 }

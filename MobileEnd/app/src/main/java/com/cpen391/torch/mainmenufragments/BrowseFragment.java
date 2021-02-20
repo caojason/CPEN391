@@ -145,14 +145,14 @@ public class BrowseFragment extends Fragment implements OnMapReadyCallback {
             //switch to list view
             Toast.makeText(this.getContext(), "switch to list view", Toast.LENGTH_LONG).show();
             inMapView = false;
-            switchFab.setBackgroundResource(R.drawable.ic_baseline_map_24);
+            switchFab.setImageResource(R.drawable.ic_baseline_map_24);
 
             setupListView();
         } else {
             //switch to map view
             Toast.makeText(this.getContext(), "switch to map view", Toast.LENGTH_LONG).show();
             inMapView = true;
-            switchFab.setBackgroundResource(R.drawable.ic_baseline_list_alt_24);
+            switchFab.setImageResource(R.drawable.ic_baseline_list_alt_24);
 
             if (mapView == null) {
                 mapView = getLayoutInflater().inflate(R.layout.fragment_maps, browseConstraintLayout, false);

@@ -26,8 +26,7 @@ public class LetterActivity extends AppCompatActivity {
     private String subject;
     private String message;
     private static final String PermissionURL = "http://52.188.108.13:3000/home/request/"; //Add the storeOwnerID before use
-    private LocationManager locationManager;
-    private LocationListener locationListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +35,6 @@ public class LetterActivity extends AppCompatActivity {
         EditText emailEditText = findViewById(R.id.editTextEmail);
         EditText requestInfoEditText = findViewById(R.id.editTextMessage);
         Button submitButton = findViewById(R.id.submitEmailButton);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         editTextListenerSetup(subjectEditText, emailEditText, requestInfoEditText);
 
         submitButton.setOnClickListener(v -> onSubmitClicked());
@@ -106,17 +104,6 @@ public class LetterActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.YES, (dialogInterface, i) -> {parseInfo();})
                 .show();
     }
-    public void goBackToHome() {
-        if (locationManager != null) {
-            try {
-                locationManager.removeUpdates(locationListener);
-                locationManager = null;
-            } catch (Exception e) {
-                Log.d("D", "remove location listener failed");
-            }
-        }
-        finishAndRemoveTask();
-    }
 
 
     private boolean checkSubmissionValid() {
@@ -149,7 +136,7 @@ public class LetterActivity extends AppCompatActivity {
         String uid = sp.getString(getString(R.string.UID), "");
 
         new Thread(()->OtherUtils.uploadToServer(PermissionURL, uid, getString(R.string.Letter_of_permission), dataToSend)).start();
-        goBackToHome();
+        finishAffinity();
     }
 
     @Override
