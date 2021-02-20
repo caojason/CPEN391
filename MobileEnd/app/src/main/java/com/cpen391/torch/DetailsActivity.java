@@ -1,5 +1,6 @@
 package com.cpen391.torch;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -15,12 +17,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.anychart.APIlib;
 import com.anychart.AnyChart;
@@ -41,17 +38,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -61,7 +52,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private static SharedPreferences.OnSharedPreferenceChangeListener onFavoriteChangedListener;
 
     private StoreInfo storeInfo;
-    private static final String PermissionURL = "http://52.188.108.13:3000/home/request/"; //Add the storeOwnerID before use
     private Button addToFavoriteButton;
     private TextView storeNameText;
     private RequestQueue mRequestQueue;
@@ -199,27 +189,9 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void requestForPermission() {
-        //TODO: implement this
         Toast.makeText(this, getString(R.string.UI_request_permission), Toast.LENGTH_SHORT).show();
-        String requestURL=PermissionURL+storeInfo.getStoreOwnerId();
-        JSONObject postPermission=new JSONObject();
-
-        JsonObjectRequest postRequest=new JsonObjectRequest(Request.Method.POST, requestURL, postPermission, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.d("Response:",response.toString());
-                Toast.makeText(getApplicationContext(),"Permission Granted",Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Failed", "post request failed");
-                error.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Failed to get the permission", Toast.LENGTH_SHORT).show();
-            }
-        });
-        mRequestQueue.add(postRequest);
-
+        Intent requestPermissionIntent = new Intent(DetailsActivity.this, LetterActivity.class);
+        startActivity(requestPermissionIntent);
     }
 
     private void switchDay(String day) {

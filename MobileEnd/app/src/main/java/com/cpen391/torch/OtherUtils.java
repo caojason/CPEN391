@@ -2,8 +2,10 @@ package com.cpen391.torch;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Patterns;
 
 import com.google.gson.JsonObject;
 
@@ -29,6 +31,9 @@ public class OtherUtils {
         return Pattern.matches("^[aA-zZ0-9_-]{3,15}$", storeName);
     }
 
+    public static boolean checkValidEmail(String target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
 
     /*
      * Encoding and decoding images for storing in shared preferences and send to server

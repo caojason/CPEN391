@@ -92,4 +92,16 @@
     <string name="UI_request_permission">Request permission</string>
     <string name="UI_no_permission">Please ask the owner for permission to see detailed analysis</string>
 
+
+    <!--    request letter activity-->
+    <string name="UI_subject">Subject</string>
+    <string name="UI_request_message">Request Message</string>
+    <string name="Your_Email">Your Email</string>
+    <string name="UI_request_for_permission_hint">Please justify your request for permission in the following region</string>
+    <string name="Letter_of_permission">letterOfPermission</string>
+    <string name="UI_fill_subject">Please fill the subject</string>
+    <string name="UI_fill_justification">Please write your justification</string>
+    <string name="UI_email_invalid">Email invalid</string>
+    <string name="UI_request_letter_edit_warning">Do you want to discard this request letter?</string>
+
 </resources>

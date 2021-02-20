@@ -1,51 +1,145 @@
 package com.cpen391.torch;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
-import android.util.Patterns;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.JsonObject;
+
 public class LetterActivity extends AppCompatActivity {
-    private Button submit;
-    private EditText Subject,Email,RequestInfo;
+
+    private String email;
+    private String subject;
+    private String message;
+    private static final String PermissionURL = "http://52.188.108.13:3000/home/request/"; //Add the storeOwnerID before use
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.letter);
-        Subject=findViewById(R.id.Subject);
-        Email=findViewById(R.id.editTextTextEmail);
-        RequestInfo=findViewById(R.id.editTextTextMultiLine);
-        submit=findViewById(R.id.button);
-        Editable subject=Subject.getText();
-        Editable email=Email.getText();
-        Editable requestMsg=RequestInfo.getText();
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isValidEmail(email)) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + email.toString()));
-                    intent.putExtra(Intent.EXTRA_SUBJECT, subject.toString() );
+        setContentView(R.layout.letter_layout);
+        EditText subjectEditText = findViewById(R.id.editTextSubject);
+        EditText emailEditText = findViewById(R.id.editTextEmail);
+        EditText requestInfoEditText = findViewById(R.id.editTextMessage);
+        Button submitButton = findViewById(R.id.submitEmailButton);
 
-                    intent.putExtra(Intent.EXTRA_TEXT, requestMsg.toString());
-                    startActivity(intent);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),"Email can not be empty",Toast.LENGTH_SHORT).show();
-                }
+        editTextListenerSetup(subjectEditText, emailEditText, requestInfoEditText);
+
+        submitButton.setOnClickListener(v -> onSubmitClicked());
+
+    }
+
+    private void editTextListenerSetup(EditText subjectEditText, EditText emailEditText, EditText requestInfoEditText) {
+        subjectEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                subject = editable.toString();
             }
         });
 
+        emailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                email = editable.toString();
+            }
+        });
+
+        requestInfoEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                message = editable.toString();
+            }
+        });
     }
-    public static boolean isValidEmail(CharSequence target) {
-        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+
+    private void onSubmitClicked() {
+        if (!checkSubmissionValid()) return;
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.UI_warning)
+                .setMessage("Are you sure you want to submit?")
+                .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
+                .setPositiveButton(R.string.YES, (dialogInterface, i) -> parseInfo())
+                .show();
+    }
+
+    private boolean checkSubmissionValid() {
+        if (OtherUtils.stringIsNullOrEmpty(subject)) {
+            Toast.makeText(this, R.string.UI_fill_subject, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (OtherUtils.stringIsNullOrEmpty(message)) {
+            Toast.makeText(this, R.string.UI_fill_justification, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!OtherUtils.checkValidEmail(email)) {
+            Toast.makeText(this, R.string.UI_email_invalid, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void parseInfo() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("email", email);
+        jsonObject.addProperty("subject", subject);
+        jsonObject.addProperty("message", message);
+
+        String dataToSend = jsonObject.toString();
+
+        SharedPreferences sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
+        String uid = sp.getString(getString(R.string.UID), "");
+
+        new Thread(()->OtherUtils.uploadToServer(PermissionURL, uid, getString(R.string.Letter_of_permission), dataToSend)).start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this).setTitle(R.string.UI_warning)
+                .setMessage(R.string.UI_request_letter_edit_warning)
+                .setPositiveButton(R.string.YES, (dialogInterface, i) -> super.onBackPressed())
+                .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
+                .show();
     }
 }
