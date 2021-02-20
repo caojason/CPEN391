@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -246,6 +247,24 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         cartesian.yAxis(0).title(getString(R.string.UI_Customer_counts));
 
         chartView.setChart(cartesian);
+
+        // Below is how we change the data
+        final int delayMillis = 500;
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            public void run() {
+// create new data List and populate it with values
+                List<DataEntry> data = new ArrayList<>();
+                data.add(new ValueDataEntry("08:00", 3));
+                data.add(new ValueDataEntry("10:00", 2));
+
+// apply the new List to the existing chart
+                //cartesian.column(data);
+                cartesian.title(String.format("Volume on %s", day));
+                handler.postDelayed(this, delayMillis);
+            }
+        };
+        handler.postDelayed(runnable, delayMillis);
     }
 
     private void onFavoriteChanged(String key) {

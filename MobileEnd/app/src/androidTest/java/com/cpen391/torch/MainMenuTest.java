@@ -2,6 +2,7 @@ package com.cpen391.torch;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 
@@ -22,8 +23,8 @@ public class MainMenuTest {
         Espresso.onView(ViewMatchers.withText(R.string.title_browse)).perform(ViewActions.click());
 
         //check if something is present
-//        Espresso.onView(ViewMatchers.withText(R.string.UI_click_here_for_details))
-//                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+       Espresso.onView(ViewMatchers.withText(R.string.UI_click_here_for_details))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
         Assert.assertTrue(true);
     }

@@ -1,11 +1,15 @@
 package com.cpen391.torch;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +26,8 @@ public class LetterActivity extends AppCompatActivity {
     private String subject;
     private String message;
     private static final String PermissionURL = "http://52.188.108.13:3000/home/request/"; //Add the storeOwnerID before use
-
+    private LocationManager locationManager;
+    private LocationListener locationListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +36,7 @@ public class LetterActivity extends AppCompatActivity {
         EditText emailEditText = findViewById(R.id.editTextEmail);
         EditText requestInfoEditText = findViewById(R.id.editTextMessage);
         Button submitButton = findViewById(R.id.submitEmailButton);
-
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         editTextListenerSetup(subjectEditText, emailEditText, requestInfoEditText);
 
         submitButton.setOnClickListener(v -> onSubmitClicked());
@@ -98,9 +103,21 @@ public class LetterActivity extends AppCompatActivity {
                 .setTitle(R.string.UI_warning)
                 .setMessage("Are you sure you want to submit?")
                 .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
-                .setPositiveButton(R.string.YES, (dialogInterface, i) -> parseInfo())
+                .setPositiveButton(R.string.YES, (dialogInterface, i) -> {parseInfo();})
                 .show();
     }
+    public void goBackToHome() {
+        if (locationManager != null) {
+            try {
+                locationManager.removeUpdates(locationListener);
+                locationManager = null;
+            } catch (Exception e) {
+                Log.d("D", "remove location listener failed");
+            }
+        }
+        finishAndRemoveTask();
+    }
+
 
     private boolean checkSubmissionValid() {
         if (OtherUtils.stringIsNullOrEmpty(subject)) {
@@ -132,6 +149,7 @@ public class LetterActivity extends AppCompatActivity {
         String uid = sp.getString(getString(R.string.UID), "");
 
         new Thread(()->OtherUtils.uploadToServer(PermissionURL, uid, getString(R.string.Letter_of_permission), dataToSend)).start();
+        goBackToHome();
     }
 
     @Override
