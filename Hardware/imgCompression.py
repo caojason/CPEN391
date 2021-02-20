@@ -6,6 +6,7 @@ def compression(imgPath):
     img_arr = np.array(img, dtype=np.uint8)
     compressed_arr = []
     color = img_arr[0][0]
+
     count = 0
 
     # the first 4 bytes will be the size of the image width, height
@@ -17,9 +18,7 @@ def compression(imgPath):
     for i in range(img_arr.shape[0]):
         for j in range(img_arr.shape[1]):
             newColor = img_arr[i][j]
-            if newColor[0] == color[0] and newColor[1] == color[1] and newColor[2] == color[2]:
-                count += 1
-            elif count == 255:
+            if count == 255:
                 #we don't want the count to be larger than 255
                 compressed_arr.append(color[0])
                 compressed_arr.append(color[1])
@@ -28,6 +27,8 @@ def compression(imgPath):
                 #get the new color
                 color = newColor
                 count = 1
+            elif newColor[0] == color[0] and newColor[1] == color[1] and newColor[2] == color[2]:
+                count += 1
             else:
                 #store the values
                 compressed_arr.append(color[0])
@@ -86,7 +87,7 @@ def decompression(compressedFilePath):
 
 def main():
     with open("compressed.txt", "wb+") as f:
-        compressedImg = compression("C:\\Users\\yunta\\Desktop\\third_year\\CPEN391\\Torch\\Hardware\\60x60.png")
+        compressedImg = compression("C:\\Users\\yunta\\Desktop\\third_year\\CPEN391\\Torch\\Hardware\\logo.png")
         f.write(compressedImg)
         f.flush()
         f.close()
