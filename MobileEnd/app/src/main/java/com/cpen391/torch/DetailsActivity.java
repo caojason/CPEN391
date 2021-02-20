@@ -1,6 +1,5 @@
 package com.cpen391.torch;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,8 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -18,8 +17,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.anychart.APIlib;
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
@@ -55,7 +52,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private StoreInfo storeInfo;
     private Button addToFavoriteButton;
     private TextView storeNameText;
-    private RequestQueue mRequestQueue;
+    private LinearLayout chartLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +62,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
         onFavoriteChangedListener = (sp, key) -> onFavoriteChanged(key);
         sp.registerOnSharedPreferenceChangeListener(onFavoriteChangedListener);
-        mRequestQueue = Volley.newRequestQueue(this);
         String distance = getIntent().getStringExtra(getString(R.string.Intent_distance_attribute));
         String storeInfoString = getIntent().getStringExtra(getString(R.string.STORE_INFO));
         Gson g = new Gson();
@@ -97,6 +93,8 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         setupFavoriteButton();
 
         LinearLayout switchDayLayout = findViewById(R.id.switch_day_linear_layout);
+
+        chartLinearLayout = findViewById(R.id.chart_linear_layout);
 
         String[] dates = getResources().getStringArray(R.array.dates);
 
@@ -197,16 +195,20 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     private void switchDay(String day) {
         Toast.makeText(this, String.format("Swtiched to %s", day), Toast.LENGTH_SHORT).show();
-        AnyChartView chartView = findViewById(R.id.chart_view);
         setupChart(day);
     }
 
     private void setupChart(String day) {
         //BUG: cannot switch day
-        AnyChartView chartView = findViewById(R.id.chart_view);
-        if(chartView.isActivated()) {
-            chartView.clear();
-        }
+        chartLinearLayout.removeViewAt(0);
+
+        AnyChartView chartView = new AnyChartView(this);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
+        layoutParams.setMargins(16, 16, 16, 16);
+        chartView.setLayoutParams(layoutParams);
+
+        chartLinearLayout.addView(chartView, 0);
+
         APIlib.getInstance().setActiveAnyChartView(chartView);
         ProgressBar progressBar = findViewById(R.id.progress_bar);
         chartView.setProgressBar(progressBar);
@@ -214,15 +216,41 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         cartesian.title(String.format("Volume on %s", day));
         List<DataEntry> data = new ArrayList<>();
-        data.add(new ValueDataEntry("08:00", 1));
-        data.add(new ValueDataEntry("09:00", 2));
-        data.add(new ValueDataEntry("10:00", 4));
-        data.add(new ValueDataEntry("11:00", 10));
-        data.add(new ValueDataEntry("12:00", 9));
-        data.add(new ValueDataEntry("13:00", 8));
-        data.add(new ValueDataEntry("14:00", 6));
-        data.add(new ValueDataEntry("15:00", 2));
-        data.add(new ValueDataEntry("16:00", 1));
+        switch (day) {
+            case "Sunday":
+                data.add(new ValueDataEntry("08:00", 8));
+                data.add(new ValueDataEntry("09:00", 4));
+                data.add(new ValueDataEntry("10:00", 2));
+                data.add(new ValueDataEntry("11:00", 10));
+                data.add(new ValueDataEntry("12:00", 1));
+                data.add(new ValueDataEntry("13:00", 0));
+                data.add(new ValueDataEntry("14:00", 0));
+                data.add(new ValueDataEntry("15:00", 5));
+                data.add(new ValueDataEntry("16:00", 4));
+                break;
+            case "Monday":
+                data.add(new ValueDataEntry("08:00", 7));
+                data.add(new ValueDataEntry("09:00", 3));
+                data.add(new ValueDataEntry("10:00", 2));
+                data.add(new ValueDataEntry("11:00", 0));
+                data.add(new ValueDataEntry("12:00", 9));
+                data.add(new ValueDataEntry("13:00", 6));
+                data.add(new ValueDataEntry("14:00", 3));
+                data.add(new ValueDataEntry("15:00", 1));
+                data.add(new ValueDataEntry("16:00", 10));
+                break;
+            default:
+                data.add(new ValueDataEntry("08:00", 1));
+                data.add(new ValueDataEntry("09:00", 2));
+                data.add(new ValueDataEntry("10:00", 4));
+                data.add(new ValueDataEntry("11:00", 10));
+                data.add(new ValueDataEntry("12:00", 9));
+                data.add(new ValueDataEntry("13:00", 8));
+                data.add(new ValueDataEntry("14:00", 6));
+                data.add(new ValueDataEntry("15:00", 2));
+                data.add(new ValueDataEntry("16:00", 1));
+                break;
+        }
 
         Column column = cartesian.column(data);
 
@@ -247,24 +275,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         cartesian.yAxis(0).title(getString(R.string.UI_Customer_counts));
 
         chartView.setChart(cartesian);
-
-        // Below is how we change the data
-        final int delayMillis = 500;
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
-            public void run() {
-// create new data List and populate it with values
-                List<DataEntry> data = new ArrayList<>();
-                data.add(new ValueDataEntry("08:00", 3));
-                data.add(new ValueDataEntry("10:00", 2));
-
-// apply the new List to the existing chart
-                //cartesian.column(data);
-                cartesian.title(String.format("Volume on %s", day));
-                handler.postDelayed(this, delayMillis);
-            }
-        };
-        handler.postDelayed(runnable, delayMillis);
+        
     }
 
     private void onFavoriteChanged(String key) {
