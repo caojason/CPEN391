@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
             public void onStatusChanged(String provider, int status,
                                         Bundle extras) {
                 locationManager.removeUpdates(locationListener);
+                stopLockTask();
             }
         };
     }
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                         this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                         GPS_PERMISSION);
+                return;
             }
             locationManager.requestLocationUpdates(provider, 1000, 0, locationListener);
         }
