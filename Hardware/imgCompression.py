@@ -10,10 +10,10 @@ def compression(imgPath):
     count = 0
 
     # the first 4 bytes will be the size of the image width, height
-    compressed_arr.append(img_arr.shape[0] // 256)
-    compressed_arr.append(img_arr.shape[0] % 256)
     compressed_arr.append(img_arr.shape[1] // 256)
     compressed_arr.append(img_arr.shape[1] % 256)
+    compressed_arr.append(img_arr.shape[0] // 256)
+    compressed_arr.append(img_arr.shape[0] % 256)
 
     for i in range(img_arr.shape[0]):
         for j in range(img_arr.shape[1]):
@@ -44,6 +44,8 @@ def reconstruct(img_arr, start_x, start_y, R_value, G_value, B_value, height, wi
     current_count = 0
     for i in range(start_y, height):
         for j in range(start_x, width):
+            if i == 337:
+                break
             if j == width - 1:
                 start_x = 0
             if current_count == count:
@@ -62,7 +64,7 @@ def decompression(compressedFilePath):
         width = int.from_bytes(width, byteorder="big", signed=False)
         height = f.read(2)
         height = int.from_bytes(height, byteorder="big", signed=False)
-        img_arr = np.zeros((width, height, 3), dtype=np.uint8)
+        img_arr = np.zeros((height, width, 3), dtype=np.uint8)
         start_x = 0
         start_y = 0
         while True:
