@@ -74,7 +74,7 @@ int main() {
     FILE* newFp;
     newFp = fopen("out.txt", "w+");
     
-    fwrite(&(compression_out + 1), sizeof(compression_out), (size_t)*(compression_out), newFp);
+    fwrite((const void *)(compression_out + 1), sizeof(compression_out), (size_t)(*(compression_out)), newFp);
 
     fflush(newFp);
     fclose(fp);
