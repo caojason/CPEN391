@@ -25,6 +25,8 @@ public class LetterActivity extends AppCompatActivity {
     private String email;
     private String subject;
     private String message;
+    private String storeName = "";
+    private String ownerId = "";
     private static final String PermissionURL = "http://52.188.108.13:3000/home/request/"; //Add the storeOwnerID before use
 
     @Override
@@ -39,6 +41,8 @@ public class LetterActivity extends AppCompatActivity {
 
         submitButton.setOnClickListener(v -> onSubmitClicked());
 
+        storeName = getIntent().getStringExtra(getString(R.string.STORE_NAME));
+        ownerId = getIntent().getStringExtra(getString(R.string.OWNER_ID));
     }
 
     private void editTextListenerSetup(EditText subjectEditText, EditText emailEditText, EditText requestInfoEditText) {
@@ -126,6 +130,8 @@ public class LetterActivity extends AppCompatActivity {
 
     private void parseInfo() {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("storeName", storeName);
+        jsonObject.addProperty("storeOwner", ownerId);
         jsonObject.addProperty("email", email);
         jsonObject.addProperty("subject", subject);
         jsonObject.addProperty("message", message);

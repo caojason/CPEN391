@@ -24,6 +24,8 @@
     <string name="MAC_ADDR">MAC_ADDR</string>
     <string name="FAVORITES">Favorites</string>
     <string name="STORE_INFO">STORE_INFO</string>
+    <string name="STORE_NAME">STORE_NAME</string>
+    <string name="OWNER_ID">OWNER_ID</string>
 
     <string name="LOG_OUT">log out</string>
     <string name="UI_warning">Warning</string>

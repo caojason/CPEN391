@@ -190,6 +190,8 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private void requestForPermission() {
         Toast.makeText(this, getString(R.string.UI_request_permission), Toast.LENGTH_SHORT).show();
         Intent requestPermissionIntent = new Intent(DetailsActivity.this, LetterActivity.class);
+        requestPermissionIntent.putExtra(getString(R.string.STORE_NAME), storeInfo.getStoreName());
+        requestPermissionIntent.putExtra(getString(R.string.OWNER_ID), storeInfo.getStoreOwnerId());
         startActivity(requestPermissionIntent);
     }
 
