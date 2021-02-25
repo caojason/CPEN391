@@ -1,11 +1,9 @@
 import sys
 import os
 
-from flask import Flask, testing
 sys.path.append(os.getcwd())
 
 from modules.database.init_database import init_torch_database
-import pytest
 from pytest_mysql import factories
 
 mysql_my_proc = factories.mysql_proc(port=3306)

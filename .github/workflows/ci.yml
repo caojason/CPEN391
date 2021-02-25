@@ -18,6 +18,12 @@ jobs:
         python-version: [3.8]
 
     steps:
+    - uses: mirromutth/mysql-action@v1.1
+      with:
+        mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
+        mysql database: 'torch' # Optional, default value is "test". The specified database which will be create
+        mysql user: 'admin' 
+        mysql password: 'torch' 
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
@@ -28,6 +34,7 @@ jobs:
         cd serverside
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    
     - name: Run tests
       run: |
         cd serverside
