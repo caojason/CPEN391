@@ -6,3 +6,4 @@ serverside/modules/person_counter_opencv/__pycache__/*
 serverside/modules/database/__pycache__/*
 !**/__pycache__/*
 *.pyc
+*.pyc
