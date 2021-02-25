@@ -1,7 +1,8 @@
 import sys
 import os
-
 sys.path.append(os.getcwd())
+
+import json
 
 from modules.database.init_database import init_torch_database
 from pytest_mysql import factories
@@ -22,7 +23,8 @@ def default_test():
 def test_create_user():
     with app.test_client() as testing_client:
         rv = testing_client.post("/create_user",
-                    data=b"{\"uid\":\"105960354998423944600\",\"type\":\"user_info\",\"data\":\"yuntaowu2000@gmail.com\"}")
+                    data=json.dumps({"uid":"105960354998423944600","type":"user_info","data":"yuntaowu2000@gmail.com"}),
+                    content_type="application/json")
         assert rv.status_code == 200
         rv=testing_client.get("/email?uid=105960354998423944600")
         assert b"yuntaowu2000@gmail.com" in rv.data
