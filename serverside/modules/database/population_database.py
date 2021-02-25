@@ -129,12 +129,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
     return report 
 
 def get_location_data_monthly(location, year, month):
-    db = mysql.connector.connect(
-        host="localhost",
-        user="admin", 
-        password="torch",
-        database="torch"
-    )
+    db = connect_to_database()
     cursor = db.cursor()
     sql = "SELECT * FROM population_data WHERE location = '{}' AND month = {} AND year = {}".format(location, month, year)  
     cursor.execute(sql)

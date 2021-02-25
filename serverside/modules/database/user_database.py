@@ -60,12 +60,7 @@ def get_favorite_list(uid):
     return result
 
 def set_favorite_list(uid, favorite_list):
-    db = mysql.connector.connect(
-        host="localhost",
-        user="admin", 
-        password="torch",
-        database="torch"
-    )
+    db = connect_to_database()
 
     cursor = db.cursor()
     sql = "UPDATE user_data SET favorite_list=%s WHERE user_gid=%s"

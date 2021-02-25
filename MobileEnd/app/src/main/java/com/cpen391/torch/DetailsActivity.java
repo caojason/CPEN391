@@ -255,16 +255,29 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         String result = OtherUtils.readFromURL(getDailyDataURL);
         Log.d("result", result);
-        Map<String, Integer> myMap = new Gson().fromJson(result, Map.class);
-        data.add(new ValueDataEntry("08:00", myMap.get("8")));
-        data.add(new ValueDataEntry("09:00", myMap.get("9")));
-        data.add(new ValueDataEntry("10:00", myMap.get("10")));
-        data.add(new ValueDataEntry("11:00", myMap.get("11")));
-        data.add(new ValueDataEntry("12:00", myMap.get("12")));
-        data.add(new ValueDataEntry("13:00", myMap.get("13")));
-        data.add(new ValueDataEntry("14:00", myMap.get("14")));
-        data.add(new ValueDataEntry("15:00", myMap.get("15")));
-        data.add(new ValueDataEntry("16:00", myMap.get("16")));
+        try {
+            Map<String, Integer> myMap = new Gson().fromJson(result, Map.class);
+            data.add(new ValueDataEntry("08:00", myMap.get("8")));
+            data.add(new ValueDataEntry("09:00", myMap.get("9")));
+            data.add(new ValueDataEntry("10:00", myMap.get("10")));
+            data.add(new ValueDataEntry("11:00", myMap.get("11")));
+            data.add(new ValueDataEntry("12:00", myMap.get("12")));
+            data.add(new ValueDataEntry("13:00", myMap.get("13")));
+            data.add(new ValueDataEntry("14:00", myMap.get("14")));
+            data.add(new ValueDataEntry("15:00", myMap.get("15")));
+            data.add(new ValueDataEntry("16:00", myMap.get("16")));
+        } catch (Exception e) {
+            //no data
+            data.add(new ValueDataEntry("08:00", 8));
+            data.add(new ValueDataEntry("09:00", 9));
+            data.add(new ValueDataEntry("10:00", 10));
+            data.add(new ValueDataEntry("11:00", 11));
+            data.add(new ValueDataEntry("12:00", 12));
+            data.add(new ValueDataEntry("13:00", 13));
+            data.add(new ValueDataEntry("14:00", 14));
+            data.add(new ValueDataEntry("15:00", 15));
+            data.add(new ValueDataEntry("16:00", 16));
+        }
 
         Column column = cartesian.column(data);
 
