@@ -11,6 +11,7 @@ import json
 def parse_data(data):
     print(data)
     value = data.decode("utf-8")
+    value.replace("\"", "")
     return json.loads(value)
 
 @app.route("/create_user", methods = ["POST"])
