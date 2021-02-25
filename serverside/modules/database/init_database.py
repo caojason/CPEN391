@@ -12,7 +12,7 @@ def database_init():
 
     try:
         db = mysql.connector.connect(
-        host="localhost",
+        host="34.82.123.84",
         user="admin", 
         password="torch"
         )
@@ -26,7 +26,7 @@ def database_init():
 def create_table_user(): 
 
     db = mysql.connector.connect(
-        host="localhost",
+        host="34.82.123.84",
         user="admin", 
         password="torch",
         database="torch"
@@ -41,7 +41,7 @@ def create_table_user():
 def create_table_population(): 
 
     db = mysql.connector.connect(
-        host="localhost",
+        host="34.82.123.84",
         user="admin", 
         password="torch",
         database="torch"

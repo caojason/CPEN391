@@ -1,1 +1,11 @@
-sql pwd: KnIvHNeOxldg1tyH
+to connect to the server using linux
+use the key provided in chart (without the ppk one)
+ssh -i torch-key yuntaowu2000@35.233.184.107
+
+from the server
+use the following to connect to the sql server
+mysql --host=34.82.123.84 --user=admin --password
+password is torch
+
+
+

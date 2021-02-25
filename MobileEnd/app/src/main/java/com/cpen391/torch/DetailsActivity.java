@@ -55,7 +55,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private TextView storeNameText;
     private LinearLayout chartLinearLayout;
     private String[] pairs;
-    private static final String getDailyDataURL = String.format("http://52.188.108.13:3000/get_population_data/day?year=2021&month=%d&day=%d&location=%s",Month,Day,location );
+    private static final String getDailyDataURL = String.format("http://35.233.184.107/get_population_data/day?year=2021&month=%d&day=%d&location=%s",Month,Day,location );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

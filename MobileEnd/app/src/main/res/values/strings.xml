@@ -5,7 +5,7 @@
     <string name="title_browse">Browse</string>
     <string name="title_activity_maps">Map</string>
 
-    <string name="BASE_URL">http://127.0.0.1:5000/</string>
+    <string name="BASE_URL">http://35.233.184.107/</string>
     <string name="favorite_list_endpoint">favorite_list</string>
     <string name="create_user">create_user</string>
     <string name="USER_INFO">user_info</string>
