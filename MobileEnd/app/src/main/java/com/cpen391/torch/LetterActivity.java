@@ -140,7 +140,6 @@ public class LetterActivity extends AppCompatActivity {
 
         SharedPreferences sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
         String uid = sp.getString(getString(R.string.UID), "");
-
         new Thread(()->OtherUtils.uploadToServer(PermissionURL, uid, getString(R.string.Letter_of_permission), dataToSend)).start();
         finishAffinity();
     }

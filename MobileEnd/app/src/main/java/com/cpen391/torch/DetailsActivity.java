@@ -1,9 +1,11 @@
 package com.cpen391.torch;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -40,7 +42,11 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -48,17 +54,21 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     private SharedPreferences sp;
     private static SharedPreferences.OnSharedPreferenceChangeListener onFavoriteChangedListener;
-
+    private static int Day,Month=1;//Assume we are only getting data from January
+    private static String location=""; //Add a location here
     private StoreInfo storeInfo;
     private Button addToFavoriteButton;
     private TextView storeNameText;
     private LinearLayout chartLinearLayout;
-
+    private String result;
+    private Map<String, Integer> myMap;
+    private String[] pairs;
+    private static final String getDailyDataURL = String.format("http://52.188.108.13:3000/get_population_data/day?year=2021&month=%d&day=%d&location=%s",Month,Day,location );
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-
+        myMap=new HashMap<String, Integer>();
         sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
         onFavoriteChangedListener = (sp, key) -> onFavoriteChanged(key);
         sp.registerOnSharedPreferenceChangeListener(onFavoriteChangedListener);
@@ -200,6 +210,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         setupChart(day);
     }
 
+
     private void setupChart(String day) {
         //BUG: cannot switch day
         chartLinearLayout.removeViewAt(0);
@@ -208,6 +219,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
         layoutParams.setMargins(16, 16, 16, 16);
         chartView.setLayoutParams(layoutParams);
+
 
         chartLinearLayout.addView(chartView, 0);
 
@@ -220,28 +232,46 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         List<DataEntry> data = new ArrayList<>();
         switch (day) {
             case "Sunday":
-                data.add(new ValueDataEntry("08:00", 8));
-                data.add(new ValueDataEntry("09:00", 4));
-                data.add(new ValueDataEntry("10:00", 2));
-                data.add(new ValueDataEntry("11:00", 10));
-                data.add(new ValueDataEntry("12:00", 1));
-                data.add(new ValueDataEntry("13:00", 0));
-                data.add(new ValueDataEntry("14:00", 0));
-                data.add(new ValueDataEntry("15:00", 5));
-                data.add(new ValueDataEntry("16:00", 4));
+                Day=7;
+                result=OtherUtils.readFromURL(getDailyDataURL);
+                Log.d("result",result);
+                pairs = result.split(",");
+                for (int i=0;i<pairs.length;i++) {
+                    String pair = pairs[i];
+                    String[] keyValue = pair.split(":");
+                    myMap.put(keyValue[0], Integer.valueOf(keyValue[1]));
+                }
+                data.add(new ValueDataEntry("08:00", myMap.get("8")));
+                data.add(new ValueDataEntry("09:00", myMap.get("9")));
+                data.add(new ValueDataEntry("10:00", myMap.get("10")));
+                data.add(new ValueDataEntry("11:00", myMap.get("11")));
+                data.add(new ValueDataEntry("12:00", myMap.get("12")));
+                data.add(new ValueDataEntry("13:00", myMap.get("13")));
+                data.add(new ValueDataEntry("14:00", myMap.get("14")));
+                data.add(new ValueDataEntry("15:00", myMap.get("15")));
+                data.add(new ValueDataEntry("16:00", myMap.get("16")));
                 break;
             case "Monday":
-                data.add(new ValueDataEntry("08:00", 7));
-                data.add(new ValueDataEntry("09:00", 3));
-                data.add(new ValueDataEntry("10:00", 2));
-                data.add(new ValueDataEntry("11:00", 0));
-                data.add(new ValueDataEntry("12:00", 9));
-                data.add(new ValueDataEntry("13:00", 6));
-                data.add(new ValueDataEntry("14:00", 3));
-                data.add(new ValueDataEntry("15:00", 1));
-                data.add(new ValueDataEntry("16:00", 10));
+                Day=1;
+                result=OtherUtils.readFromURL(getDailyDataURL);
+                Log.d("result",result);
+                pairs = result.split(",");
+                for (int i=0;i<pairs.length;i++) {
+                    String pair = pairs[i];
+                    String[] keyValue = pair.split(":");
+                    myMap.put(keyValue[0], Integer.valueOf(keyValue[1]));
+                }
+                data.add(new ValueDataEntry("08:00", myMap.get("8")));
+                data.add(new ValueDataEntry("09:00", myMap.get("9")));
+                data.add(new ValueDataEntry("10:00", myMap.get("10")));
+                data.add(new ValueDataEntry("11:00", myMap.get("11")));
+                data.add(new ValueDataEntry("12:00", myMap.get("12")));
+                data.add(new ValueDataEntry("13:00", myMap.get("13")));
+                data.add(new ValueDataEntry("14:00", myMap.get("14")));
+                data.add(new ValueDataEntry("15:00", myMap.get("15")));
+                data.add(new ValueDataEntry("16:00", myMap.get("16")));
                 break;
-            default:
+            default: //Do the same thing as above for everyday
                 data.add(new ValueDataEntry("08:00", 1));
                 data.add(new ValueDataEntry("09:00", 2));
                 data.add(new ValueDataEntry("10:00", 4));
