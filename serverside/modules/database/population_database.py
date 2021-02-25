@@ -2,18 +2,29 @@ import mysql.connector
 import datetime 
 import calendar
 
+def connect_to_database():
+    try:
+        return mysql.connector.connect(
+            host="localhost",
+            user="admin", 
+            password="torch",
+            database="torch"
+        )
+    except:
+        return mysql.connector.connect(
+            host="34.82.123.84",
+            user="admin", 
+            password="torch",
+            database="torch"
+        )
+
 #insert tuple into population table. 
 def insert_table_population(location, count):
     
     now = datetime.datetime.now()
     weekday = datetime.datetime.today().weekday()
 
-    db = mysql.connector.connect(
-        host="localhost",
-        user="admin", 
-        password="torch",
-        database="torch"
-    )
+    db = connect_to_database()
 
     cursor = db.cursor()
     sql = "INSERT INTO population_data (location, count, year, month, day, hour, minute, weekday) VALUES (%s, %d, %d, %d, %d, %d, %d, %d)"
@@ -23,12 +34,7 @@ def insert_table_population(location, count):
     db.commit()
 
 def get_location_data_hourly(location, year, month, day, hour):
-    db = mysql.connector.connect(
-        host="localhost",
-        user="admin", 
-        password="torch",
-        database="torch"
-    )
+    db = connect_to_database()
     cursor = db.cursor()
     sql = "SELECT * FROM population_data WHERE location = '{}' AND hour = {} AND day = {} AND month = {} AND year = {}".format(location, hour, day, month, year)
     cursor.execute(sql)
@@ -41,12 +47,7 @@ def get_location_data_hourly(location, year, month, day, hour):
     return report 
 
 def get_location_data_daily(location, year, month, day): 
-    db = mysql.connector.connect(
-        host="localhost",
-        user="admin", 
-        password="torch",
-        database="torch"
-    )
+    db = connect_to_database()
     cursor = db.cursor()
     sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day, month, year)
     cursor.execute(sql)
@@ -59,12 +60,7 @@ def get_location_data_daily(location, year, month, day):
     return report
 
 def get_location_data_weekly(location, year, month, day, weekday):
-    db = mysql.connector.connect(
-        host="localhost",
-        user="admin", 
-        password="torch",
-        database="torch"
-    )
+    db = connect_to_database()
 
     cursor = db.cursor()
     report = [0] * 7 
@@ -159,12 +155,7 @@ def get_location_data_monthly(location, year, month):
         return report
 
 def get_location_data_yearly(location, year):
-    db = mysql.connector.connect(
-        host="localhost",
-        user="admin", 
-        password="torch",
-        database="torch"
-    )
+    db = connect_to_database()
     cursor = db.cursor()
     sql = "SELECT * FROM population_data WHERE location = '{}' AND year = {}".format(location, year)
     cursor.execute(sql)

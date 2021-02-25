@@ -1,17 +1,26 @@
 import mysql.connector 
-import datetime 
-import calendar
+
+def connect_to_database():
+    try:
+        return mysql.connector.connect(
+            host="localhost",
+            user="admin", 
+            password="torch",
+            database="torch"
+        )
+    except:
+        return mysql.connector.connect(
+            host="34.82.123.84",
+            user="admin", 
+            password="torch",
+            database="torch"
+        )
 
 #insert tuple into user table. 
 def insert_table_user(uid, email):
     
 
-    db = mysql.connector.connect(
-        host="localhost",
-        user="admin", 
-        password="torch",
-        database="torch"
-    )
+    db = connect_to_database()
 
     cursor = db.cursor()
     #check if the user already exists
@@ -27,12 +36,7 @@ def insert_table_user(uid, email):
         db.commit()
 
 def get_email(uid):
-    db = mysql.connector.connect(
-        host="localhost",
-        user="admin", 
-        password="torch",
-        database="torch"
-    )
+    db = connect_to_database()
 
     cursor = db.cursor()
     sql = "SELECT email FROM user_data WHERE user_gid = {}".format(uid)
@@ -43,12 +47,7 @@ def get_email(uid):
     return result
 
 def get_favorite_list(uid):
-    db = mysql.connector.connect(
-        host="localhost",
-        user="admin", 
-        password="torch",
-        database="torch"
-    )
+    db = connect_to_database()
 
     cursor = db.cursor()
     sql = "SELECT favorite_list FROM user_data WHERE user_gid = {}".format(uid)
