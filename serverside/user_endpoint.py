@@ -6,14 +6,6 @@ import modules.database.user_database as UD
 from app import app
 
 from flask import request, jsonify
-import json
-
-def parse_data(data):
-    print(data)
-    value = data.decode("utf-8")
-    value = value.replace("\\\"","") #for bug with format
-    return json.loads(value)
-
 
 @app.route("/create_user", methods = ["POST"])
 def create_user():
