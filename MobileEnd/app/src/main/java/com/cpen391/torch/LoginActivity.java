@@ -6,7 +6,6 @@ import androidx.core.app.ActivityCompat;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.StrictMode;
 import android.util.Log;
 
@@ -21,7 +20,6 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -114,7 +112,6 @@ public class LoginActivity extends AppCompatActivity {
                 new Thread(() ->
                         OtherUtils.uploadToServer(getString(R.string.create_user),
                                 account.getId(),
-                                getString(R.string.USER_INFO),
                                 account.getEmail()))
                         .start();
             }

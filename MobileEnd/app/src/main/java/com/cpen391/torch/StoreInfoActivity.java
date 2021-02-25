@@ -217,16 +217,29 @@ public class StoreInfoActivity extends AppCompatActivity {
 
     private void updateFavoriteList(StoreInfo newInfo) {
         String previousList = sp.getString(getString(R.string.FAVORITES), "");
+        String newInfoJson = newInfo.toJson();
         String updatedJson = "";
         if (OtherUtils.stringIsNullOrEmpty(previousList)) {
             JSONArray jsonArray = new JSONArray();
-            jsonArray.put(newInfo.toJson());
+            jsonArray.put(newInfoJson);
             updatedJson = jsonArray.toString();
             sp.edit().putString(getString(R.string.FAVORITES), updatedJson).apply();
         } else {
             try {
+                Gson g = new Gson();
                 JSONArray jsonArray = new JSONArray(previousList);
-                jsonArray.put(newInfo.toJson());
+                int i;
+                for (i = 0; i < jsonArray.length(); i++) {
+                    StoreInfo oldStoreInfo = g.fromJson(jsonArray.getString(i), StoreInfo.class);
+                    if (oldStoreInfo.getMacAddr().equals(newInfo.getMacAddr())) {
+                        break;
+                    }
+                }
+                if (i < jsonArray.length()) {
+                    jsonArray.put(i, newInfoJson);
+                } else {
+                    jsonArray.put(newInfoJson);
+                }
                 updatedJson = jsonArray.toString();
                 sp.edit().putString(getString(R.string.FAVORITES), updatedJson).apply();
             } catch (Exception e) {
@@ -234,6 +247,19 @@ public class StoreInfoActivity extends AppCompatActivity {
             }
         }
         //upload the new json to server
+        String finalUpdatedJson = updatedJson;
+        new Thread(() -> {
+            OtherUtils.uploadToServer(
+                    getString(R.string.favorite_list_endpoint),
+                    sp.getString(getString(R.string.UID), ""),
+                    finalUpdatedJson
+            );
+            OtherUtils.uploadToServer(
+                    getString(R.string.create_store),
+                    sp.getString(getString(R.string.UID), ""),
+                    newInfo.toJson()
+            );
+        }).start();
     }
 
     @Override

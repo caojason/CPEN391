@@ -96,10 +96,14 @@ public class FavoriteFragment extends Fragment {
             Toast.makeText(this.getContext(), "refreshing", Toast.LENGTH_LONG).show();
 
             //get data from server
-            String favoriteList = sp.getString(getString(R.string.FAVORITES), "");
-            if (!OtherUtils.stringIsNullOrEmpty(favoriteList)) {
-                setupFavoriteList(favoriteList);
+            String url = getString(R.string.BASE_URL)
+                    + getString(R.string.favorite_list_endpoint)
+                    + "?uid=" + sp.getString(getString(R.string.UID), "");
+            String favoriteList = OtherUtils.readFromURL(url);
+            if (OtherUtils.stringIsNullOrEmpty(favoriteList)) {
+                favoriteList = sp.getString(getString(R.string.FAVORITES), "");
             }
+            setupFavoriteList(favoriteList);
         });
     }
 
@@ -142,8 +146,10 @@ public class FavoriteFragment extends Fragment {
 
         ImageView storeImageView = listBlock.findViewById(R.id.store_image);
         Bitmap imageBitmap = OtherUtils.decodeImage(storeInfo.getEncodedLogo());
-        imageBitmap = OtherUtils.scaleImage(imageBitmap, 100, 100);
-        storeImageView.setImageBitmap(imageBitmap);
+        if (imageBitmap != null) {
+            imageBitmap = OtherUtils.scaleImage(imageBitmap, 100, 100);
+            storeImageView.setImageBitmap(imageBitmap);
+        }
 
         Button button = listBlock.findViewById(R.id.details_button);
         button.setOnClickListener(view1 -> enterDetails(storeInfo, distanceString));

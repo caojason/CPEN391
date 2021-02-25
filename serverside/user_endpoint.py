@@ -10,14 +10,13 @@ from flask import request, jsonify
 @app.route("/create_user", methods = ["POST"])
 def create_user():
     user_info_dict = request.get_json()
-    if user_info_dict["type"] == "user_info":
+    try:
         uid = user_info_dict["uid"]
         email = user_info_dict["data"]
         UD.insert_table_user(uid, email)
         print("create user success")
         return "success"
-    else:
-        print("malformed type")
+    except:
         return "failed"
 
 

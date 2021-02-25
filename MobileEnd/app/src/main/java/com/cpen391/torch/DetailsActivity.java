@@ -191,7 +191,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         new Thread(() -> OtherUtils.uploadToServer(
                 getString(R.string.favorite_list_endpoint),
                 sp.getString(getString(R.string.UID), ""),
-                getString(R.string.FAVORITES),
                 finalUpdatedJson
         )).start();
     }

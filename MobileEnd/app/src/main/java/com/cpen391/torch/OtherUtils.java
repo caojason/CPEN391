@@ -7,8 +7,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 
-import com.google.gson.JsonObject;
-
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -52,6 +50,7 @@ public class OtherUtils {
     }
 
     public static Bitmap decodeImage(String encodedImg) {
+        if (stringIsNullOrEmpty(encodedImg)) return null;
         byte[] decoded = Base64.decode(encodedImg, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
     }
@@ -64,9 +63,9 @@ public class OtherUtils {
      * upload strings, bitmap to the server
      * returns true if success, false otherwise
      * */
-    public static void uploadToServer(String endpoint, String uid, String type, String data) {
+    public static void uploadToServer(String endpoint, String uid, String data) {
 
-        String jsonStringToSend = createJsonString(uid, type, data);
+        String jsonStringToSend = createJsonString(uid, data);
         String response = "";
         String serverLink = "http://35.233.184.107:5000/" + endpoint;
         Log.d("upload", "uploading: " + jsonStringToSend);
@@ -119,11 +118,10 @@ public class OtherUtils {
         }
     }
 
-    private static String createJsonString(String uid, String type, String data) {
+    private static String createJsonString(String uid, String data) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("uid", uid);
-            jsonObject.put("type", type);
             jsonObject.put("data", data);
         } catch (Exception e) {
             Log.d("other_utils", "create json object failed");

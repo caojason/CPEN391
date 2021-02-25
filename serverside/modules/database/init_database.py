@@ -52,7 +52,21 @@ def create_table_population():
         "CREATE TABLE IF NOT EXISTS `population_data` ( `id` INT AUTO_INCREMENT PRIMARY KEY, `location` VARCHAR(20), `count` INT, `year` INT, `month` INT, `day` INT, `hour` INT, `minute` INT, `weekday` INT)"
     )
 
+def create_table_store_info():
+    db = mysql.connector.connect(
+        host="localhost",
+        user="admin", 
+        password="torch",
+        database="torch"
+    )
+
+    cursor = db.cursor()
+    cursor.execute(
+        "CREATE TABLE IF NOT EXISTS `store_info_data` ( `id` INT AUTO_INCREMENT PRIMARY KEY, `storeName` VARCHAR(20), `storeOwnerId` VARCHAR(255), `latitude` DOUBLE, `longitude` DOUBLE, `macAddr` VARCHAR(255), `encodedLogo` TEXT)"
+    )
+
 def init_torch_database():
     database_init()
     create_table_user()
     create_table_population()
+    create_table_store_info()
