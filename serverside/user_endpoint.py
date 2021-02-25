@@ -17,7 +17,10 @@ def parse_data(data):
 
 @app.route("/create_user", methods = ["POST"])
 def create_user():
-    user_info_dict = parse_data(request.get_data())
+    print(request.get_json())
+    user_info_dict = request.get_json()
+    if user_info_dict is None:
+        user_info_dict = parse_data(request.get_data())
     if user_info_dict["type"] == "user_info":
         uid = user_info_dict["uid"]
         email = user_info_dict["data"]
@@ -37,9 +40,11 @@ def get_favorite_list():
         return jsonify(favorite_list) if favorite_list != "" else ""
 
     elif request.method == "POST":
-        fav_lis_data = parse_data(request.get_data())
-        uid = fav_lis_data["uid"]
-        favorite_list = str(fav_lis_data["data"])
+        fav_list_data = request.get_json()
+        if fav_list_data is None:
+            fav_list_data = parse_data(request.get_data())
+        uid = fav_list_data["uid"]
+        favorite_list = str(fav_list_data["data"])
         UD.set_favorite_list(uid, favorite_list)
         return "success"
 

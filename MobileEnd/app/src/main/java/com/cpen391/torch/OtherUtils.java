@@ -9,6 +9,8 @@ import android.util.Patterns;
 
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -74,6 +76,7 @@ public class OtherUtils {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Accept", "application/json");
             conn.setConnectTimeout(3000);
             conn.setDoOutput(true);
             conn.connect();
@@ -97,7 +100,7 @@ public class OtherUtils {
                 URL url = new URL(link);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("Content-Type", "text/html");
                 conn.setConnectTimeout(3000);
                 conn.setDoOutput(true);
                 conn.connect();
@@ -117,11 +120,11 @@ public class OtherUtils {
     }
 
     private static String createJsonString(String uid, String type, String data) {
-        JsonObject jsonObject = new JsonObject();
+        JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.addProperty("\"uid\"", "\"" + uid + "\"");
-            jsonObject.addProperty("\"type\"", "\"" + type + "\"");
-            jsonObject.addProperty("\"data\"", "\"" + data + "\"");
+            jsonObject.put("uid", uid);
+            jsonObject.put("type", type);
+            jsonObject.put("data", data);
         } catch (Exception e) {
             Log.d("other_utils", "create json object failed");
         }

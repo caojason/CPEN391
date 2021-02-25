@@ -6,7 +6,9 @@ import androidx.core.app.ActivityCompat;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.StrictMode;
+import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -18,6 +20,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
@@ -125,9 +128,12 @@ public class LoginActivity extends AppCompatActivity {
     private boolean getFavoriteList(String uid) {
         String url = getString(R.string.BASE_URL) + getString(R.string.favorite_list_endpoint) + "?uid=" + uid;
         String favoriteList = OtherUtils.readFromURL(url);
-
-        sp.edit().putString(getString(R.string.FAVORITES), favoriteList).apply();
-
+        try {
+            JSONArray jsonArray = new JSONArray(favoriteList);
+            sp.edit().putString(getString(R.string.FAVORITES), jsonArray.getString(0)).apply();
+        } catch (Exception e) {
+            Log.d("D", "first parse of favorite list failed");
+        }
         return !OtherUtils.stringIsNullOrEmpty(favoriteList);
     }
 
