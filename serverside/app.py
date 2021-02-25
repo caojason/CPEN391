@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 import user_endpoint
 import store_info_endpoint
-import population_endpoint
+#import population_endpoint
 
 @app.route("/")
 def home():

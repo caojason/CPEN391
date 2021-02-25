@@ -56,6 +56,8 @@ def get_favorite_list(uid):
 
     result = cursor.fetchone()
 
+    if result is None:
+        result = ""
     return result
 
 def set_favorite_list(uid, favorite_list):

@@ -66,7 +66,7 @@ public class OtherUtils {
 
         String jsonStringToSend = createJsonString(uid, type, data);
         String response = "";
-        String serverLink = "http://127.0.0.1:5000/" + endpoint;
+        String serverLink = "http://35.233.184.107:5000/" + endpoint;
         Log.d("upload", "uploading: " + jsonStringToSend);
         Log.d("upload", "upload to: "+ serverLink);
         try {

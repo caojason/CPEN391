@@ -5,13 +5,20 @@ import modules.database.user_database as UD
 
 from app import app
 
-from flask import Flask, request, jsonify
-import json
+from flask import request, jsonify
 
 def parse_data(form):
     value = form.to_dict()
     value = list(value.keys())[0]
-    return json.loads(value)
+    value = (str(value))[1:-1]
+    value = value.split(",")
+    value_dict = {}
+    for v in value:
+        pair = v.split(":")
+        value_dict[pair[0]]=pair[1]
+
+    print(value_dict)
+    return value_dict
 
 @app.route("/create_user", methods = ["POST"])
 def create_user():
@@ -32,7 +39,7 @@ def get_favorite_list():
     if request.method == "GET":
         uid = request.args["uid"]
         favorite_list = UD.get_favorite_list(uid)
-        return jsonify(favorite_list)
+        return jsonify(favorite_list) if favorite_list != "" else ""
 
     elif request.method == "POST":
         fav_lis_data = parse_data(request.form)
