@@ -6,19 +6,12 @@ import modules.database.user_database as UD
 from app import app
 
 from flask import request, jsonify
+import json
 
 def parse_data(form):
     value = form.to_dict()
     value = list(value.keys())[0]
-    value = (str(value))[1:-1]
-    value = value.split(",")
-    value_dict = {}
-    for v in value:
-        pair = v.split(":")
-        value_dict[pair[0]]=pair[1]
-
-    print(value_dict)
-    return value_dict
+    return json.loads(value)
 
 @app.route("/create_user", methods = ["POST"])
 def create_user():

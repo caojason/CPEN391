@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.append(os.getcwd())
 
-from flask import Flask
+from flask import Flask, request
 from modules.database.init_database import init_torch_database
 
 init_torch_database()
@@ -16,6 +16,12 @@ import store_info_endpoint
 @app.route("/")
 def home():
     return "Torch"
+
+@app.route("/test", methods = ["POST"])
+def test():
+    print(request.get_data())
+    print(request.form)
+    return ""
 
 
 #usage :

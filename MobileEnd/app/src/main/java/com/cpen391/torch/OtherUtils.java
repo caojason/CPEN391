@@ -119,9 +119,9 @@ public class OtherUtils {
     private static String createJsonString(String uid, String type, String data) {
         JsonObject jsonObject = new JsonObject();
         try {
-            jsonObject.addProperty("uid", uid);
-            jsonObject.addProperty("type", type);
-            jsonObject.addProperty("data", data);
+            jsonObject.addProperty("\"uid\"", "\"" + uid + "\"");
+            jsonObject.addProperty("\"type\"", "\"" + type + "\"");
+            jsonObject.addProperty("\"data\"", "\"" + data + "\"");
         } catch (Exception e) {
             Log.d("other_utils", "create json object failed");
         }
