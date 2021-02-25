@@ -18,6 +18,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 420;
@@ -105,14 +107,28 @@ public class LoginActivity extends AppCompatActivity {
             //use google ID as our default id
             sp.edit().putString(getString(R.string.UID), account.getId()).apply();
 
-//            String url = getString(R.string.GET_URL) + "users?" + getString(R.string.UID) + "=" + account.getId();
-//            String userInfoJson = OtherUtils.readFromURL(url);
-//            getUserInfo(userInfoJson);
+            if (!getFavoriteList(account.getId())) {
+                new Thread(() ->
+                        OtherUtils.uploadToServer(getString(R.string.create_user),
+                                account.getId(),
+                                getString(R.string.USER_INFO),
+                                account.getEmail()))
+                        .start();
+            }
 
             goToHomeActivity();
         } else {
             signIn();
         }
+    }
+
+    private boolean getFavoriteList(String uid) {
+        String url = getString(R.string.BASE_URL) + getString(R.string.favorite_list_endpoint) + "?uid=" + uid;
+        String favoriteList = OtherUtils.readFromURL(url);
+
+        sp.edit().putString(getString(R.string.FAVORITES), favoriteList).apply();
+
+        return !OtherUtils.stringIsNullOrEmpty(favoriteList);
     }
 
     private void goToHomeActivity() {

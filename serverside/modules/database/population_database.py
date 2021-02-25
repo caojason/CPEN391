@@ -2,33 +2,6 @@ import mysql.connector
 import datetime 
 import calendar
 
-#create the database
-def database_init():
-
-    db = mysql.connector.connect(
-        host="localhost",
-        user="admin", 
-        password="torch"
-    )
-
-    cursor = db.cursor()
-    cursor.execute("CREATE DATABASE torch")
-
-#create the table to store location visation records
-def create_table_population(): 
-
-    db = mysql.connector.connect(
-        host="localhost",
-        user="admin", 
-        password="torch",
-        database="torch"
-    )
-
-    cursor = db.cursor()
-    cursor.execute(
-        "CREATE TABLE population_data ( id INT AUTO_INCREMENT PRIMARY KEY, location VARCHAR(20), count INT, year INT, month INT, day INT, hour INT, minute INT, weekday INT"
-    )
-
 #insert tuple into population table. 
 def insert_table_population(location, count):
     

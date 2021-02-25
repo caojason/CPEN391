@@ -5,3 +5,4 @@ scipy
 opencv-python
 imutils
 Flask
+mysql-connector-python

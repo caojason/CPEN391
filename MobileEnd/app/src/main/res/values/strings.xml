@@ -5,7 +5,11 @@
     <string name="title_browse">Browse</string>
     <string name="title_activity_maps">Map</string>
 
-    <string name="GET_URL">placeholder</string>
+    <string name="BASE_URL">http://127.0.0.1:5000/</string>
+    <string name="favorite_list_endpoint">favorite_list</string>
+    <string name="create_user">create_user</string>
+    <string name="USER_INFO">user_info</string>
+
     <string name="client_id">3088778948-19qd3b5ag17p6rde7vb7qbtm2ji9h3iu.apps.googleusercontent.com</string>
 
     <string name="LOGGED">LOGGED</string>

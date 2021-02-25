@@ -1,15 +1,15 @@
-import person_counter_opencv.people_counter as PC #may change depending on directory structure
-import database.population_database as PD #may change depending on directory structure
+import os
+import sys
+sys.path.append(os.getcwd())
+import modules.person_counter_opencv.people_counter as PC #may change depending on directory structure
+import modules.database.population_database as PD #may change depending on directory structure
 
 from flask import Flask, request, jsonify 
-import os 
+ 
 import calendar
 
-app = Flask(__name__)
+from app import app
 
-#create torch database and the app's tables.
-PD.database_init()
-PD.create_table_population()
 
 @app.route('/get_population_data/week')
 def get_week(): 
