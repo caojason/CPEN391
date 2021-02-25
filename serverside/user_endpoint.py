@@ -41,3 +41,7 @@ def get_favorite_list():
         UD.set_favorite_list(uid, favorite_list)
         return "success"
 
+@app.route("/email", methods=["GET"])
+def get_email():
+    uid = request.args["uid"]
+    return jsonify(UD.get_email(uid))

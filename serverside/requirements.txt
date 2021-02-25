@@ -6,3 +6,4 @@ opencv-python
 imutils
 Flask
 mysql-connector-python
+pytest_mysql
