@@ -28,3 +28,25 @@ def test_create_user():
         assert rv.status_code == 200
         rv=testing_client.get("/email?uid=105960354998423944600")
         assert b"yuntaowu2000@gmail.com" in rv.data
+
+def test_invalid_create_user():
+    # GET should fail
+    with app.test_client() as testing_client:
+        rv = testing_client.get("/create_user")
+        assert rv.status_code != 200
+
+def test_favorite_list():
+    with app.test_client() as testing_client:
+        # first setup user
+        rv = testing_client.post("/create_user",
+                    data=json.dumps({"uid":"105960354998423944600","type":"user_info","data":"yuntaowu2000@gmail.com"}),
+                    content_type="application/json")
+        assert rv.status_code == 200
+
+        #send a random favorite list
+        rv = testing_client.post("/favorite_list",
+                    data=json.dumps({"uid":"105960354998423944600","type":"Favorites","data":"[]"}),
+                    content_type="application/json")
+        assert rv.status_code == 200
+        rv=testing_client.get("/favorite_list?uid=105960354998423944600")
+        assert b"[]" in rv.data
