@@ -8,14 +8,14 @@ from app import app
 from flask import request, jsonify
 import json
 
-def parse_data(form):
-    value = form.to_dict()
-    value = list(value.keys())[0]
+def parse_data(data):
+    print(data)
+    value = data.decode("utf-8")
     return json.loads(value)
 
 @app.route("/create_user", methods = ["POST"])
 def create_user():
-    user_info_dict = parse_data(request.form)
+    user_info_dict = parse_data(request.get_data())
     if user_info_dict["type"] == "user_info":
         uid = user_info_dict["uid"]
         email = user_info_dict["data"]
@@ -35,7 +35,7 @@ def get_favorite_list():
         return jsonify(favorite_list) if favorite_list != "" else ""
 
     elif request.method == "POST":
-        fav_lis_data = parse_data(request.form)
+        fav_lis_data = parse_data(request.get_data())
         uid = fav_lis_data["uid"]
         favorite_list = str(fav_lis_data["data"])
         UD.set_favorite_list(uid, favorite_list)
