@@ -29,3 +29,6 @@ def test():
 # set FLASK_APP=app.py
 # set FLASK_ENV=development
 # flask run
+# To run flask on the server
+# cd Torch/serverside
+# flask run --host=0.0.0.0

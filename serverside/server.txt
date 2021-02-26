@@ -8,4 +8,12 @@ mysql --host=34.82.123.84 --user=admin --password
 password is torch
 
 
+To run flask on the server
+cd Torch/serverside
+flask run --host=0.0.0.0
 
+json data format:
+mostly can be found in the test files
+
+favorite list with multiple entries:
+["{\"encodedLogo\":\"\",\"hasPermission\":true,\"latitude\":49.2311,\"longitude\":-123.0082,\"macAddr\":\"20:17:01:09:52:98\",\"storeName\":\"testMyStore\",\"storeOwnerId\":\"105960354998423944600\"}","{\"encodedLogo\":\" \",\"hasPermission\":false,\"latitude\":10.0,\"longitude\":12.0,\"macAddr\":\"FF:FF:FF:FF:FF:AB\",\"storeName\":\"test1\",\"storeOwnerId\":\"testid1\"}"]
