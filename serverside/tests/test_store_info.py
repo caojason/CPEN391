@@ -18,7 +18,7 @@ app.testing = True
 def test_create_store():
     with app.test_client() as testing_client:
         rv = testing_client.post("/create_store",
-                    data=json.dumps({"encodedLogo":"","hasPermission":True,"latitude":49.2311,"longitude":-123.0082,"macAddr":"20:17:01:09:52:98","storeName":"test","storeOwnerId":"105960354998423944600"}),
+                    data=json.dumps({"uid":"105960354998423944600","data":"{\"encodedLogo\":\"\",\"hasPermission\":true,\"latitude\":49.2311,\"longitude\":-123.0082,\"macAddr\":\"20:17:01:09:52:98\",\"storeName\":\"test1\",\"storeOwnerId\":\"105960354998423944600\"}"}),
                     content_type="application/json")
         assert rv.status_code == 200
         rv = testing_client.get("/get_stores")
@@ -36,7 +36,7 @@ def test_update_store_info():
     with app.test_client() as testing_client:
         # firstly create the store
         rv = testing_client.post("/create_store",
-                    data=json.dumps({"encodedLogo":"","hasPermission":True,"latitude":49.2311,"longitude":-123.0082,"macAddr":"20:17:01:09:52:98","storeName":"test","storeOwnerId":"105960354998423944600"}),
+                    data=json.dumps({"uid":"105960354998423944600","data":"{\"encodedLogo\":\"\",\"hasPermission\":true,\"latitude\":49.2311,\"longitude\":-123.0082,\"macAddr\":\"20:17:01:09:52:98\",\"storeName\":\"test\",\"storeOwnerId\":\"105960354998423944600\"}"}),
                     content_type="application/json")
         assert rv.status_code == 200
         rv = testing_client.get("/get_stores")
@@ -45,7 +45,7 @@ def test_update_store_info():
         
         # now update the value
         rv = testing_client.post("/create_store",
-                    data=json.dumps({"encodedLogo":"","hasPermission":True,"latitude":49.2311,"longitude":-123.0082,"macAddr":"20:17:01:09:52:98","storeName":"testUpdate","storeOwnerId":"105960354998423944600"}),
+                    data=json.dumps({"uid":"105960354998423944600","data":"{\"encodedLogo\":\"\",\"hasPermission\":true,\"latitude\":49.2311,\"longitude\":-123.0082,\"macAddr\":\"20:17:01:09:52:98\",\"storeName\":\"testMyStore\",\"storeOwnerId\":\"105960354998423944600\"}"}),
                     content_type="application/json")
         assert rv.status_code == 200
         rv = testing_client.get("/get_stores")

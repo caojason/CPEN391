@@ -6,12 +6,15 @@ import modules.database.store_info_database as SD
 from app import app
 
 from flask import request, jsonify
+import json
 
 @app.route("/create_store", methods=["POST"])
 def create_store():
-    store_info_dict = request.get_json()
-    print(store_info_dict)
+    data_json = request.get_json()
+    print(data_json)
     try:
+        print(data_json["data"])
+        store_info_dict = json.loads(data_json["data"])
         encodedLogo = store_info_dict["encodedLogo"]
         latitude = store_info_dict["latitude"]
         longitude = store_info_dict["longitude"]
