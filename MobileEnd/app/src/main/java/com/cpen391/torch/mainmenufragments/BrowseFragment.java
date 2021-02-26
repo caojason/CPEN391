@@ -86,7 +86,6 @@ public class BrowseFragment extends Fragment implements OnMapReadyCallback {
         switchFab = view.findViewById(R.id.switch_map_fab);
         switchFab.setOnClickListener(view1 -> switchView());
 
-        setupStoreInfoList();
         setupListView();
     }
 
@@ -250,7 +249,7 @@ public class BrowseFragment extends Fragment implements OnMapReadyCallback {
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
-        //TODO: read from server
+        setupStoreInfoList();
         Objects.requireNonNull(getActivity()).runOnUiThread(() -> contentLayout.removeAllViews());
         for (int i = 0; i < storeInfoList.size(); i++) {
             StoreInfo storeInfo = storeInfoList.get(i);
