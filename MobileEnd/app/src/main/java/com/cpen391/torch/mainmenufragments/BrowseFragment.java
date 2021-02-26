@@ -3,6 +3,7 @@ package com.cpen391.torch.mainmenufragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +42,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,6 +93,42 @@ public class BrowseFragment extends Fragment implements OnMapReadyCallback {
     private void setupStoreInfoList() {
         storeInfoList = new ArrayList<>();
         storeInfoMap = new HashMap<>();
+        SharedPreferences sp = Objects.requireNonNull(getActivity()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
+        String url = getString(R.string.BASE_URL) + getString(R.string.get_store_list) + "?uid=" + sp.getString(getString(R.string.UID), "");
+        String infoString = OtherUtils.readFromURL(url);
+
+        try {
+            testSetup();
+            JSONArray jsonArray = new JSONArray(infoString);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
+                String encodedLogo = jsonObject.getString("encodedLogo");
+                double latitude = jsonObject.getDouble("latitude");
+                double longitude = jsonObject.getDouble("longitude");
+                String macAddr = jsonObject.getString("macAddr");
+                String storeName = jsonObject.getString("storeName");
+                String storeOwnerId = jsonObject.getString("storeOwnerId");
+                StoreInfo storeInfo= new StoreInfo(
+                        storeName,
+                        storeOwnerId,
+                        latitude,
+                        longitude,
+                        macAddr,
+                        encodedLogo,
+                        false
+                );
+                storeInfoList.add(storeInfo);
+                storeInfoMap.put(storeName, storeInfo);
+            }
+        } catch (Exception e) {
+            Log.d("D", "store info list parsing error");
+        }
+
+
+
+    }
+
+    private void testSetup() {
         for (int i = 0; i < 3; i++) {
             Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test_img);
             imageBitmap = OtherUtils.scaleImage(imageBitmap, 100, 100);

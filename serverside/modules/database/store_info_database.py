@@ -51,6 +51,10 @@ def get_store_info_records(uid):
     sql = "SELECT * FROM store_info_data WHERE (storeOwnerId<>{} AND NOT(latitude={} AND longitude={})) LIMIT {};".format(uid, -1, -1, 10)
     cursor.execute(sql)
 
-    all_stores = cursor.fetchall()
+    columns = tuple([d[0] for d in cursor.description])
+
+    all_stores = []
+    for row in cursor:
+        all_stores.append(dict(zip(columns, row)))
 
     return all_stores
