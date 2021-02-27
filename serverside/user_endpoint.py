@@ -26,7 +26,7 @@ def get_favorite_list():
         uid = request.args["uid"]
         favorite_list = UD.get_favorite_list(uid)
         print(favorite_list)
-        return str(favorite_list) if favorite_list != "" else ""
+        return str(favorite_list[0]) if favorite_list != "" else ""
 
     elif request.method == "POST":
         fav_list_data = request.get_json()

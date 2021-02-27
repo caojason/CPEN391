@@ -185,6 +185,10 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
                 sp.edit().putString(getString(R.string.FAVORITES), updatedJson).apply();
             } catch (Exception e) {
                 Log.d("D", "malformed json");
+                JSONArray jsonArray = new JSONArray();
+                jsonArray.put(storeInfo.toJson());
+                updatedJson = jsonArray.toString();
+                sp.edit().putString(getString(R.string.FAVORITES), updatedJson).apply();
             }
         }
         String finalUpdatedJson = updatedJson;

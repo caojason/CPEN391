@@ -86,6 +86,7 @@ public class BrowseFragment extends Fragment implements OnMapReadyCallback {
         switchFab = view.findViewById(R.id.switch_map_fab);
         switchFab.setOnClickListener(view1 -> switchView());
 
+        setupStoreInfoList();
         setupListView();
     }
 

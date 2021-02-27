@@ -129,6 +129,7 @@ public class LoginActivity extends AppCompatActivity {
             JSONArray jsonArray = new JSONArray(favoriteList);
             sp.edit().putString(getString(R.string.FAVORITES), jsonArray.getString(0)).apply();
         } catch (Exception e) {
+            sp.edit().putString(getString(R.string.FAVORITES), "").apply();
             Log.d("D", "first parse of favorite list failed");
         }
         return !OtherUtils.stringIsNullOrEmpty(favoriteList);

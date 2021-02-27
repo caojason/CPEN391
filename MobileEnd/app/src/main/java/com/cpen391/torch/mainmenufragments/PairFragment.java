@@ -165,6 +165,7 @@ public class PairFragment extends Fragment {
                 if (!result.equals("\"\"") && !result.contains(uid)) {
                     Objects.requireNonNull(getActivity()).runOnUiThread(() ->
                             Toast.makeText(getContext(), "the address has been registered by someone", Toast.LENGTH_SHORT).show());
+                    return;
                 }
 
                 boolean fail = false;
