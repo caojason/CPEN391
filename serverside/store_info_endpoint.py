@@ -4,7 +4,7 @@ import json
 import smtplib
 sys.path.append(os.getcwd())
 import modules.database.store_info_database as SD
-import modules.database.user_database.py as UD
+import modules.database.user_database as UD
 from app import app
 
 from flask import request, jsonify
@@ -37,7 +37,14 @@ def get_store_list():
     return jsonify(SD.get_store_info_records(uid))
 
 
-@app.route("/request",method=["GET"])
+@app.route("/check_exists", methods=["GET"])
+def check_exist():
+    macAddr = request.args["macAddr"]
+    print(macAddr)
+    return jsonify(SD.check_if_exist(macAddr))
+
+
+@app.route("/create_email",methods=["GET"])
 def create_permission_link():
     data_json = request.get_json()
     request_info=json.loads(data_json["data"])
@@ -59,12 +66,13 @@ def create_permission_link():
         
     toStr=str(favourite_list)
     UD.set_favorite_list(uid, toStr)
+    return ""
 
 
-def send_email(from,to,message,password):
+def send_email(from_addr,to_addr,message,password):
     server=smtplib.SMTP_SSL("smtp.gmail.com",465)
-    server.login(from,password)
-    server.sendmail(from,to,message)
+    server.login(from_addr,password)
+    server.sendmail(from_addr,to_addr,message)
     server.quit()
 
 

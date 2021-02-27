@@ -27,7 +27,6 @@ public class LetterActivity extends AppCompatActivity {
     private String message;
     private String storeName = "";
     private String ownerId = "";
-    private static final String PermissionURL = "http://52.188.108.13:3000/home/request/"; //Add the storeOwnerID before use
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +139,10 @@ public class LetterActivity extends AppCompatActivity {
 
         SharedPreferences sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
         String uid = sp.getString(getString(R.string.UID), "");
-        new Thread(()->OtherUtils.uploadToServer(PermissionURL, uid, dataToSend)).start();
+        new Thread(()-> {
+            String url = getString(R.string.BASE_URL) + getString(R.string.create_email) + "?uid=" + uid;
+            OtherUtils.uploadToServer(url, uid, dataToSend);
+        }).start();
         finishAffinity();
     }
 

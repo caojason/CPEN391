@@ -53,3 +53,22 @@ def test_update_store_info():
         data2 = rv.data
         assert data1 != data2
 
+
+def test_check_if_store_exist1():
+    #this time the store does not exist yet
+    with app.test_client() as testing_client:
+        rv = testing_client.get("/check_exists?macAddr=00:00:00:00:00:00")
+        assert rv.status_code == 200
+        assert b"\"\"" in rv.data
+
+def test_check_if_store_exist2():
+    # this time create a store first
+    with app.test_client() as testing_client:
+        rv = testing_client.post("/create_store",
+                    data=json.dumps({"uid":"105960354998423944600","data":"{\"encodedLogo\":\"\",\"hasPermission\":true,\"latitude\":49.2311,\"longitude\":-123.0082,\"macAddr\":\"20:17:01:09:52:98\",\"storeName\":\"test\",\"storeOwnerId\":\"105960354998423944600\"}"}),
+                    content_type="application/json")
+        assert rv.status_code == 200
+        rv = testing_client.get("/check_exists?macAddr=20:17:01:09:52:98")
+        assert rv.status_code == 200
+        assert b"[\"105960354998423944600\"]" in rv.data
+

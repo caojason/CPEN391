@@ -157,7 +157,16 @@ public class PairFragment extends Fragment {
 
         Thread t = new Thread() {
             public void run() {
-                //TODO: check if the address has been used on the server, if so, do not proceed
+                // check if the address has been used on the server, if so, do not proceed
+                SharedPreferences sp = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
+                String uid = sp.getString(getString(R.string.UID), "");
+                String url = getString(R.string.BASE_URL) + getString(R.string.check_is_store_owner) + "?macAddr=" + selectedAddr;
+                String result = OtherUtils.readFromURL(url);
+                if (!result.equals("\"\"") && !result.contains(uid)) {
+                    Objects.requireNonNull(getActivity()).runOnUiThread(() ->
+                            Toast.makeText(getContext(), "the address has been registered by someone", Toast.LENGTH_SHORT).show());
+                }
+
                 boolean fail = false;
 
                 BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);

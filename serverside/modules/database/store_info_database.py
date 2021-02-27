@@ -58,3 +58,19 @@ def get_store_info_records(uid):
         all_stores.append(dict(zip(columns, row)))
 
     return all_stores
+
+def check_if_exist(macAddr):
+    db = connect_to_database()
+
+    cursor = db.cursor()
+
+    sql = "SELECT storeOwnerId FROM store_info_data WHERE macAddr={}".format("\""+macAddr+"\"")
+
+    cursor.execute(sql)
+
+    result = cursor.fetchone()
+
+    if not result:
+        return ""
+    else:
+        return result
