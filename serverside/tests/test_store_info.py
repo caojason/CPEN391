@@ -91,7 +91,7 @@ def test_create_permission_link():
         data1=str(rv.data)
         x=data1.split(',')
 
-        print(x[1][14:])
+        print(x[1][15:])
         #send a message
         rv = testing_client.get("/give_permission?uid=105960354998423944600&macAddr=20:17:01:09:52:98")
         assert rv.status_code == 200
