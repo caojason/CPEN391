@@ -69,7 +69,7 @@ def get_permission():
     temp=favourite_list_str[0].split(',')
     Addr=temp[4][7:]
     if(Addr==macAddr):
-        permission=temp[2][15:]
+        permission=temp[2][16:]
         if permission =="false":
                 permission ="true"
   
