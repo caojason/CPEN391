@@ -66,12 +66,11 @@ def get_permission():
     favourite_list_str=UD.get_favorite_list(uid)
     if favourite_list_str != "":
         favourite_list_str=str(favourite_list_str)
-    temp=favourite_list_str[0].split(',')
-    Addr=temp[4][7:]
-    if(Addr==macAddr):
-        permission=temp[2][16:]
-        if permission =="false":
-                permission ="true"
+    indexOfAddr=favourite_list_str.find(macAddr)
+    if indexOfAddr != -1:
+        indexOfPermission=favourite_list_str.rfind("false",indexOfAddr,-1)
+        if indexOfPermission != -1:
+            favourite_list_str.replace("false","true",1)
   
     UD.set_favorite_list(uid, favourite_list_str)
 
