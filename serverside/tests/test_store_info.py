@@ -88,8 +88,8 @@ def test_create_permission_link():
                 content_type="application/json")
         assert rv.status_code == 200
         rv=testing_client.get("/favorite_list?uid=105960354998423944600")
-        data1=rv.data
-        x=str(data1.split(','))
+        data1=str(rv.data)
+        x=data1.split(',')
 
         print(x[4][7:])
         #send a message
