@@ -72,3 +72,32 @@ def test_check_if_store_exist2():
         assert rv.status_code == 200
         assert b"[\"105960354998423944600\"]" in rv.data
 
+def test_create_permission_link():
+    with app.test_client() as testing_client:
+      #create a user 
+        rv = testing_client.post("/create_user",
+                data=json.dumps({"uid":"105960354998423944600","type":"user_info","data":"yuntaowu2000@gmail.com"}),
+                content_type="application/json")
+        assert rv.status_code == 200
+        rv=testing_client.get("/email?uid=105960354998423944600")
+        assert b"yuntaowu2000@gmail.com" in rv.data
+     
+      #send a random favorite list
+        rv = testing_client.post("/favorite_list",
+                data=json.dumps({"uid":"105960354998423944600","type":"Favorites","data":"{\"encodedLogo\":\"\",\"hasPermission\":false,\"latitude\":49.2311,\"longitude\":-123.0082,\"macAddr\":\"20:17:01:09:52:98\",\"storeName\":\"testMyStore\",\"storeOwnerId\":\"105960354998423944600\"}"}),
+                content_type="application/json")
+        assert rv.status_code == 200
+        rv=testing_client.get("/favorite_list?uid=105960354998423944600")
+        assert b"[]" in rv.data
+        data1=rv.data
+
+        #send a message
+        rv = testing_client.post("/give_permission",
+                data=json.dumps({"uid":"105960354998423944600","macAddr":"20:17:01:09:52:98"}),
+                content_type="application/json")
+        assert rv.status_code == 200
+        
+        rv=testing_client.get("/favorite_list?uid=105960354998423944600")
+        data2=rv.data
+        assert data1 !=data2
+        

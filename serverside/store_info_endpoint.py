@@ -54,25 +54,34 @@ def create_permission_link():
     uid=UD.get_uid(email)
     storeInfo=SD.get_store_info_records(ownerId)
     macAddr=storeInfo["macAddr"]
-    favourite_list_str=UD.get_favorite_list(uid)
-    favourite_list=json.loads(favourite_list_str)
-    uid=hash(uid)
-    macAddr=hash(macAddr)
+    uid=StevenHash(uid)
     permissionLink="/give_permission?macAddr={macAddr}&request_user_id={uid}"
-    send_email(email,"owner's email","user's password", message+"please click the link to give permission:"+permissionLink)
-    for y in favourite_list.values():   #I don't know what the list look like, so I pretend the value in the dictionary has the storeInfo 
-        if y["macAddr"] == macAddr:
-            y["permission"] == True
-        
-    toStr=str(favourite_list)
-    UD.set_favorite_list(uid, toStr)
-    return ""
+    send_email("our email","owner email",message+"click the following link to give permission"+permissionLink)
+
+@app.route("/give_permission",method=["GET"])
+def get_permission():
+    uid = request.args["uid"] if "uid" in request.args else "\"\""
+    #uid=StevenUnHash(uid)
+    macAddr=request.args["macAddr"] if "macAddr" in request.args else "\"\""
+    favourite_list_str=UD.get_favorite_list(uid)
+    favourite_list=json.loads(favourite_list_str) 
+    if favourite_list[0]["macAddr"] == macAddr:
+        favourite_list[0]["hasPermission"] == True
+
+    tostringList=str(favourite_list)    
+    UD.set_favorite_list(uid, tostringList)
 
 
-def send_email(from_addr,to_addr,message,password):
+
+
+def send_email(sender,receiver,message,password):
     server=smtplib.SMTP_SSL("smtp.gmail.com",465)
-    server.login(from_addr,password)
-    server.sendmail(from_addr,to_addr,message)
+    server.login(sender,password)
+    server.sendmail(sender,receiver,message)
     server.quit()
 
+def StevenHash(num):
+    return bin(num)<<2
 
+def StevenUnHash(num):
+    return int(num>>2)

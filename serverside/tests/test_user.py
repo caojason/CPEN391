@@ -50,3 +50,5 @@ def test_favorite_list():
         assert rv.status_code == 200
         rv=testing_client.get("/favorite_list?uid=105960354998423944600")
         assert b"[]" in rv.data
+
+
