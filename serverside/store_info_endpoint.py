@@ -58,7 +58,7 @@ def create_permission_link():
     permissionLink="/give_permission?macAddr={macAddr}&request_user_id={uid}"
     send_email("our email","owner email",message+"click the following link to give permission"+permissionLink)
 
-@app.route("/give_permission",method=["GET"])
+@app.route("/give_permission",methods=["GET"])
 def get_permission():
     uid = request.args["uid"] if "uid" in request.args else "\"\""
     #uid=StevenUnHash(uid)
