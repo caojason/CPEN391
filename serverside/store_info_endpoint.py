@@ -66,13 +66,16 @@ def get_permission():
     favourite_list_str=UD.get_favorite_list(uid)
     if favourite_list_str != "":
         favourite_list_str=str(favourite_list_str)
-    favourite_list=json.loads(favourite_list_str) 
-    print(favourite_list)
-    if favourite_list[0]["macAddr"] == macAddr:
-        favourite_list[0]["hasPermission"] == True
-
-    tostringList=str(favourite_list)    
-    UD.set_favorite_list(uid, tostringList)
+    temp=favourite_list_str[0].split(":")
+    Addr=temp[5]
+    Addr=Addr.split(",")
+    if(Addr[0]==macAddr):
+        permission=temp[2]
+        permission=permission.split(",")
+        if permission[0] =="false":
+                permission[0]="true"
+  
+    UD.set_favorite_list(uid, favourite_list_str)
 
 
 
