@@ -84,7 +84,7 @@ def test_create_permission_link():
      
       #send a random favorite list
         rv = testing_client.post("/favorite_list",
-                data=json.dumps({"uid":"105960354998423944600","type":"Favorites","data":"{\"encodedLogo\":\"\",\"hasPermission\":false,\"latitude\":49.2311,\"longitude\":-123.0082,\"macAddr\":\"20:17:01:09:52:98\",\"storeName\":\"testMyStore\",\"storeOwnerId\":\"105960354998423944600\"}"}),
+                data=json.dumps({"uid":"105960354998423944600","type":"Favorites","data":"[{\"encodedLogo\":\"\",\"hasPermission\":false,\"latitude\":49.2311,\"longitude\":-123.0082,\"macAddr\":\"20:17:01:09:52:98\",\"storeName\":\"testMyStore\",\"storeOwnerId\":\"105960354998423944600\"}]"}),
                 content_type="application/json")
         assert rv.status_code == 200
         rv=testing_client.get("/favorite_list?uid=105960354998423944600")
