@@ -91,7 +91,7 @@ def test_create_permission_link():
         data1=rv.data
 
         #send a message
-        rv = testing_client.post("/give_permission",
+        rv = testing_client.get("/give_permission",
                 data=json.dumps({"uid":"105960354998423944600","macAddr":"20:17:01:09:52:98"}),
                 content_type="application/json")
         assert rv.status_code == 200
