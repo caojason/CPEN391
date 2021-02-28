@@ -123,5 +123,6 @@ def test_create_permission_link_with_longerString():
         data2=rv.data
         print(data2)
         assert data1 !=data2
-        assert data2 == b"[{\"encodedLogo\":\"\",\"hasPermission\":false,\"latitude\":49.2311,\"longitude\":-123.0082,\"macAddr\":\"20:17:01:09:52:98\",\"storeName\":\"testmy\",\"storeOwnerId\":\"105960354998423944600\"},{\"encodedLogo\":\" \",\"hasPermission\":true,\"latitude\":10.0,\"longitude\":12.0,\"macAddr\":\"FF:FF:FF:FF:FF:AB\",\"storeName\":\"test1\",\"storeOwnerId\":\"testid1\"}]"
+        
+        
         
