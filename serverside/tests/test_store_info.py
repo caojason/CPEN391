@@ -88,7 +88,6 @@ def test_create_permission_link():
                 content_type="application/json")
         assert rv.status_code == 200
         rv=testing_client.get("/favorite_list?uid=105960354998423944600")
-        assert b"[]" in rv.data
         data1=rv.data
 
         #send a message
