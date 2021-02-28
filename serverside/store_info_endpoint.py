@@ -64,7 +64,10 @@ def get_permission():
     #uid=StevenUnHash(uid)
     macAddr=request.args["macAddr"] if "macAddr" in request.args else "\"\""
     favourite_list_str=UD.get_favorite_list(uid)
+    if favourite_list_str != "":
+        favourite_list_str=str(favourite_list_str)
     favourite_list=json.loads(favourite_list_str) 
+    print(favourite_list)
     if favourite_list[0]["macAddr"] == macAddr:
         favourite_list[0]["hasPermission"] == True
 
