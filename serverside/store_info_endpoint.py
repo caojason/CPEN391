@@ -57,6 +57,7 @@ def create_permission_link():
     uid=StevenHash(uid)
     permissionLink="/give_permission?macAddr={macAddr}&request_user_id={uid}"
     send_email("our email","owner email",message+"click the following link to give permission"+permissionLink)
+    return "success"
 
 @app.route("/give_permission",methods=["GET"])
 def get_permission():
@@ -68,13 +69,16 @@ def get_permission():
         favourite_list_str=str(favourite_list_str)
     indexOfAddr=favourite_list_str.find(macAddr)
     if indexOfAddr != -1:
-        indexOfPermission=favourite_list_str.rfind("false",indexOfAddr,-1)
+        indexOfPermission=favourite_list_str.rfind("false",0,indexOfAddr)
         if indexOfPermission != -1:
-            favourite_list_str.replace("false","true",1)
+            firstPart=favourite_list_str[0:indexOfPermission]
+            secondPart=favourite_list_str[indexOfPermission:-1]
+            secondPart=secondPart.replace("false","true",1)
+            favourite_list_str=firstPart+secondPart
   
     UD.set_favorite_list(uid, favourite_list_str)
 
-
+    return "success"
 
 
 def send_email(sender,receiver,message,password):
