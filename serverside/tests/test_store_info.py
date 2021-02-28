@@ -98,3 +98,29 @@ def test_create_permission_link():
         print(data2)
         assert data1 !=data2
         
+def test_create_permission_link_with_longerString():
+    with app.test_client() as testing_client:
+      #create a user 
+        rv = testing_client.post("/create_user",
+                data=json.dumps({"uid":"105960354998423944600","type":"user_info","data":"yuntaowu2000@gmail.com"}),
+                content_type="application/json")
+        assert rv.status_code == 200
+        rv=testing_client.get("/email?uid=105960354998423944600")
+        assert b"yuntaowu2000@gmail.com" in rv.data
+     
+      #send a random favorite list
+        rv = testing_client.post("/favorite_list",
+                data=json.dumps({"uid":"105960354998423944600","type":"Favorites","data":"[{\"encodedLogo\":\"\",\"hasPermission\":true,\"latitude\":49.2311,\"longitude\":-123.0082,\"macAddr\":\"20:17:01:09:52:98\",\"storeName\":\"testmy\",\"storeOwnerId\":\"105960354998423944600\"},{\"encodedLogo\":\" \",\"hasPermission\":false,\"latitude\":10.0,\"longitude\":12.0,\"macAddr\":\"FF:FF:FF:FF:FF:AB\",\"storeName\":\"test1\",\"storeOwnerId\":\"testid1\"}]"}),
+                content_type="application/json")
+        assert rv.status_code == 200
+        rv=testing_client.get("/favorite_list?uid=105960354998423944600")
+        data1=rv.data
+        print(data1)
+        #send a message
+        rv = testing_client.get("/give_permission?uid=105960354998423944600&macAddr=20:17:01:09:52:98")
+        assert rv.status_code == 200
+        rv=testing_client.get("/favorite_list?uid=105960354998423944600")
+        data2=rv.data
+        print(data2)
+        assert data1 !=data2
+        
