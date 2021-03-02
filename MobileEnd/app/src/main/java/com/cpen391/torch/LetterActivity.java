@@ -1,16 +1,9 @@
 package com.cpen391.torch;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,7 +18,7 @@ public class LetterActivity extends AppCompatActivity {
     private String email;
     private String subject;
     private String message;
-    private String storeName = "";
+    private String macAddr = "";
     private String ownerId = "";
 
     @Override
@@ -40,7 +33,7 @@ public class LetterActivity extends AppCompatActivity {
 
         submitButton.setOnClickListener(v -> onSubmitClicked());
 
-        storeName = getIntent().getStringExtra(getString(R.string.STORE_NAME));
+        macAddr = getIntent().getStringExtra(getString(R.string.MAC_ADDR));
         ownerId = getIntent().getStringExtra(getString(R.string.OWNER_ID));
     }
 
@@ -129,8 +122,8 @@ public class LetterActivity extends AppCompatActivity {
 
     private void parseInfo() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("storeName", storeName);
-        jsonObject.addProperty("storeOwner", ownerId);
+        jsonObject.addProperty("macAddr", macAddr);
+        jsonObject.addProperty("ownerId", ownerId);
         jsonObject.addProperty("email", email);
         jsonObject.addProperty("subject", subject);
         jsonObject.addProperty("message", message);

@@ -47,16 +47,19 @@ def check_exist():
 @app.route("/create_email",methods=["GET"])
 def create_permission_link():
     data_json = request.get_json()
-    request_info=json.loads(data_json["data"])
-    email=request_info["email"]
-    message=request_info["message"]
-    ownerId=request_info["ownerId"]
-    uid=UD.get_uid(email)
-    storeInfo=SD.get_store_info_records(ownerId)
-    macAddr=storeInfo["macAddr"]
+    request_info = json.loads(data_json["data"])
+    email = request_info["email"]
+    subject = request_info["subject"]
+    message = request_info["message"]
+    ownerId = request_info["ownerId"]
+    macAddr = request_info["macAddr"]
+
+    owner_email = UD.get_email(ownerId)
+    uid=data_json["uid"]
     uid=StevenHash(uid)
+    
     permissionLink="/give_permission?macAddr={macAddr}&request_user_id={uid}"
-    send_email("our email","owner email",message+"click the following link to give permission"+permissionLink)
+    send_email(owner_email, subject, "User {} send you a request for viewing your store's analytic data. Here is his message: \n" + message+"\n\n Click the following link to give permission:"+permissionLink)
     return "success"
 
 @app.route("/give_permission",methods=["GET"])
@@ -81,10 +84,12 @@ def get_permission():
     return "success"
 
 
-def send_email(sender,receiver,message,password):
-    server=smtplib.SMTP_SSL("smtp.gmail.com",465)
-    server.login(sender,password)
-    server.sendmail(sender,receiver,message)
+def send_email(receiver, subject, message):
+    server=smtplib.SMTP_SSL("smtp.gmail.com", 587)
+
+    #need to change to valid gmail account and google app password
+    server.login("test@gmail.com", "Password")
+    server.sendmail(receiver, subject, message)
     server.quit()
 
 def StevenHash(num):
