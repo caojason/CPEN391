@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -54,6 +55,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private Button addToFavoriteButton;
     private TextView storeNameText;
     private LinearLayout chartLinearLayout;
+    private ImageView analysisPic;
     private String[] pairs;
     private static final String getDailyDataURL = String.format("http://35.233.184.107/get_population_data/day?year=2021&month=%d&day=%d&location=%s",Month,Day,location );
 
@@ -79,7 +81,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         mapFragment.getMapAsync(this);
 
         TextView analysisPicExplainText = findViewById(R.id.analysis_pic_explain);
-        ImageView analysisPic = findViewById(R.id.analysis_pic);
+        analysisPic = findViewById(R.id.analysis_pic);
         Button requestPicButton = findViewById(R.id.request_pic_button);
         LinearLayout detailsLinearLayout = findViewById(R.id.details_linear_layout);
 
@@ -89,6 +91,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             requestPicButton.setOnClickListener(v -> requestForPermission());
         } else {
             detailsLinearLayout.removeView(requestPicButton);
+            new Thread(this::setupAnalysis).start();
         }
 
         addToFavoriteButton = findViewById(R.id.add_to_favorite_button);
@@ -108,6 +111,18 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         }
         setupChart(dates[0]);
+    }
+
+    private void setupAnalysis() {
+        //download the analysis picture
+        String url = getString(R.string.BASE_URL) + getString(R.string.get_image) + "?macAddr=" + storeInfo.getMacAddr();
+
+        String encodedImage = OtherUtils.readFromURL(url);
+
+        Bitmap img = OtherUtils.decodeImage(encodedImage);
+        if (img != null) {
+            runOnUiThread(() -> analysisPic.setImageBitmap(img));
+        }
     }
 
     private void setupFavoriteButton() {

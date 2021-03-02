@@ -13,6 +13,7 @@
     <string name="get_store_list">get_stores</string>
     <string name="check_is_store_owner">check_exists</string>
     <string name="create_email">create_email</string>
+    <string name="get_image">get_image_analysis</string>
 
     <string name="client_id">3088778948-19qd3b5ag17p6rde7vb7qbtm2ji9h3iu.apps.googleusercontent.com</string>
 
