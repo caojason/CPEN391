@@ -7,3 +7,4 @@ serverside/modules/database/__pycache__/*
 !**/__pycache__/*
 *.pyc
 serverside/modules/person_counter_opencv/__pycache__/centroidtracker.cpython-38.pyc
+!**/.vscode/*
