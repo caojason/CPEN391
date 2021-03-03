@@ -1,3 +1,4 @@
+import base64
 import os
 import sys
 import json
@@ -99,7 +100,7 @@ def send_email(receiver, message):
     server.quit()
 
 def StevenHash(num):
-    return bin(num)
+    return base64.b64encode(num)
 
 def StevenUnHash(num):
-    return int(num)
+    return base64.b64decode(num)
