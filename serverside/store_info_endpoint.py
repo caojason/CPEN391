@@ -61,7 +61,7 @@ def create_permission_link():
     owner_email = UD.get_email(ownerId)
     print(owner_email)
     uid=data_json["uid"]
-    uid=StevenHash(int(uid))
+    #uid=StevenHash(int(uid))
     print(uid)
     permissionLink="/give_permission?macAddr={}&request_user_id={}".format(macAddr,uid)
     print(permissionLink)
