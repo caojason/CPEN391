@@ -58,7 +58,7 @@ def create_permission_link():
     email=data["email"]
     owner_email = UD.get_email(ownerId)
     uid=data_json["uid"]
-    uid=StevenHash(int(uid))
+    uid=StevenHash(uid)
     permissionLink="http://35.233.184.107/give_permission?macAddr={}&request_user_id={}".format(macAddr,uid)
     msg="Subject: \n"+subject+"\n\nUser {}".format(email)+" send you a request for viewing your store's analytic data. Here is his message: \n" + message+"\n\n Click the following link to give permission:"+permissionLink
     send_email(owner_email,msg)
@@ -100,7 +100,7 @@ def send_email(receiver, message):
     server.quit()
 
 def StevenHash(num):
-    return base64.b64encode(num)
+    return str.encode(num)
 
 def StevenUnHash(num):
-    return base64.b64decode(num)
+    return num.decode()
