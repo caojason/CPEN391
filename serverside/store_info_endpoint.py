@@ -60,11 +60,11 @@ def create_permission_link():
     print(macAddr)
     owner_email = UD.get_email(ownerId)
     uid=request.args["uid"]
-    #uid=StevenHash(uid)
-    permissionLink="/give_permission?macAddr={macAddr}&request_user_id={uid}"
-    msg="Subject:"+subject+"User {uid} send you a request for viewing your store's analytic data. Here is his message: \n" + message+"\n\n Click the following link to give permission:"+permissionLink
+    uid=StevenHash(uid)
+    permissionLink="/give_permission?macAddr={}&request_user_id={}".format(macAddr,uid)
+    msg="Subject:"+subject+"User {} send you a request for viewing your store's analytic data. Here is his message: \n" + message+"\n\n Click the following link to give permission:"+permissionLink.format(uid)
     print(msg)
-    #send_email(owner_email,msg)
+    send_email(owner_email,msg)
     return "success"
 
 @app.route("/give_permission",methods=["GET"])
