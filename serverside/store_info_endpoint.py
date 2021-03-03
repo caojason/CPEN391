@@ -44,21 +44,24 @@ def check_exist():
     return jsonify(SD.check_if_exist(macAddr))
 
 
-@app.route("/create_email",methods=["GET"])
+@app.route("/create_email",methods=["POST"])
 def create_permission_link():
-    subject = request.args["subject"]
-    message = request.args["message"]
-    ownerId = request.args["ownerId"]
-    macAddr = request.args["macAddr"]
+    data_json = request.get_json()
+    print(data_json)
+    data=json.loads(data_json["data"])
+    subject = data["subject"]
+    message = data["message"]
+    ownerId = data["ownerId"]
+    macAddr = data["macAddr"]
 
     owner_email = UD.get_email(ownerId)
     uid=request.args["uid"]
     #uid=StevenHash(uid)
     permissionLink="/give_permission?macAddr={macAddr}&request_user_id={uid}"
     msg="Subject:"+subject+"User {uid} send you a request for viewing your store's analytic data. Here is his message: \n" + message+"\n\n Click the following link to give permission:"+permissionLink
+   
+    send_email(owner_email,msg)
     print(msg)
-    #send_email(owner_email,msg)
-    
     return "success"
 
 @app.route("/give_permission",methods=["GET"])
