@@ -46,20 +46,19 @@ def check_exist():
 
 @app.route("/create_email",methods=["GET"])
 def create_permission_link():
-    data_json = request.get_json()
-    request_info = json.loads(data_json["data"])
-    email = request_info["email"]
-    subject = request_info["subject"]
-    message = request_info["message"]
-    ownerId = request_info["ownerId"]
-    macAddr = request_info["macAddr"]
+    subject = request.args["subject"]
+    message = request.args["message"]
+    ownerId = request.args["ownerId"]
+    macAddr = request.args["macAddr"]
 
     owner_email = UD.get_email(ownerId)
-    uid=data_json["uid"]
-    uid=StevenHash(uid)
-    
+    uid=request.args["uid"]
+    #uid=StevenHash(uid)
     permissionLink="/give_permission?macAddr={macAddr}&request_user_id={uid}"
-    send_email(owner_email, subject, "User {} send you a request for viewing your store's analytic data. Here is his message: \n" + message+"\n\n Click the following link to give permission:"+permissionLink)
+    msg="Subject:"+subject+"User {uid} send you a request for viewing your store's analytic data. Here is his message: \n" + message+"\n\n Click the following link to give permission:"+permissionLink
+   
+    send_email(owner_email,msg)
+    print(msg)
     return "success"
 
 @app.route("/give_permission",methods=["GET"])
@@ -84,12 +83,17 @@ def get_permission():
     return "success"
 
 
-def send_email(receiver, subject, message):
-    server=smtplib.SMTP_SSL("smtp.gmail.com", 587)
+def send_email(receiver, message):
 
-    #need to change to valid gmail account and google app password
-    server.login("test@gmail.com", "Password")
-    server.sendmail(receiver, subject, message)
+    fromaddr = 'torchapp1@gmail.com'
+    toaddrs  = receiver
+    username = 'torchapp1@gmail.com'
+    password = 'ok89010430'
+    server = smtplib.SMTP('smtp.gmail.com:587')
+    server.ehlo()
+    server.starttls()
+    server.login(username,password)
+    server.sendmail(fromaddr, toaddrs, message)
     server.quit()
 
 def StevenHash(num):
