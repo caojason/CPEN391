@@ -100,11 +100,7 @@ def send_email(receiver, message):
     server.quit()
 
 def StevenHash(num):
-     
-    number_bytes = num.to_bytes((num.bit_length() + 7),'big')
-    encoded = base64.b64encode(number_bytes)
-    return encoded
+    return bin(num<<2)
 
 def StevenUnHash(num):
-   decoded = base64.b64decode(num)
-   return sum((item * 256 ** idx for idx, item in enumerate(reversed(decoded))))
+    return int(num,2)>>2
