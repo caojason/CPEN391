@@ -49,6 +49,7 @@ def create_permission_link():
     data_json = request.get_json()
     print(data_json)
     data=json.loads(data_json["data"])
+    print(data_json["data"])
     subject = data["subject"]
     message = data["message"]
     ownerId = data["ownerId"]
