@@ -54,7 +54,10 @@ def create_permission_link():
     message = data["message"]
     ownerId = data["ownerId"]
     macAddr = data["macAddr"]
-
+    print(subject)
+    print(message)
+    print(ownerId)
+    print(macAddr)
     owner_email = UD.get_email(ownerId)
     uid=request.args["uid"]
     #uid=StevenHash(uid)
