@@ -123,10 +123,10 @@ def test_create_permission_link_with_longerString():
         data2=rv.data
         print(data2)
         assert data1 !=data2
-
+ 
 def test_send_email():
         with app.test_client() as testing_client:
-        #create user
+        #create user    
          rv = testing_client.post("/create_user",
                     data=json.dumps({"uid":"105960354998423944600","type":"user_info","data":"yuntaowu2000@gmail.com"}),
                     content_type="application/json")
