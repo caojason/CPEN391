@@ -67,7 +67,7 @@ def create_permission_link():
     print(permissionLink)
     msg="Subject: \n"+subject+"\n\nUser {} send you a request for viewing your store's analytic data. Here is his message: \n" + message+"\n\n Click the following link to give permission:"+permissionLink.format(uid)
     print(msg)
-    #send_email(owner_email,msg)
+    send_email(owner_email,msg)
     return "success"
 
 @app.route("/give_permission",methods=["GET"])
