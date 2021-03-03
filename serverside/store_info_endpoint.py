@@ -98,7 +98,7 @@ def send_email(receiver, message):
     server.quit()
 
 def StevenHash(num):
-    return bin(num)<<2
+    return bin(num)
 
 def StevenUnHash(num):
-    return int(num>>2)
+    return int(num)
