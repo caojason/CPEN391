@@ -117,7 +117,7 @@ def test_create_permission_link_with_longerString():
         data1=rv.data
         print(data1)
         #send a message
-        rv = testing_client.get("/give_permission?uid=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFvn7NeBNYfZg=&macAddr=FF:FF:FF:FF:FF:AB")
+        rv = testing_client.get("/give_permission?uid=101101111100111111011001101011110000001001101011000011111011001100000&macAddr=FF:FF:FF:FF:FF:AB")
         assert rv.status_code == 200
         rv=testing_client.get("/favorite_list?uid=105960354998423944600")
         data2=rv.data
