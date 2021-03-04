@@ -2,6 +2,8 @@ import os
 import sys
 sys.path.append(os.getcwd())
 
+import base64
+
 from flask import Flask, request
 from modules.database.init_database import init_torch_database
 
@@ -17,11 +19,15 @@ import store_info_endpoint
 def home():
     return "Torch"
 
-@app.route("/test", methods = ["POST"])
+@app.route("/test", methods = ["GET"])
 def test():
-    print(request.get_data())
-    print(request.form)
-    return ""
+    # get the actual path to image
+    path_to_image = os.path.join(os.getcwd(), "..", "Hardware", "imageProcessing", "3x3.png")
+    print(path_to_image)
+    encoded_image = ""
+    with open(path_to_image, "rb+") as img_file:
+        encoded_image = base64.b64encode(img_file.read())
+    return encoded_image
 
 
 #usage :

@@ -1,5 +1,6 @@
 import os
 import sys
+import base64
 sys.path.append(os.getcwd())
 import modules.person_counter_opencv.people_counter as PC #may change depending on directory structure
 import modules.database.population_database as PD #may change depending on directory structure
@@ -109,7 +110,15 @@ def upload_video():
         return "video recieved and analyzed"
 
 
-
-
+@app.route("/get_image_analysis", methods=["GET"])
+def get_image():
+    # get the actual path to image using mac address as file identifier
+    mac_addr = request.args["macAddr"]
+    path_to_image = os.path.join(os.getcwd(), "..", "Hardware", "imageProcessing", "3x3.png")
+    print(path_to_image)
+    encoded_image = ""
+    with open(path_to_image, "rb+") as img_file:
+        encoded_image = base64.b64encode(img_file.read())
+    return encoded_image
 
 

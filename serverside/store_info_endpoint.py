@@ -1,3 +1,4 @@
+import base64
 import os
 import sys
 import json
@@ -44,25 +45,31 @@ def check_exist():
     return jsonify(SD.check_if_exist(macAddr))
 
 
-@app.route("/create_email",methods=["GET"])
+@app.route("/create_email",methods=["POST"])
 def create_permission_link():
     data_json = request.get_json()
-    request_info=json.loads(data_json["data"])
-    email=request_info["email"]
-    message=request_info["message"]
-    ownerId=request_info["ownerId"]
-    uid=UD.get_uid(email)
-    storeInfo=SD.get_store_info_records(ownerId)
-    macAddr=storeInfo["macAddr"]
-    uid=StevenHash(uid)
-    permissionLink="/give_permission?macAddr={macAddr}&request_user_id={uid}"
-    send_email("our email","owner email",message+"click the following link to give permission"+permissionLink)
+    print(data_json)
+    data=json.loads(data_json["data"])
+    print(data_json["data"])
+    subject = data["subject"]
+    message = data["message"]
+    ownerId = data["ownerId"]
+    macAddr = data["macAddr"]
+    email=data["email"]
+    owner_email = UD.get_email(ownerId)
+    uid=data_json["uid"]
+    uid=StevenHash(int(uid))
+    print(uid)
+    permissionLink="http://35.233.184.107/give_permission?macAddr={}&request_user_id={}".format(macAddr,uid)
+    msg="Subject: \n"+subject+"\n\nUser {}".format(email)+" send you a request for viewing your store's analytic data. Here is his message: \n" + message+"\n\n Click the following link to give permission:"+permissionLink
+    #send_email(owner_email,msg)
     return "success"
 
 @app.route("/give_permission",methods=["GET"])
 def get_permission():
     uid = request.args["uid"] if "uid" in request.args else "\"\""
-    #uid=StevenUnHash(uid)
+    uid=StevenUnHash(uid)
+    print(uid)
     macAddr=request.args["macAddr"] if "macAddr" in request.args else "\"\""
     favourite_list_str=UD.get_favorite_list(uid)
     if favourite_list_str != "":
@@ -81,14 +88,22 @@ def get_permission():
     return "success"
 
 
-def send_email(sender,receiver,message,password):
-    server=smtplib.SMTP_SSL("smtp.gmail.com",465)
-    server.login(sender,password)
-    server.sendmail(sender,receiver,message)
+def send_email(receiver, message):
+
+    fromaddr = 'torchapp1@gmail.com'
+    toaddrs  = receiver
+    username = 'torchapp1@gmail.com'
+    password = 'ok89010430'
+    server = smtplib.SMTP('smtp.gmail.com:587')
+    server.ehlo()
+    server.starttls()
+    server.login(username,password)
+    server.sendmail(fromaddr, toaddrs, message)
     server.quit()
 
-def StevenHash(num):
-    return bin(num)<<2
+def StevenHash(number):
+    
+    return bin(number>>2)
 
-def StevenUnHash(num):
-    return int(num>>2)
+def StevenUnHash(encoded):
+    return int(encoded,2)<<2

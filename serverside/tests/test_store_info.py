@@ -91,7 +91,7 @@ def test_create_permission_link():
         data1=rv.data
         print(data1)
         #send a message
-        rv = testing_client.get("/give_permission?uid=105960354998423944600&macAddr=20:17:01:09:52:98")
+        rv = testing_client.get("/give_permission?uid=10110111110011111101100110101111000000100110101100001111101100110&macAddr=20:17:01:09:52:98")
         assert rv.status_code == 200
         rv=testing_client.get("/favorite_list?uid=105960354998423944600")
         data2=rv.data
@@ -117,12 +117,35 @@ def test_create_permission_link_with_longerString():
         data1=rv.data
         print(data1)
         #send a message
-        rv = testing_client.get("/give_permission?uid=105960354998423944600&macAddr=FF:FF:FF:FF:FF:AB")
+        rv = testing_client.get("/give_permission?uid=10110111110011111101100110101111000000100110101100001111101100110&macAddr=FF:FF:FF:FF:FF:AB")
         assert rv.status_code == 200
         rv=testing_client.get("/favorite_list?uid=105960354998423944600")
         data2=rv.data
         print(data2)
         assert data1 !=data2
-        
+ 
+def test_send_email():
+        with app.test_client() as testing_client:
+        #create user    
+         rv = testing_client.post("/create_user",
+                    data=json.dumps({"uid":"105960354998423944600","type":"user_info","data":"yuntaowu2000@gmail.com"}),
+                    content_type="application/json")
+        assert rv.status_code == 200
+        rv=testing_client.get("/email?uid=105960354998423944600")
+        assert b"yuntaowu2000@gmail.com" in rv.data
+        #create store
+         # firstly create the store
+        rv = testing_client.post("/create_store",
+                    data=json.dumps({"uid":"105960354998423944600","data":"{\"encodedLogo\":\"\",\"hasPermission\":true,\"latitude\":49.2311,\"longitude\":-123.0082,\"macAddr\":\"20:17:01:09:52:98\",\"storeName\":\"test\",\"storeOwnerId\":\"105960354998423944600\"}"}),
+                    content_type="application/json")
+        assert rv.status_code == 200
+        rv = testing_client.get("/get_stores")
+        assert rv.status_code == 200
+     
+        #send email 
+        rv = testing_client.post("/create_email",
+                data=json.dumps({"uid":"105960354998423944600","data":"{\"macAddr\":\"20:17:01:09:52:98\",\"ownerId\":\"105960354998423944600\",\"email\":\"yuntaowu2000@gmail.com\",\"subject\":\"Give me Permission\",\"message\":\"This is Steven Huang\"}"}),
+                content_type="application/json")
+        assert rv.status_code==200        
         
         
