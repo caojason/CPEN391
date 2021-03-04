@@ -105,5 +105,5 @@ def StevenHash(num):
     return bin(num<<2)
 
 def StevenUnHash(num):
-    a=int(num,2)>>2
+    a=int(num)>>2
     return a
