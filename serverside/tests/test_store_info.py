@@ -22,10 +22,11 @@ def test_create_store():
                     content_type="application/json")
         assert rv.status_code == 200
         rv = testing_client.get("/get_stores")
-        print(rv.data)
+        print("test create store success received data {0}".format(rv.data))
         assert rv.status_code == 200
 
 def test_create_store_with_malformed_info():
+    # test create store with invalid data, it should fail
     with app.test_client() as testing_client:
         rv = testing_client.post("/create_store",
                     data=json.dumps({"encodedLogo":""}),
@@ -51,6 +52,8 @@ def test_update_store_info():
         rv = testing_client.get("/get_stores")
         assert rv.status_code == 200
         data2 = rv.data
+
+        # there should be one more store in data2
         assert data1 != data2
 
 
@@ -73,6 +76,7 @@ def test_check_if_store_exist2():
         assert b"[\"105960354998423944600\"]" in rv.data
 
 def test_create_permission_link():
+    # test permission link, after the Get request, false should be changed to true in user's favorite list
     with app.test_client() as testing_client:
       #create a user 
         rv = testing_client.post("/create_user",
@@ -89,13 +93,14 @@ def test_create_permission_link():
         assert rv.status_code == 200
         rv=testing_client.get("/favorite_list?uid=105960354998423944600")
         data1=rv.data
-        print(data1)
+
         #send a message
         rv = testing_client.get("/give_permission?uid=10110111110011111101100110101111000000100110101100001111101100110&macAddr=20:17:01:09:52:98")
         assert rv.status_code == 200
         rv=testing_client.get("/favorite_list?uid=105960354998423944600")
         data2=rv.data
-        print(data2)
+
+        # the value should be changed (false->true)
         assert data1 !=data2
         
 def test_create_permission_link_with_longerString():
@@ -115,13 +120,13 @@ def test_create_permission_link_with_longerString():
         assert rv.status_code == 200
         rv=testing_client.get("/favorite_list?uid=105960354998423944600")
         data1=rv.data
-        print(data1)
         #send a message
         rv = testing_client.get("/give_permission?uid=10110111110011111101100110101111000000100110101100001111101100110&macAddr=FF:FF:FF:FF:FF:AB")
         assert rv.status_code == 200
         rv=testing_client.get("/favorite_list?uid=105960354998423944600")
         data2=rv.data
-        print(data2)
+
+        # the value should be changed (false->true)
         assert data1 !=data2
  
 def test_send_email():
@@ -134,7 +139,7 @@ def test_send_email():
         rv=testing_client.get("/email?uid=105960354998423944600")
         assert b"yuntaowu2000@gmail.com" in rv.data
         #create store
-         # firstly create the store
+        # firstly create the store
         rv = testing_client.post("/create_store",
                     data=json.dumps({"uid":"105960354998423944600","data":"{\"encodedLogo\":\"\",\"hasPermission\":true,\"latitude\":49.2311,\"longitude\":-123.0082,\"macAddr\":\"20:17:01:09:52:98\",\"storeName\":\"test\",\"storeOwnerId\":\"105960354998423944600\"}"}),
                     content_type="application/json")

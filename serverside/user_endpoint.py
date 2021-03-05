@@ -25,14 +25,12 @@ def get_favorite_list():
     if request.method == "GET":
         uid = request.args["uid"]
         favorite_list = UD.get_favorite_list(uid)
-        print(favorite_list)
         return str(favorite_list[0]) if favorite_list != "" else ""
 
     elif request.method == "POST":
         fav_list_data = request.get_json()
         uid = fav_list_data["uid"]
         favorite_list = str(fav_list_data["data"])
-        print(favorite_list)
         UD.set_favorite_list(uid, favorite_list)
         return "success"
 
