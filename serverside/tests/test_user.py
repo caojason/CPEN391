@@ -60,4 +60,9 @@ def test_favorite_list():
         rv=testing_client.get("/favorite_list?uid=105960354998423944600")
         assert b"[]" in rv.data
 
-
+def test_favorite_list1():
+    # try getting the favorite list of a non-existing user
+    with app.test_client() as testing_client:
+        #get favorite list by an invalid uid, the server should not crash, but return ""
+        rv=testing_client.get("/favorite_list?uid=1")
+        assert rv.status_code == 200
