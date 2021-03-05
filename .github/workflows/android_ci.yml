@@ -19,7 +19,9 @@ jobs:
       with:
         java-version: 1.8
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: |
+        cd MobileEnd
+        chmod +x gradlew
 
     - name: Build mobile app with Gradle
       run: |
@@ -31,6 +33,11 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+    
+    - name: Grant execute permission for gradlew
+      run: |
+        cd MobileEnd
+        chmod +x gradlew
 
     - name: run tests
       uses: reactivecircus/android-emulator-runner@v2
