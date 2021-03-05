@@ -38,6 +38,6 @@ jobs:
     - name: Run tests
       run: |
         cd serverside
-        coverage run -m --source=. --omit=./tests/* pytest -s --cov-report term-missing
-        coverage report
+        coverage run -m --source=. --omit=./tests/* pytest -s
+        coverage report -m
       
