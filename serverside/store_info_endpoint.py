@@ -14,9 +14,8 @@ import json
 @app.route("/create_store", methods=["POST"])
 def create_store():
     data_json = request.get_json()
-    print(data_json)
+    print("create store read data: {0}".format(data_json))
     try:
-        print(data_json["data"])
         store_info_dict = json.loads(data_json["data"])
         encodedLogo = store_info_dict["encodedLogo"]
         latitude = store_info_dict["latitude"]
@@ -41,16 +40,15 @@ def get_store_list():
 @app.route("/check_exists", methods=["GET"])
 def check_exist():
     macAddr = request.args["macAddr"]
-    print(macAddr)
     return jsonify(SD.check_if_exist(macAddr))
 
 
 @app.route("/create_email",methods=["POST"])
 def create_permission_link():
     data_json = request.get_json()
-    print(data_json)
+    print("create permission link data read {0}".format(data_json))
     data=json.loads(data_json["data"])
-    print(data_json["data"])
+
     subject = data["subject"]
     message = data["message"]
     ownerId = data["ownerId"]
@@ -59,7 +57,7 @@ def create_permission_link():
     owner_email = UD.get_email(ownerId)
     uid=data_json["uid"]
     uid=StevenHash(int(uid))
-    print(uid)
+    print("hashed uid {0}".format(uid))
     permissionLink="http://35.233.184.107/give_permission?macAddr={}&request_user_id={}".format(macAddr,uid)
     msg="Subject: \n"+subject+"\n\nUser {}".format(email)+" send you a request for viewing your store's analytic data. Here is his message: \n" + message+"\n\n Click the following link to give permission:"+permissionLink
     #send_email(owner_email,msg)
@@ -69,7 +67,7 @@ def create_permission_link():
 def get_permission():
     uid = request.args["uid"] if "uid" in request.args else "\"\""
     uid=StevenUnHash(uid)
-    print(uid)
+    print("unhashed uid: {0}".format(uid))
     macAddr=request.args["macAddr"] if "macAddr" in request.args else "\"\""
     favourite_list_str=UD.get_favorite_list(uid)
     if favourite_list_str != "":

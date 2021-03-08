@@ -46,15 +46,6 @@ def get_email(uid):
 
     return result
 
-def get_uid(email):
-    db=connect_to_database()
-    cursor=db.cursor()
-    sql="SELECT user_gid FROM user_data WHERE email={}".format(email)
-    cursor.execute(sql)
-    result=cursor.fetchone()
-
-    return result
-
 def get_favorite_list(uid):
     db = connect_to_database()
 
