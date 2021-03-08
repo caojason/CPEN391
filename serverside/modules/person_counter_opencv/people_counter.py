@@ -5,7 +5,7 @@ import numpy as np
 import sys
 import os
 sys.path.append(os.getcwd())
-from .centroidtracker import CentroidTracker
+from modules.person_counter_opencv.centroidtracker import CentroidTracker
 
 
 protopath = os.path.join(os.getcwd(), "modules", "person_counter_opencv", "MobileNetSSD_deploy.prototxt")
