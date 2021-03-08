@@ -162,4 +162,50 @@ def get_location_data_yearly(location, year):
         report[month - 1] += count 
     return report 
 
+#get the hour & weekday with the lowest and highest population peak in the year
+def get_location_analysis(location, year):
+    db = connect_to_database()
+    cursor = db.cursor()
+    sql = "SELECT * FROM population_data WHERE location = '{}' AND year = {}".format(location, year)
+    cursor.execute(sql)
+    result = cursor.fetchall()
 
+    week_average = [0.0] * 7
+    unique_weekdays = [[] for i in range(7)]
+    
+    for row in result: 
+        weekday = row["weekday"]
+        count = row["count"]
+        day = row["day"]
+        month = row["month"]
+        #generate a date so we can count how many unique weekdays has passed. 
+        date = "{}/{}".format(day, month)  
+        if date not in unique_weekdays[weekday - 1]:
+            unique_weekdays[weekday - 1].append(date)
+        #sum up the total in the array element for the weekday 
+        week_average[weekday - 1] += count 
+
+    #divide weekday totals by the number of that weekday for the average. 
+    for i in range(7):
+        week_average[i] /= len(unique_weekdays[i])
+
+    highest_average = max(week_average)
+    highest_weekday = week_average.index(highest_average)
+
+    lowest_average = min(week_average)
+    lowest_weekday = week_average.index(lowest_average)
+
+    daily_high = [0.0] * 24 
+    daily_low = [0.0] * 24
+
+    for row in result: 
+        if row["weekday"] == highest_weekday: 
+            daily_high[row["hour"]] += row["count"]
+            
+        if row["weekday"] == lowest_weekday: 
+            daily_low[row["hour"]] += row["count"]
+    
+    highest_hour = daily_high.index(max(daily_high))
+    lowest_hour = daily_low.index(min(daily_low))
+
+    return (highest_weekday, highest_hour, highest_average, lowest_weekday, lowest_hour, lowest_average) 
