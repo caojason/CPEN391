@@ -4,6 +4,8 @@ import base64
 sys.path.append(os.getcwd())
 import modules.person_counter_opencv.people_counter as PC #may change depending on directory structure
 import modules.database.population_database as PD #may change depending on directory structure
+import modules.person_counter_opencv.face_detector as FD #may change depending on directory structure
+import modules.database.mask_database as MD 
 
 from flask import Flask, request, jsonify 
  
@@ -86,6 +88,23 @@ def get_hour():
     histogram = dict(zip(dict_key, report))
     return jsonify(histogram)
 
+@app.route('/get_population_analysis')
+def get_population_analysis():
+    location = request.args["location"]
+    year = request.args["year"]
+
+    highest_weekday, highest_hour, highest_average, lowest_weekday, lowest_hour, lowest_average = PD.get_location_analysis(location, year)
+    report = {
+        "highest weekday" : highest_weekday,
+        "highest hour" : highest_hour,
+        "highest average" : highest_average, 
+        "lowest weekday" : lowest_weekday, 
+        "lowest hour" : lowest_hour, 
+        "lowest average" : lowest_average
+    }
+    #returns the highest and lowest average ie Monday at 2 pm is the lowest. Average refers to average visitors on a monday 
+    return jsonify(report)
+
 #POST video feed 
 @app.route('/upload_video', methods = ['GET', 'POST'])
 def upload_video(): 
@@ -101,8 +120,11 @@ def upload_video():
         #get the people count array 
         count = PC.people_counter()
 
+        masks = FD.facemask_detector()
+
         #insert count as a new tuple inside the SQL database
         PD.insert_table_population(str(location), int(count))
+        MD.insert_table_mask(str(location), int(count))
 
         #after completing analysis, delete the file to save disk space
         os.remove('/video/interval.mp4')
