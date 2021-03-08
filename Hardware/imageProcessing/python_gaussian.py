@@ -4,7 +4,7 @@ import numpy as np
 
 #this file is only for testing the correctness of our Gaussian filter
 
-img = cv2.imread("60x60.png")
+img = cv2.imread("noise.png")
 img_arr = np.array(img)
 
 out = cv2.GaussianBlur(img, (3,3), 1)
@@ -40,6 +40,6 @@ for r in range(img_arr.shape[0]):
 fig = plt.figure()
 ax1 = fig.add_subplot(121)
 ax2 = fig.add_subplot(122)
-ax1.imshow(test_arr)
+ax1.imshow(img_arr)
 ax2.imshow(out_arr)
 plt.show()
