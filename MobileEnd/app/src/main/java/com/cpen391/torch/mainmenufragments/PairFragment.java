@@ -239,7 +239,7 @@ public class PairFragment extends Fragment {
                 }
             }
         } catch (Exception e) {
-            return "";
+            return favoriteListStr;
         }
         return "";
     }
