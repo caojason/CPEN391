@@ -220,10 +220,6 @@ public class PairFragment extends Fragment {
         startActivity(i);
     }
 
-    private boolean checkIfExists() {
-        return false;
-    }
-
     private String getStoreInfo() {
         SharedPreferences sp = getActivity().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
         String favoriteListStr = sp.getString(getString(R.string.FAVORITES), "");
@@ -239,7 +235,13 @@ public class PairFragment extends Fragment {
                 }
             }
         } catch (Exception e) {
-            return favoriteListStr;
+            assert favoriteListStr != null;
+            assert userId != null;
+            if (favoriteListStr.contains(userId)) {
+                return favoriteListStr;
+            } else {
+                return "";
+            }
         }
         return "";
     }
