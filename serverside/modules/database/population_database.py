@@ -27,7 +27,7 @@ def insert_table_population(location, count):
     db = connect_to_database()
 
     cursor = db.cursor()
-    sql = "INSERT INTO population_data (location, count, year, month, day, hour, minute, weekday) VALUES (%s, %d, %d, %d, %d, %d, %d, %d)"
+    sql = "INSERT INTO population_data (location, count, year, month, day, hour, minute, weekday) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
     val = (location, count, now.year, now.month, now.day, now.hour, now.minute, weekday)
 
     cursor.execute(sql, val)

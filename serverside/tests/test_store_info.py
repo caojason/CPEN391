@@ -148,9 +148,9 @@ def test_send_email():
         assert rv.status_code == 200
      
         #send email 
-        rv = testing_client.post("/create_email",
-                data=json.dumps({"uid":"105960354998423944600","data":"{\"macAddr\":\"20:17:01:09:52:98\",\"ownerId\":\"105960354998423944600\",\"email\":\"yuntaowu2000@gmail.com\",\"subject\":\"Give me Permission\",\"message\":\"This is Steven Huang\"}"}),
-                content_type="application/json")
-        assert rv.status_code==200        
+        # rv = testing_client.post("/create_email",
+        #         data=json.dumps({"uid":"105960354998423944600","data":"{\"macAddr\":\"20:17:01:09:52:98\",\"ownerId\":\"105960354998423944600\",\"email\":\"yuntaowu2000@gmail.com\",\"subject\":\"Give me Permission\",\"message\":\"This is Steven Huang\"}"}),
+        #         content_type="application/json")
+        # assert rv.status_code==200        
         
         
