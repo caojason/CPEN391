@@ -124,10 +124,9 @@ def get_location_data_weekly(location, year, month, day, weekday):
             cursor.execute(sql)
             result = cursor.fetchall()
             for row in result:
+                print(row)
                 weekday = row[7]
                 count = row[1]
-                if weekday < 1: 
-                    continue
                 report[weekday - 1] += count  
     return report 
 
