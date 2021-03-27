@@ -147,18 +147,21 @@ def get_location_data_yearly(location, year):
 def get_location_analysis(location, year):
     db = connect_to_database()
     cursor = db.cursor()
-    sql = "SELECT * FROM population_data WHERE location = '{}' AND year = {}".format(location, year)
+    sql = "SELECT * FROM population_data WHERE location = '{}' AND year = {}".format(location, int(year))
     cursor.execute(sql)
     result = cursor.fetchall()
 
+    if result is None:
+        return "no data"
+
     week_average = [0.0] * 7
-    unique_weekdays = [[] for i in range(7)]
+    unique_weekdays = [[] for _ in range(7)]
     
     for row in result: 
-        weekday = row[7]
-        count = row[1]
-        day = row[4]
-        month = row[3]
+        weekday = row[8]
+        count = row[2]
+        day = row[5]
+        month = row[4]
         #generate a date so we can count how many unique weekdays has passed. 
         date = "{}/{}".format(day, month)  
         if date not in unique_weekdays[weekday - 1]:
@@ -180,11 +183,11 @@ def get_location_analysis(location, year):
     daily_low = [0.0] * 24
 
     for row in result: 
-        if row[7] == highest_weekday: 
-            daily_high[row[5]] += row[1]
+        if row[8] == highest_weekday: 
+            daily_high[row[6]] += row[2]
             
-        if row[7] == lowest_weekday: 
-            daily_low[row[5]] += row[1]
+        if row[8] == lowest_weekday: 
+            daily_low[row[6]] += row[2]
     
     highest_hour = daily_high.index(max(daily_high))
     lowest_hour = daily_low.index(min(daily_low))

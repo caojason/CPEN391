@@ -94,7 +94,11 @@ def get_population_analysis():
     location = request.args["location"]
     year = request.args["year"]
 
-    highest_weekday, highest_hour, highest_average, lowest_weekday, lowest_hour, lowest_average = PD.get_location_analysis(location, year)
+    try:
+        highest_weekday, highest_hour, highest_average, lowest_weekday, lowest_hour, lowest_average = PD.get_location_analysis(location, year)
+    except:
+        return "no data"
+
     report = {
         "highest weekday" : highest_weekday,
         "highest hour" : highest_hour,
