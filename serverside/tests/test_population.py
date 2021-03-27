@@ -35,7 +35,7 @@ def test_get_weekly_data_1():
         print("get population data {0}".format(rv.data))
         assert b"0" in rv.data
 
-def test_get_weekly_data_1():
+def test_get_weekly_data_2():
     PD.insert_table_population("B", 100)
 
     with app.test_client() as testing_client:
