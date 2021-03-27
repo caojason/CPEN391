@@ -76,7 +76,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
                 cursor.execute(sql)
                 result = cursor.fetchall()
                 for row in result:
-                    weekday = row[7]
+                    weekday = row[8]
                     count = row[1]
                     report[weekday - 1] += count
             else:
@@ -85,7 +85,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
                 cursor.execute(sql)
                 result = cursor.fetchall()
                 for row in result:
-                    weekday = row[7]
+                    weekday = row[8]
                     count = row[1]
                     report[weekday - 1] += count 
         else:
@@ -93,7 +93,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
             cursor.execute(sql)
             result = cursor.fetchall()
             for row in result:
-                weekday = row[7]
+                weekday = row[8]
                 count = row[1]
                 report[weekday - 1] += count 
     #then find the days proceeding the current weekday. If today is friday we seatch saturday and sunday. 
@@ -107,7 +107,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
                 cursor.execute(sql)
                 result = cursor.fetchall()
                 for row in result:
-                    weekday = row[7]
+                    weekday = row[8]
                     count = row[1]
                     report[weekday - 1] += count 
             else:
@@ -116,7 +116,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
                 cursor.execute(sql)
                 result = cursor.fetchall()
                 for row in result:
-                    weekday = row[7]
+                    weekday = row[8]
                     count = row[1]
                     report[weekday - 1] += count 
         else:
@@ -124,8 +124,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
             cursor.execute(sql)
             result = cursor.fetchall()
             for row in result:
-                print(row)
-                weekday = row[7]
+                weekday = row[8]
                 count = row[1]
                 report[weekday - 1] += count  
     return report 
