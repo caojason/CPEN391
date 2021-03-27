@@ -65,7 +65,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
     cursor = db.cursor()
     report = [0] * 7 
     #first find the days before the current weekday. If today is wednesday, we search monday and tuesday. 
-    d = int(weekday)
+    d = weekday
     for i in range(d):
         day_in_week = day - i 
         #after subtracting the day may either be in the current month or a previous month. 

@@ -16,10 +16,10 @@ from app import app
 
 @app.route('/get_population_data/week')
 def get_week(): 
-    day = request.args["day"]
-    month = request.args["month"]
-    year = request.args["year"]
-    weekday = request.args["weekday"]
+    day = int(request.args["day"])
+    month = int(request.args["month"])
+    year = int(request.args["year"])
+    weekday = int(request.args["weekday"])
     location = request.args["location"]
     report = PD.get_location_data_weekly(location, year, month, day, weekday)
     WEEKDAY_NAMES = [
