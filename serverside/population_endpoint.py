@@ -2,10 +2,11 @@ import os
 import sys
 import base64
 sys.path.append(os.getcwd())
-import modules.person_counter_opencv.people_counter as PC #may change depending on directory structure
-import modules.database.population_database as PD #may change depending on directory structure
-import modules.person_counter_opencv.face_detector as FD #may change depending on directory structure
+import modules.person_counter_opencv.people_counter as PC
+import modules.database.population_database as PD
+import modules.person_counter_opencv.face_detector as FD 
 import modules.database.mask_database as MD 
+from modules.person_counter_opencv.video_conversion import convert_frames_to_video
 
 from flask import Flask, request, jsonify 
  
@@ -110,10 +111,21 @@ def get_population_analysis():
     #returns the highest and lowest average ie Monday at 2 pm is the lowest. Average refers to average visitors on a monday 
     return jsonify(report)
 
+LOCATION_IMAGES_MAP = {}
+DEFAULT_FILE_PATH = "."
+
 #POST video feed 
 @app.route('/upload_video', methods = ['GET', 'POST'])
 def upload_video(): 
+    global LOCATION_IMAGES_MAP
+    global DEFAULT_FILE_PATH
     if request.method == 'POST' : 
+        #should be a byte stream here instead of a file
+        #wait for the hardware part to be done first
+
+        #decompress and save the image file to a directory
+        #record the file name
+        filename="some file.jpg"
 
         #save the video section to the server
         f = request.files['file']
@@ -122,19 +134,27 @@ def upload_video():
         #get location from http request
         location = request.form['location']
 
-        #get the people count array 
-        count = PC.people_counter()
+        if not location in LOCATION_IMAGES_MAP.keys():
+            LOCATION_IMAGES_MAP[location] = [filename]
+        else:
+            LOCATION_IMAGES_MAP[location].append(filename)
+        
+        if len(LOCATION_IMAGES_MAP[location]) == 15:
+            convert_frames_to_video(DEFAULT_FILE_PATH, DEFAULT_FILE_PATH, 1)
 
-        masks = FD.facemask_detector()
+            #get the people count array 
+            count = PC.people_counter()
 
-        #insert count as a new tuple inside the SQL database
-        PD.insert_table_population(str(location), int(count))
-        MD.insert_table_mask(str(location), int(count))
+            masks = FD.facemask_detector()
 
-        #after completing analysis, delete the file to save disk space
-        os.remove('/video/interval.mp4')
+            #insert count as a new tuple inside the SQL database
+            PD.insert_table_population(str(location), int(count))
+            MD.insert_table_mask(str(location), int(count))
 
-        return "video recieved and analyzed"
+            #after completing analysis, delete the file to save disk space
+            os.remove('/video/interval.mp4')
+
+        return "image received"
 
 
 @app.route("/get_image_analysis", methods=["GET"])
