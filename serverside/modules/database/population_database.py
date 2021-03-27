@@ -59,6 +59,17 @@ def get_location_data_daily(location, year, month, day):
         report[hour - 1] += count 
     return report
 
+def update_report(cursor, sql, report):
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    if result is None:
+        return
+    else:
+        for row in result:
+            weekday = row[8]
+            count = row[2]
+            report[weekday - 1] += count
+
 def get_location_data_weekly(location, year, month, day, weekday):
     db = connect_to_database()
 
@@ -73,29 +84,14 @@ def get_location_data_weekly(location, year, month, day, weekday):
             if month > 1: 
                 day_in_week = calendar.monthrange(year, month - 1)[1] + day_in_week
                 sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day_in_week, month - 1, year)
-                cursor.execute(sql)
-                result = cursor.fetchall()
-                for row in result:
-                    weekday = row[8]
-                    count = row[1]
-                    report[weekday - 1] += count
+                update_report(cursor, sql, report)
             else:
                 day_in_week = calendar.monthrange(year - 1, 12)[1] + day_in_week
                 sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day_in_week, 12, year)
-                cursor.execute(sql)
-                result = cursor.fetchall()
-                for row in result:
-                    weekday = row[8]
-                    count = row[1]
-                    report[weekday - 1] += count 
+                update_report(cursor, sql, report)
         else:
             sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day_in_week, month, year)
-            cursor.execute(sql)
-            result = cursor.fetchall()
-            for row in result:
-                weekday = row[8]
-                count = row[1]
-                report[weekday - 1] += count 
+            update_report(cursor, sql, report)
     #then find the days proceeding the current weekday. If today is friday we seatch saturday and sunday. 
     for i in range(1, 8 - d): 
         day_in_week = day + i
@@ -104,29 +100,14 @@ def get_location_data_weekly(location, year, month, day, weekday):
             if month < 12:
                 day_in_week -= calendar.monthrange(year, month)[1]
                 sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day_in_week, month + 1, year)
-                cursor.execute(sql)
-                result = cursor.fetchall()
-                for row in result:
-                    weekday = row[8]
-                    count = row[1]
-                    report[weekday - 1] += count 
+                update_report(cursor, sql, report)
             else:
                 day_in_week -= calendar.monthrange(year, month)[1]
                 sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day_in_week, 1, year + 1)
-                cursor.execute(sql)
-                result = cursor.fetchall()
-                for row in result:
-                    weekday = row[8]
-                    count = row[1]
-                    report[weekday - 1] += count 
+                update_report(cursor, sql, report)
         else:
             sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day_in_week, month, year)
-            cursor.execute(sql)
-            result = cursor.fetchall()
-            for row in result:
-                weekday = row[8]
-                count = row[1]
-                report[weekday - 1] += count  
+            update_report(cursor, sql, report)
     return report 
 
 def get_location_data_monthly(location, year, month):
