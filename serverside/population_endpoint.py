@@ -6,7 +6,7 @@ import modules.person_counter_opencv.people_counter as PC
 import modules.database.population_database as PD
 import modules.person_counter_opencv.face_detector as FD 
 import modules.database.mask_database as MD 
-from modules.person_counter_opencv.video_conversion import convert_frames_to_video, decompress
+from modules.person_counter_opencv.video_conversion import convert_frames_to_video, decompression
 
 from flask import Flask, request, jsonify 
  
@@ -143,7 +143,7 @@ def upload_video():
         f.write(img_bytes)
         f.flush()
     
-    decompress(compressed_file_path, image_file_path)
+    decompression(compressed_file_path, image_file_path)
 
     convert_frames_to_video(image_file_path, image_file_path + "output.mp4", 1)
 
