@@ -126,6 +126,8 @@ def get_location_data_weekly(location, year, month, day, weekday):
             for row in result:
                 weekday = row[7]
                 count = row[1]
+                if weekday < 1: 
+                    continue
                 report[weekday - 1] += count  
     return report 
 
