@@ -72,7 +72,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
         if day_in_week < 0: 
             if month > 1: 
                 day_in_week = calendar.monthrange(year, month - 1)[1] + day_in_week
-                sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} year = {}".format(location, day_in_week, month - 1, year)
+                sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day_in_week, month - 1, year)
                 cursor.execute(sql)
                 result = cursor.fetchall()
                 for row in result:
@@ -81,7 +81,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
                     report[weekday - 1] += count
             else:
                 day_in_week = calendar.monthrange(year - 1, 12)[1] + day_in_week
-                sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} year = {}".format(location, day_in_week, 12, year)
+                sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day_in_week, 12, year)
                 cursor.execute(sql)
                 result = cursor.fetchall()
                 for row in result:
@@ -89,7 +89,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
                     count = row[1]
                     report[weekday - 1] += count 
         else:
-            sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} year = {}".format(location, day_in_week, month, year)
+            sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day_in_week, month, year)
             cursor.execute(sql)
             result = cursor.fetchall()
             for row in result:
@@ -103,7 +103,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
         if day_in_week > calendar.monthrange(year, month)[1]: 
             if month < 12:
                 day_in_week -= calendar.monthrange(year, month)[1]
-                sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} year = {}".format(location, day_in_week, month + 1, year)
+                sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day_in_week, month + 1, year)
                 cursor.execute(sql)
                 result = cursor.fetchall()
                 for row in result:
@@ -112,7 +112,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
                     report[weekday - 1] += count 
             else:
                 day_in_week -= calendar.monthrange(year, month)[1]
-                sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} year = {}".format(location, day_in_week, 1, year + 1)
+                sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day_in_week, 1, year + 1)
                 cursor.execute(sql)
                 result = cursor.fetchall()
                 for row in result:
@@ -120,7 +120,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
                     count = row[1]
                     report[weekday - 1] += count 
         else:
-            sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} year = {}".format(location, day_in_week, month, year)
+            sql = "SELECT * FROM population_data WHERE location = '{}' AND day = {} AND month = {} AND year = {}".format(location, day_in_week, month, year)
             cursor.execute(sql)
             result = cursor.fetchall()
             for row in result:
