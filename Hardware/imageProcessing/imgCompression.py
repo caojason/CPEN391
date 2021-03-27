@@ -89,7 +89,7 @@ def decompression(compressedFilePath):
 
 def main():
     with open("compressed.txt", "wb+") as f:
-        compressedImg = compression("C:\\Users\\yunta\\Desktop\\third_year\\CPEN391\\Torch\\Hardware\\logo.png")
+        compressedImg = compression("C:\\Users\\yunta\\Desktop\\third_year\\CPEN391\\Torch\\Hardware\\imageProcessing\\3x3.png")
         f.write(compressedImg)
         f.flush()
         f.close()

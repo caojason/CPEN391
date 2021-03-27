@@ -6,7 +6,7 @@ import modules.person_counter_opencv.people_counter as PC
 import modules.database.population_database as PD
 import modules.person_counter_opencv.face_detector as FD 
 import modules.database.mask_database as MD 
-from modules.person_counter_opencv.video_conversion import convert_frames_to_video
+from modules.person_counter_opencv.video_conversion import convert_frames_to_video, decompress
 
 from flask import Flask, request, jsonify 
  
@@ -112,56 +112,68 @@ def get_population_analysis():
     return jsonify(report)
 
 LOCATION_IMAGES_MAP = {}
-DEFAULT_FILE_PATH = "."
+DEFAULT_FILE_PATH = "image"
 
 #POST video feed 
-@app.route('/upload_video', methods = ['GET', 'POST'])
+@app.route('/upload_video', methods = ['POST'])
 def upload_video(): 
     global LOCATION_IMAGES_MAP
     global DEFAULT_FILE_PATH
-    if request.method == 'POST' : 
-        #should be a byte stream here instead of a file
-        #wait for the hardware part to be done first
+    #should be a byte stream here instead of a file
+    #wait for the hardware part to be done first
+    data_json = request.get_json()
+    macAddr = data_json["location"]
+    img_bytes = data_json["data"]
+    store_path = macAddr.replace(":", "_")
 
-        #decompress and save the image file to a directory
-        #record the file name
-        filename="some file.jpg"
+    if not macAddr in LOCATION_IMAGES_MAP.keys():
+        file_name = "0.png"
+        LOCATION_IMAGES_MAP[macAddr] = [file_name]
+    else:
+        file_name = "{0}.png".format(len(LOCATION_IMAGES_MAP[macAddr]))
+        LOCATION_IMAGES_MAP[macAddr].append(file_name)
+    
+    folder_path = os.path.join("/", DEFAULT_FILE_PATH, store_path)
+    compressed_file_path = os.path.join(folder_path, file_name.replace("png", "txt"))
+    print(compressed_file_path)
+    image_file_path = os.path.join(folder_path, file_name)
+    print(image_file_path)
 
-        #save the video section to the server
-        f = request.files['file']
-        f.save('/video/interval.mp4')
+    with open(compressed_file_path, "wb+") as f:
+        f.write(img_bytes)
+        f.flush()
+    
+    decompress(compressed_file_path, image_file_path)
+
+    convert_frames_to_video(image_file_path, image_file_path + "output.mp4", 1)
+
+    #used for people counter
+    path_to_image = os.path.join("/", DEFAULT_FILE_PATH, store_path, "output.jpg")
+    print(path_to_image)
+    # #get the people count array 
+    # count = PC.people_counter()
+
+    # masks = FD.facemask_detector()
+
+    # #insert count as a new tuple inside the SQL database
+    # PD.insert_table_population(str(macAddr), int(count))
+    # MD.insert_table_mask(str(macAddr), int(count))
+
+    # #after completing analysis, delete the file to save disk space
+    # os.remove(image_file_path + "output.mp4")
+
+    return "image received"
         
-        #get location from http request
-        location = request.form['location']
-
-        if not location in LOCATION_IMAGES_MAP.keys():
-            LOCATION_IMAGES_MAP[location] = [filename]
-        else:
-            LOCATION_IMAGES_MAP[location].append(filename)
-        
-        if len(LOCATION_IMAGES_MAP[location]) == 15:
-            convert_frames_to_video(DEFAULT_FILE_PATH, DEFAULT_FILE_PATH, 1)
-
-            #get the people count array 
-            count = PC.people_counter()
-
-            masks = FD.facemask_detector()
-
-            #insert count as a new tuple inside the SQL database
-            PD.insert_table_population(str(location), int(count))
-            MD.insert_table_mask(str(location), int(count))
-
-            #after completing analysis, delete the file to save disk space
-            os.remove('/video/interval.mp4')
-
-        return "image received"
 
 
 @app.route("/get_image_analysis", methods=["GET"])
 def get_image():
     # get the actual path to image using mac address as file identifier
+    global DEFAULT_FILE_PATH
+
     mac_addr = request.args["macAddr"]
-    path_to_image = os.path.join(os.getcwd(), "..", "Hardware", "imageProcessing", "3x3.png")
+    store_path = mac_addr.replace(":", "_")
+    path_to_image = os.path.join("/", DEFAULT_FILE_PATH, store_path, "output.jpg")
     print(path_to_image)
     encoded_image = ""
     with open(path_to_image, "rb+") as img_file:

@@ -1,6 +1,7 @@
 pytest
 coverage
 numpy
+PIL
 scipy
 opencv-python
 imutils
