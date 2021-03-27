@@ -26,3 +26,27 @@ def test_get_weekly_data():
         print("get population data {0}".format(rv.data))
         assert b"100" in rv.data
 
+def test_get_weekly_data_1():
+    PD.insert_table_population("A", 100)
+
+    with app.test_client() as testing_client:
+        rv = testing_client.get("/get_population_data/week?day=26&month=3&year=2021&weekday=5&location=FF:FF:FF:FF:FF:FF")
+        assert rv.status_code == 200
+        print("get population data {0}".format(rv.data))
+        assert b"0" in rv.data
+
+def test_get_weekly_data_1():
+    PD.insert_table_population("B", 100)
+
+    with app.test_client() as testing_client:
+        rv = testing_client.get("/get_population_data/week?day=26&month=3&year=2021&weekday=5&location=B")
+        assert rv.status_code == 200
+        print("get population data {0}".format(rv.data))
+        assert b"0" in rv.data  
+    
+    PD.insert_table_population("B", 2)
+    with app.test_client() as testing_client:
+        rv = testing_client.get("/get_population_data/week?day=26&month=3&year=2021&weekday=5&location=B")
+        assert rv.status_code == 200
+        print("get population data {0}".format(rv.data))
+        assert b"102" in rv.data  
