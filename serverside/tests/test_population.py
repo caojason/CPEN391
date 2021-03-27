@@ -24,4 +24,5 @@ def test_get_weekly_data():
         rv = testing_client.get("/get_population_data/week?day=26&month=3&year=2021&weekday=5&location=FF:FF:FF:FF:FF:FF")
         assert rv.status_code == 200
         print("get population data {0}".format(rv.data))
+        assert b"100" in rv.data
 
