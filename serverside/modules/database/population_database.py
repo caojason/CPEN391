@@ -97,7 +97,7 @@ def get_location_data_weekly(location, year, month, day, weekday):
                 count = row[1]
                 report[weekday - 1] += count 
     #then find the days proceeding the current weekday. If today is friday we seatch saturday and sunday. 
-    for i in range(1, 8 - weekday): 
+    for i in range(1, 8 - d): 
         day_in_week = day + i
         #after addition the day may either be in the current month or in the next month. 
         if day_in_week > calendar.monthrange(year, month)[1]: 
