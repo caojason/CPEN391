@@ -90,7 +90,7 @@ def upload_video():
    
     decompression(compressed_file_path, image_file_path)
     print(os.path.getsize(image_file_path))
-    #convert_frames_to_video(folder_path, folder_path + "/output.mp4", 1)
+    convert_frames_to_video(folder_path, folder_path + "/output.mp4", 1)
 
     #used for people counter
     # #get the people count array 
