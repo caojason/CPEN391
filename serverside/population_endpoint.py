@@ -117,7 +117,7 @@ def get_image():
 
     mac_addr = request.args["macAddr"]
     store_path = mac_addr.replace(":", "_")
-    path_to_image = os.path.join("~/", DEFAULT_FILE_PATH, store_path, "output.jpg")
+    path_to_image = os.path.join("~/", DEFAULT_FILE_PATH, store_path, "output.png")
     if not os.path.exists(path_to_image):
         return ""
     print(path_to_image)
