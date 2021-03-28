@@ -17,12 +17,9 @@ from app import app
 
 @app.route('/get_population_data/week')
 def get_week(): 
-    day = int(request.args["day"])
-    month = int(request.args["month"])
-    year = int(request.args["year"])
-    weekday = int(request.args["weekday"])
+
     location = request.args["location"]
-    report = PD.get_location_data_weekly(location, year, month, day, weekday)
+    report = PD.get_location_data_weekly(location)
     WEEKDAY_NAMES = [
         "Monday",
         "Tuesday",
@@ -134,6 +131,9 @@ def upload_video():
         LOCATION_IMAGES_MAP[macAddr].append(file_name)
     
     folder_path = os.path.join("/", DEFAULT_FILE_PATH, store_path)
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
     compressed_file_path = os.path.join(folder_path, file_name.replace("png", "txt"))
     print(compressed_file_path)
     image_file_path = os.path.join(folder_path, file_name)
