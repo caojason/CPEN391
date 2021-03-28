@@ -10,7 +10,7 @@ def convert_frames_to_video(pathIn,pathOut,fps):
     #for sorting the file names properly
     files.sort(key = lambda x: int(x[0:2]))
     for i in range(len(files)):
-        filename=pathIn + files[i]
+        filename=pathIn +"/"+files[i]
         print(filename)
         #reading each files
         img = cv2.imread(filename)
