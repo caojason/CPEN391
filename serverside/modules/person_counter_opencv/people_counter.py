@@ -147,4 +147,3 @@ def people_counter(path, imgPath):
     cv2.destroyAllWindows()
     return OPC
 
-print(people_counter("output.jpg"))
