@@ -87,10 +87,10 @@ def upload_video():
     with open(compressed_file_path, "wb+") as f:
         f.write(base64.b64decode(img_bytes))
         f.flush()
-    
+   
     decompression(compressed_file_path, image_file_path)
-
-    # convert_frames_to_video(folder_path, folder_path + "/output.mp4", 1)
+    print(os.path.getsize(image_file_path))
+    #convert_frames_to_video(folder_path, folder_path + "/output.mp4", 1)
 
     #used for people counter
     # #get the people count array 
