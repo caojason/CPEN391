@@ -63,9 +63,10 @@ def upload_video():
     #wait for the hardware part to be done first
     data_json = request.get_json()
     macAddr = data_json["location"]
+    NumofImg=data_json["NumofImage"]
     img_bytes = data_json["data"]
     store_path = macAddr.replace(":", "_")
-
+    NumofImg=int(NumofImg)
     if not macAddr in LOCATION_IMAGES_MAP.keys():
         file_name = "00.png"
         LOCATION_IMAGES_MAP[macAddr] = [file_name]
@@ -91,7 +92,7 @@ def upload_video():
     decompression(compressed_file_path, image_file_path)
     print(os.path.getsize(image_file_path))
     convert_frames_to_video(folder_path, folder_path + "/output.mp4", 1)
-    if len(LOCATION_IMAGES_MAP[macAddr])>=20:
+    if len(LOCATION_IMAGES_MAP[macAddr])>=NumofImg:
         LOCATION_IMAGES_MAP[macAddr].clear()
     #used for people counter
     # #get the people count array 
@@ -99,12 +100,12 @@ def upload_video():
     print(count)
     # masks = FD.facemask_detector()
 
-    # #insert count as a new tuple inside the SQL database
-    # PD.insert_table_population(str(macAddr), int(count))
-    # MD.insert_table_mask(str(macAddr), int(count))
+    #insert count as a new tuple inside the SQL database
+    PD.insert_table_population(str(macAddr), int(count))
+    MD.insert_table_mask(str(macAddr), int(count))
 
     # #after completing analysis, delete the file to save disk space
-    # os.remove(image_file_path + "output.mp4")
+    os.remove(image_file_path + "output.mp4")
 
     return "image received"
         

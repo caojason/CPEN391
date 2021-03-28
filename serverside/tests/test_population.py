@@ -111,11 +111,11 @@ def test_get_image():
 
     compressed_img = base64.b64encode(compression(original_path))
     compressed_img = compressed_img.decode("utf-8")
-    print("before writing: {0}".format(compressed_img))
+    
 
     with app.test_client() as testing_client:
         rv = testing_client.post("/upload_video", 
-                    data=json.dumps({"location":"FF:FF:FF:FF:FF:FF","data":compressed_img}),
+                    data=json.dumps({"location":"FF:FF:FF:FF:FF:FF","NumofImage":1,"data":compressed_img}),
                     content_type="application/json")
         assert rv.status_code == 200
         rv = testing_client.get("/get_image_analysis?macAddr=FF:FF:FF:FF:FF:FF")
