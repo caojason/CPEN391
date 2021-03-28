@@ -105,7 +105,7 @@ def upload_video():
     #MD.insert_table_mask(str(macAddr), int(count))
 
     # #after completing analysis, delete the file to save disk space
-    os.remove(image_file_path + "output.mp4")
+    os.remove(folder_path + "output.mp4")
 
     return "image received"
         
