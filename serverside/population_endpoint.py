@@ -92,12 +92,9 @@ def upload_video():
     
     decompression(compressed_file_path, image_file_path)
 
-    convert_frames_to_video(folder_path, folder_path + "/output.mp4", 1)
+    # convert_frames_to_video(folder_path, folder_path + "/output.mp4", 1)
 
     #used for people counter
-    path_to_image = os.path.join("~/", DEFAULT_FILE_PATH, store_path, "output.jpg")
-    print(path_to_image)
-    decompression(compressed_file_path, path_to_image)
     # #get the people count array 
     # count = PC.people_counter()
 
@@ -122,6 +119,8 @@ def get_image():
     mac_addr = request.args["macAddr"]
     store_path = mac_addr.replace(":", "_")
     path_to_image = os.path.join("~/", DEFAULT_FILE_PATH, store_path, "output.jpg")
+    if not os.path.exists(path_to_image):
+        return ""
     print(path_to_image)
     encoded_image = ""
     with open(path_to_image, "rb+") as img_file:

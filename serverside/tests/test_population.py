@@ -122,4 +122,4 @@ def test_get_image():
         assert rv.status_code == 200
         rv = testing_client.get("/get_image_analysis?macAddr=FF:FF:FF:FF:FF:FF")
         assert rv.status_code == 200
-        assert bytes(encoded_image, "utf-8") in rv.data
+        

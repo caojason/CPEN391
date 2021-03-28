@@ -11,11 +11,11 @@ def convert_frames_to_video(pathIn,pathOut,fps):
     files.sort(key = lambda x: int(x[0:2]))
     for i in range(len(files)):
         filename=pathIn + files[i]
+        print(filename)
         #reading each files
         img = cv2.imread(filename)
         height, width, layers = img.shape
         size = (width,height)
-        print(filename)
         #inserting the frames into an image array
         frame_array.append(img)
     out = cv2.VideoWriter(pathOut,cv2.VideoWriter_fourcc(*'DIVX'), fps, size)
@@ -28,8 +28,6 @@ def reconstruct(img_arr, start_x, start_y, R_value, G_value, B_value, height, wi
     current_count = 0
     for i in range(start_y, height):
         for j in range(start_x, width):
-            if i == 337:
-                break
             if j == width - 1:
                 start_x = 0
             if current_count == count:
@@ -66,5 +64,5 @@ def decompression(compressedFilePath, outputFilePath):
         
         img = Image.fromarray(img_arr)
         img.save(outputFilePath)
-
+        print("decompress image on server: {0}".format(img_arr))
     os.remove(compressedFilePath)
