@@ -73,10 +73,9 @@ def upload_video():
         file_name = "{0}.png".format(len(LOCATION_IMAGES_MAP[macAddr]))
         LOCATION_IMAGES_MAP[macAddr].append(file_name)
     
-    folder_path = os.path.join("/", DEFAULT_FILE_PATH, store_path)
+    folder_path = os.path.join("~/", DEFAULT_FILE_PATH, store_path)
     if not os.path.exists(folder_path):
         os.umask(0)
-        os.chmod("/", 0o777)
         os.makedirs(folder_path, 0o777)
 
     compressed_file_path = os.path.join(folder_path, file_name.replace("png", "txt"))
@@ -93,7 +92,7 @@ def upload_video():
     convert_frames_to_video(image_file_path, image_file_path + "output.mp4", 1)
 
     #used for people counter
-    path_to_image = os.path.join("/", DEFAULT_FILE_PATH, store_path, "output.jpg")
+    path_to_image = os.path.join("~/", DEFAULT_FILE_PATH, store_path, "output.jpg")
     print(path_to_image)
     decompression(compressed_file_path, path_to_image)
     # #get the people count array 
@@ -119,7 +118,7 @@ def get_image():
 
     mac_addr = request.args["macAddr"]
     store_path = mac_addr.replace(":", "_")
-    path_to_image = os.path.join("/", DEFAULT_FILE_PATH, store_path, "output.jpg")
+    path_to_image = os.path.join("~/", DEFAULT_FILE_PATH, store_path, "output.jpg")
     print(path_to_image)
     encoded_image = ""
     with open(path_to_image, "rb+") as img_file:
