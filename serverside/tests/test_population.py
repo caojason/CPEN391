@@ -114,10 +114,11 @@ def test_get_image():
     
 
     with app.test_client() as testing_client:
-        rv = testing_client.post("/upload_video", 
-                    data=json.dumps({"location":"FF:FF:FF:FF:FF:FF","data":compressed_img}),
-                    content_type="application/json")
-        assert rv.status_code == 200
+        for i in range(0,20):
+            rv = testing_client.post("/upload_video", 
+                        data=json.dumps({"location":"FF:FF:FF:FF:FF:FF","data":compressed_img}),
+                        content_type="application/json")
+            assert rv.status_code == 200
         rv = testing_client.get("/get_image_analysis?macAddr=FF:FF:FF:FF:FF:FF")
         assert rv.status_code == 200
         

@@ -59,7 +59,7 @@ DEFAULT_FILE_PATH = "image"
 def upload_video(): 
     global LOCATION_IMAGES_MAP
     global DEFAULT_FILE_PATH
-    NumofImg=1
+    NumofImg=20
 
     data_json = request.get_json()
     macAddr = data_json["location"]
