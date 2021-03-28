@@ -91,11 +91,12 @@ def upload_video():
     decompression(compressed_file_path, image_file_path)
     print(os.path.getsize(image_file_path))
     convert_frames_to_video(folder_path, folder_path + "/output.mp4", 1)
-
+    if len(LOCATION_IMAGES_MAP[macAddr])>=20:
+        LOCATION_IMAGES_MAP[macAddr].clear()
     #used for people counter
     # #get the people count array 
-    # count = PC.people_counter()
-
+    count = PC.people_counter(folder_path + "/output.mp4")
+    print(count)
     # masks = FD.facemask_detector()
 
     # #insert count as a new tuple inside the SQL database
