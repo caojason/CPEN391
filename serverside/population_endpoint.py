@@ -83,7 +83,7 @@ def upload_video():
 
     print("image bytes received by the server: {0}".format(img_bytes))
 
-    with open(compressed_file_path, "w+") as f:
+    with open(compressed_file_path, "wb+") as f:
         f.write(base64.b64encode(img_bytes))
         f.flush()
     
