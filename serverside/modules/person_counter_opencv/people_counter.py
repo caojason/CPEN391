@@ -62,7 +62,7 @@ def non_max_suppression_fast(boxes, overlapThresh):
 
 
 
-def people_counter(path):
+def people_counter(path, imgPath):
     #define the video file here, or put 0 to use your webcam.
     cap = cv2.VideoCapture(path)
     MaxLpc=0
@@ -136,7 +136,7 @@ def people_counter(path):
         cv2.putText(frame, fps_text, (5, 35), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
         if MaxLpc < lpc_count:
             MaxLpc=lpc_count
-            cv2.imwrite("outPut.png",frame)
+            cv2.imwrite(imgPath,frame)
        
       
        

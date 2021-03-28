@@ -95,7 +95,7 @@ def upload_video():
         LOCATION_IMAGES_MAP[macAddr].clear()
         #used for people counter
         # #get the people count array 
-        count = PC.people_counter(folder_path + "/output.mp4")
+        count = PC.people_counter(folder_path + "/output.mp4", folder_path + "/output.png")
         print(count)
         # masks = FD.facemask_detector()
 
