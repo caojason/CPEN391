@@ -108,8 +108,6 @@ def compression(imgPath):
 
 def test_get_image():
     original_path = os.path.join("tests", "60x60.png")
-    with open(original_path, "rb+") as img_file:
-        encoded_image = base64.b64encode(img_file.read())
 
     compressed_img = base64.b64encode(compression(original_path))
     compressed_img = compressed_img.decode("utf-8")
