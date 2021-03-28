@@ -67,8 +67,11 @@ def upload_video():
     store_path = macAddr.replace(":", "_")
 
     if not macAddr in LOCATION_IMAGES_MAP.keys():
-        file_name = "0.png"
+        file_name = "00.png"
         LOCATION_IMAGES_MAP[macAddr] = [file_name]
+    elif len(LOCATION_IMAGES_MAP[macAddr]) < 10:
+        file_name = "0{0}.png".format(len(LOCATION_IMAGES_MAP[macAddr]))
+        LOCATION_IMAGES_MAP[macAddr].append(file_name)
     else:
         file_name = "{0}.png".format(len(LOCATION_IMAGES_MAP[macAddr]))
         LOCATION_IMAGES_MAP[macAddr].append(file_name)
