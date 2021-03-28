@@ -75,7 +75,8 @@ def upload_video():
     
     folder_path = os.path.join("/", DEFAULT_FILE_PATH, store_path)
     if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
+        os.chmod("/", 0o777)
+        os.makedirs(folder_path, 0o777)
 
     compressed_file_path = os.path.join(folder_path, file_name.replace("png", "txt"))
     print(compressed_file_path)
