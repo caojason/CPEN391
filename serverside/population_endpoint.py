@@ -81,6 +81,8 @@ def upload_video():
     compressed_file_path = os.path.join(folder_path, file_name.replace("png", "txt"))
     image_file_path = os.path.join(folder_path, file_name)
 
+    print("image bytes received by the server: {0}".format(img_bytes))
+
     with open(compressed_file_path, "w+") as f:
         f.write(img_bytes)
         f.flush()
