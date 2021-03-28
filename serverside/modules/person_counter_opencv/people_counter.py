@@ -138,7 +138,7 @@ def people_counter(path):
             MaxLpc=lpc_count
             #cv2.imwrite(outputFile,frame)
        
-        cv2.imshow("Application", frame)
+      
        
         key = cv2.waitKey(1)
         if key == ord('q'):
