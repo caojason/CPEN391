@@ -79,11 +79,9 @@ def upload_video():
         os.makedirs(folder_path, 0o777)
 
     compressed_file_path = os.path.join(folder_path, file_name.replace("png", "txt"))
-    print(compressed_file_path)
     image_file_path = os.path.join(folder_path, file_name)
-    print(image_file_path)
 
-    with open(compressed_file_path, "wb+") as f:
+    with open(compressed_file_path, "w+") as f:
         f.write(img_bytes)
         f.flush()
     
