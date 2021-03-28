@@ -102,7 +102,7 @@ def upload_video():
 
     #insert count as a new tuple inside the SQL database
     PD.insert_table_population(str(macAddr), int(count))
-    MD.insert_table_mask(str(macAddr), int(count))
+    #MD.insert_table_mask(str(macAddr), int(count))
 
     # #after completing analysis, delete the file to save disk space
     os.remove(image_file_path + "output.mp4")

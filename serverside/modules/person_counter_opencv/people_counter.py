@@ -136,7 +136,7 @@ def people_counter(path):
         cv2.putText(frame, fps_text, (5, 35), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
         if MaxLpc < lpc_count:
             MaxLpc=lpc_count
-            #cv2.imwrite(outputFile,frame)
+            cv2.imwrite("outPut.png",frame)
        
       
        
