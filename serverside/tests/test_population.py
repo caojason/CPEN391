@@ -111,7 +111,7 @@ def test_get_image():
     with open(original_path, "rb+") as img_file:
         encoded_image = base64.b64encode(img_file.read())
 
-    compressed_img = compression(original_path)
+    compressed_img = base64.b64encode(compression(original_path))
     print("before writing: {0}".format(compressed_img))
     with open("compressed_img.txt", "wb+") as f:
         f.write(compressed_img)
@@ -119,11 +119,11 @@ def test_get_image():
         compressed_img = f.read().decode("utf-8")
 
     print("after writing and reading: {0}".format(compressed_img))
-    # with app.test_client() as testing_client:
-    #     rv = testing_client.post("/upload_video", 
-    #                 data=json.dumps({"location":"FF:FF:FF:FF:FF:FF","data":compressed_img}),
-    #                 content_type="application/json")
-    #     assert rv.status_code == 200
-    #     rv = testing_client.get("/get_image_analysis?macAddr=FF:FF:FF:FF:FF:FF")
-    #     assert rv.status_code == 200
-    #     assert bytes(encoded_image, "utf-8") in rv.data
+    with app.test_client() as testing_client:
+        rv = testing_client.post("/upload_video", 
+                    data=json.dumps({"location":"FF:FF:FF:FF:FF:FF","data":compressed_img}),
+                    content_type="application/json")
+        assert rv.status_code == 200
+        rv = testing_client.get("/get_image_analysis?macAddr=FF:FF:FF:FF:FF:FF")
+        assert rv.status_code == 200
+        assert bytes(encoded_image, "utf-8") in rv.data
