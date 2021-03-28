@@ -64,5 +64,4 @@ def decompression(compressedFilePath, outputFilePath):
         
         img = Image.fromarray(img_arr)
         img.save(outputFilePath)
-        print("decompress image on server: {0}".format(img_arr))
     os.remove(compressedFilePath)
