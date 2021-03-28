@@ -66,7 +66,6 @@ def get_location_data_weekly(location):
         update_report(cursor, sql, report, weekday)
     
     report = report.tolist()
-    print("report: {0}".format(report))
     return report 
 
 #get the hour & weekday with the lowest and highest population peak in the year

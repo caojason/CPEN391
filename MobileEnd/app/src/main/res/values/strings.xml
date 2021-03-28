@@ -14,6 +14,7 @@
     <string name="check_is_store_owner">check_exists</string>
     <string name="create_email">create_email</string>
     <string name="get_image">get_image_analysis</string>
+    <string name="get_population">get_population_data/week</string>
 
     <string name="client_id">3088778948-19qd3b5ag17p6rde7vb7qbtm2ji9h3iu.apps.googleusercontent.com</string>
 
@@ -114,5 +115,6 @@
     <string name="UI_fill_justification">Please write your justification</string>
     <string name="UI_email_invalid">Email invalid</string>
     <string name="UI_request_letter_edit_warning">Do you want to discard this request letter?</string>
+    <string name="UI_no_picture">There is no valid image analysis</string>
 
 </resources>
