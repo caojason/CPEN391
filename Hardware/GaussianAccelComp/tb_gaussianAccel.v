@@ -92,7 +92,7 @@ module tb_gaussainAccel;
         rd_en = 1'b1;
         addr = 4'd0;
         #10;
-        checkoutput(32'd_5_000_000);         // 5 * 10^6
+        checkoutput(32'd5);         // 5 
 
 
         ///////////////////////////////// TEST 2:    output = 14.1811 * 10^6,
@@ -137,51 +137,139 @@ module tb_gaussainAccel;
         rd_en = 1'b1;
         addr = 4'd0;
         #10;
-        checkoutput(32'd_14_188_100);
+        checkoutput(32'd_14);
 
-        ///////////////////////////////// TEST 3:    output = 11.610032
+        ///////////////////////////////// TEST 3:    output = 255
         //
         // img_arr = np.array([
-        //     [1, 2, 3],
-        //     [4, 5, 6],
-        //     [7, 8, 97]
+        //     [255, 255, 255],
+        //     [255, 255, 255],
+        //     [255, 255, 255]
         //     ])
 
         rd_en = 1'b0;
         wr_en = 1'b1;       // input img array
 
         addr = 4'd1;
-        writedata = 32'd1;
+        writedata = 32'd255;
         #10
         addr = 4'd2;
-        writedata = 32'd2;
+        writedata = 32'd255;
         #10
         addr = 4'd3;
-        writedata = 32'd3;
+        writedata = 32'd255;
         #10
         addr = 4'd4;
-        writedata = 32'd4;
+        writedata = 32'd255;
         #10
         addr = 4'd5;
-        writedata = 32'd5;
+        writedata = 32'd255;
         #10
         addr = 4'd6;
-        writedata = 32'd6;
+        writedata = 32'd255;
         #10
         addr = 4'd7;
-        writedata = 32'd7;
+        writedata = 32'd255;
         #10
         addr = 4'd8;
-        writedata = 32'd8;
+        writedata = 32'd255;
         #10
         addr = 4'd9;
-        writedata = 32'd97;
+        writedata = 32'd255;
         #10
         wr_en = 1'b0;   // read output value
         rd_en = 1'b1;
         addr = 4'd0;
         #10;
-        checkoutput(32'd_14_188_100);
+        checkoutput(32'd_255);
+
+        ///////////////////////////////// TEST 4:    output = 105
+        //
+        // img_arr = np.array([
+        //     [15, 51, 100],
+        //     [20, 241, 95],
+        //     [152, 75, 82]
+        //     ])
+
+        rd_en = 1'b0;
+        wr_en = 1'b1;       // input img array
+
+        addr = 4'd1;
+        writedata = 32'd15;
+        #10
+        addr = 4'd2;
+        writedata = 32'd51;
+        #10
+        addr = 4'd3;
+        writedata = 32'd100;
+        #10
+        addr = 4'd4;
+        writedata = 32'd20;
+        #10
+        addr = 4'd5;
+        writedata = 32'd241;
+        #10
+        addr = 4'd6;
+        writedata = 32'd95;
+        #10
+        addr = 4'd7;
+        writedata = 32'd152;
+        #10
+        addr = 4'd8;
+        writedata = 32'd75;
+        #10
+        addr = 4'd9;
+        writedata = 32'd82;
+        #10
+        wr_en = 1'b0;   // read output value
+        rd_en = 1'b1;
+        addr = 4'd0;
+        #10;
+        checkoutput(32'd_105);
+
+        ///////////////////////////////// TEST 4:    output = 0
+        //
+        // img_arr = np.array([
+        //     [0, 0, 0],
+        //     [0, 0, 0],
+        //     [0, 0, 0]
+        //     ])
+
+        rd_en = 1'b0;
+        wr_en = 1'b1;       // input img array
+
+        addr = 4'd1;
+        writedata = 32'd0;
+        #10
+        addr = 4'd2;
+        writedata = 32'd0;
+        #10
+        addr = 4'd3;
+        writedata = 32'd0;
+        #10
+        addr = 4'd4;
+        writedata = 32'd0;
+        #10
+        addr = 4'd5;
+        writedata = 32'd0;
+        #10
+        addr = 4'd6;
+        writedata = 32'd0;
+        #10
+        addr = 4'd7;
+        writedata = 32'd0;
+        #10
+        addr = 4'd8;
+        writedata = 32'd0;
+        #10
+        addr = 4'd9;
+        writedata = 32'd0;
+        #10
+        wr_en = 1'b0;   // read output value
+        rd_en = 1'b1;
+        addr = 4'd0;
+        #10;
+        checkoutput(32'd_0);
       
 
 

@@ -9,9 +9,9 @@ kernel = np.array([
     ])
 
 img_arr = np.array([
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 97]
+    [15, 51, 100],
+    [20, 241, 95],
+    [152, 75, 82]
     ])
 
 # row, col = 1 (middle value of 3x3 img)

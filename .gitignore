@@ -27,3 +27,4 @@ Hardware/ARM_HPS/CPEN391_Computer.sld
 Hardware/ARM_HPS/CPEN391_Computer.sta.summary
 Hardware/ARM_HPS/hps_sdram_p0_summary.csv
 Hardware/ARM_HPS/CPEN391_Computer.sopcinfo
+*.cdf

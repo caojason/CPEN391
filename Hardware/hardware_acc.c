@@ -18,18 +18,16 @@ void apply_gaussian(unsigned char input[HEIGHT][WIDTH][DEPTH], unsigned char out
                 int bottom = (i == HEIGHT - 1) ? (HEIGHT - 1) : (i + 1);
                 int left = (j == 0) ? 0 : j - 1;
                 int right = (j == WIDTH - 1) ? (WIDTH - 1) : (j + 1);
-                *(gaussian_acc + 1) = (unsigned)&input[top][left][d];
-                *(gaussian_acc + 2) = (unsigned)&input[top][j][d];
-                *(gaussian_acc + 3) = (unsigned)&input[top][right][d];
-                *(gaussian_acc + 4) = (unsigned)&input[i][left][d];
-                *(gaussian_acc + 5) = (unsigned)&input[i][j][d];
-                *(gaussian_acc + 6) = (unsigned)&input[i][right][d];
-                *(gaussian_acc + 7) = (unsigned)&input[bottom][left][d];
-                *(gaussian_acc + 8) = (unsigned)&input[bottom][j][d];
-                *(gaussian_acc + 9) = (unsigned)&input[bottom][right][d];
-                *gaussian_acc = 0; //start 
+                *(gaussian_acc + 1) = input[top][left][d];
+                *(gaussian_acc + 2) = input[top][j][d];
+                *(gaussian_acc + 3) = input[top][right][d];
+                *(gaussian_acc + 4) = input[i][left][d];
+                *(gaussian_acc + 5) = input[i][j][d];
+                *(gaussian_acc + 6) = input[i][right][d];
+                *(gaussian_acc + 7) = input[bottom][left][d];
+                *(gaussian_acc + 8) = input[bottom][j][d];
+                *(gaussian_acc + 9) = input[bottom][right][d];
 
-                *gaussian_acc; //make sure the accelerator is finished
                 output[i][j][d] = *gaussian_output;  //place the output in the correct memory address
             }
         }

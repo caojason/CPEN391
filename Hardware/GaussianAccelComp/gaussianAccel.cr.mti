@@ -1,4 +1,11 @@
-C:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/tb_gaussianAccel.v {1 {vlog -work work -stats=none C:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/tb_gaussianAccel.v
+C:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/gaussianAccel.v {1 {vlog -work work -stats=none C:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/gaussianAccel.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module gaussianAccel
+
+Top level modules:
+	gaussianAccel
+
+} {} {}} C:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/tb_gaussianAccel.v {1 {vlog -work work -stats=none C:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/tb_gaussianAccel.v
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
 -- Compiling module tb_gaussainAccel
 
