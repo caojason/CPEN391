@@ -1,9 +1,11 @@
 pytest
 coverage
 numpy
+Pillow
 scipy
 opencv-python
 imutils
 Flask
 mysql-connector-python
 pytest_mysql
+tensorflow

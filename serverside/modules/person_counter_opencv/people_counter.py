@@ -5,7 +5,7 @@ import numpy as np
 import sys
 import os
 sys.path.append(os.getcwd())
-from .centroidtracker import CentroidTracker
+from modules.person_counter_opencv.centroidtracker import CentroidTracker
 
 
 protopath = os.path.join(os.getcwd(), "modules", "person_counter_opencv", "MobileNetSSD_deploy.prototxt")
@@ -62,9 +62,9 @@ def non_max_suppression_fast(boxes, overlapThresh):
 
 
 
-def people_counter():
+def people_counter(path):
     #define the video file here, or put 0 to use your webcam.
-    cap = cv2.VideoCapture(os.path.join(os.getcwd(), "modules", "person_counter_opencv","testVideo2.mp4"))
+    cap = cv2.VideoCapture(path)
     MaxLpc=0
     fps_start_time = datetime.datetime.now()
     fps = 0
@@ -136,9 +136,9 @@ def people_counter():
         cv2.putText(frame, fps_text, (5, 35), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
         if MaxLpc < lpc_count:
             MaxLpc=lpc_count
-            cv2.imwrite('output.jpg',frame)
+            cv2.imwrite("outPut.png",frame)
        
-        cv2.imshow("Application", frame)
+      
        
         key = cv2.waitKey(1)
         if key == ord('q'):
@@ -147,7 +147,4 @@ def people_counter():
     cv2.destroyAllWindows()
     return OPC
 
-def counter_test():
-    return 1
-
-print(people_counter())
+print(people_counter("output.jpg"))

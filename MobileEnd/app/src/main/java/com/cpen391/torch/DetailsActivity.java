@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,15 +50,14 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     private SharedPreferences sp;
     private static SharedPreferences.OnSharedPreferenceChangeListener onFavoriteChangedListener;
-    private static int Day,Month=1;//Assume we are only getting data from January
-    private static String location=""; //Add a location here
     private StoreInfo storeInfo;
     private Button addToFavoriteButton;
     private TextView storeNameText;
     private LinearLayout chartLinearLayout;
     private ImageView analysisPic;
-    private String[] pairs;
-    private static final String getDailyDataURL = String.format("http://35.233.184.107/get_population_data/day?year=2021&month=%d&day=%d&location=%s",Month,Day,location );
+    private TextView analysisPicExplainText;
+    private LinearLayout detailsLinearLayout;
+    JSONObject dataJson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +80,10 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.details_view_map_fragment);
         mapFragment.getMapAsync(this);
 
-        TextView analysisPicExplainText = findViewById(R.id.analysis_pic_explain);
+        analysisPicExplainText = findViewById(R.id.analysis_pic_explain);
         analysisPic = findViewById(R.id.analysis_pic);
         Button requestPicButton = findViewById(R.id.request_pic_button);
-        LinearLayout detailsLinearLayout = findViewById(R.id.details_linear_layout);
+        detailsLinearLayout = findViewById(R.id.details_linear_layout);
 
         if (!storeInfo.isHasPermission()) {
             analysisPicExplainText.setText(R.string.UI_no_permission);
@@ -93,6 +93,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             detailsLinearLayout.removeView(requestPicButton);
             new Thread(this::setupAnalysis).start();
         }
+        downloadData();
 
         addToFavoriteButton = findViewById(R.id.add_to_favorite_button);
         setupFavoriteButton();
@@ -108,9 +109,20 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             TextView btn= (TextView)switchDayLayout.getChildAt(i);
             String day = dates[i];
             btn.setOnClickListener(v -> switchDay(day));
-
         }
         setupChart(dates[0]);
+    }
+
+    private void downloadData() {
+        String url = getString(R.string.BASE_URL) + getString(R.string.get_population) + "location=" + storeInfo.getMacAddr();
+
+//        String data = "{\"Friday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Monday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Saturday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Sunday\":[100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Thursday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Tuesday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Wednesday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}";
+        String data = OtherUtils.readFromURL(url);
+        try {
+            dataJson = new JSONObject(data);
+        } catch (Exception e) {
+            dataJson = new JSONObject();
+        }
     }
 
     private void setupAnalysis() {
@@ -122,6 +134,11 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         Bitmap img = OtherUtils.decodeImage(encodedImage);
         if (img != null) {
             runOnUiThread(() -> analysisPic.setImageBitmap(img));
+        } else {
+            runOnUiThread(() -> {
+                analysisPicExplainText.setText(R.string.UI_no_picture);
+                detailsLinearLayout.removeView(analysisPic);
+            });
         }
     }
 
@@ -247,54 +264,26 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         cartesian.title(String.format("Volume on %s", day));
         List<DataEntry> data = new ArrayList<>();
-        switch (day) {
-            case "Monday":
-                Day=1;
-                break;
-            case "Tuesday":
-                Day=2;
-                break;
-            case "Wednesday":
-                Day=3;
-                break;
-            case "Thursday":
-                Day=4;
-                break;
-            case "Friday":
-                Day=5;
-                break;
-            case "Saturday":
-                Day=6;
-                break;
-            default:
-                Day=7;
-                break;
-        }
 
-        String result = OtherUtils.readFromURL(getDailyDataURL);
-        Log.d("result", result);
         try {
-            Map<String, Integer> myMap = new Gson().fromJson(result, Map.class);
-            data.add(new ValueDataEntry("08:00", myMap.get("8")));
-            data.add(new ValueDataEntry("09:00", myMap.get("9")));
-            data.add(new ValueDataEntry("10:00", myMap.get("10")));
-            data.add(new ValueDataEntry("11:00", myMap.get("11")));
-            data.add(new ValueDataEntry("12:00", myMap.get("12")));
-            data.add(new ValueDataEntry("13:00", myMap.get("13")));
-            data.add(new ValueDataEntry("14:00", myMap.get("14")));
-            data.add(new ValueDataEntry("15:00", myMap.get("15")));
-            data.add(new ValueDataEntry("16:00", myMap.get("16")));
+            String valuesStr = dataJson.getString(day);
+            valuesStr = valuesStr.substring(1, valuesStr.length() - 1);
+            String[] values = valuesStr.split(",");
+            for (int  i = 0; i < 24; i++) {
+                String time = (i < 10) ? String.format("0%d:00", i) : String.format("%d:00", i);
+                data.add(new ValueDataEntry(time, Integer.parseInt(values[i])));
+            }
         } catch (Exception e) {
             //no data
-            data.add(new ValueDataEntry("08:00", 8));
-            data.add(new ValueDataEntry("09:00", 9));
-            data.add(new ValueDataEntry("10:00", 10));
-            data.add(new ValueDataEntry("11:00", 11));
-            data.add(new ValueDataEntry("12:00", 12));
-            data.add(new ValueDataEntry("13:00", 13));
-            data.add(new ValueDataEntry("14:00", 14));
-            data.add(new ValueDataEntry("15:00", 15));
-            data.add(new ValueDataEntry("16:00", 16));
+            data.add(new ValueDataEntry("08:00", 0));
+            data.add(new ValueDataEntry("09:00", 0));
+            data.add(new ValueDataEntry("10:00", 0));
+            data.add(new ValueDataEntry("11:00", 0));
+            data.add(new ValueDataEntry("12:00", 0));
+            data.add(new ValueDataEntry("13:00", 0));
+            data.add(new ValueDataEntry("14:00", 0));
+            data.add(new ValueDataEntry("15:00", 0));
+            data.add(new ValueDataEntry("16:00", 0));
         }
 
         Column column = cartesian.column(data);

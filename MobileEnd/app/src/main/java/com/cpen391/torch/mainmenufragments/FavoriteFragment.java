@@ -35,6 +35,7 @@ import com.cpen391.torch.data.StoreInfo;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -103,6 +104,7 @@ public class FavoriteFragment extends Fragment {
             if (OtherUtils.stringIsNullOrEmpty(favoriteList)) {
                 favoriteList = sp.getString(getString(R.string.FAVORITES), "");
             }
+            sp.edit().putString(getString(R.string.FAVORITES), favoriteList).apply();
             setupFavoriteList(favoriteList);
         });
     }
@@ -119,11 +121,14 @@ public class FavoriteFragment extends Fragment {
                 setupEachBlock(storeInfo);
             }
         } catch (Exception e) {
-            Log.d("D", "parse json failed");
+            Gson g = new Gson();
+            StoreInfo storeInfo = g.fromJson(favoriteList, StoreInfo.class);
+            setupEachBlock(storeInfo);
         }
     }
 
     private void setupEachBlock(StoreInfo storeInfo) {
+        if (storeInfo == null) return;
         LinearLayout.LayoutParams layoutParams =
                 new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(8,16,8,0);
