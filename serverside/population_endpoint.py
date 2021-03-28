@@ -75,6 +75,7 @@ def upload_video():
     
     folder_path = os.path.join("/", DEFAULT_FILE_PATH, store_path)
     if not os.path.exists(folder_path):
+        os.umask(0)
         os.chmod("/", 0o777)
         os.makedirs(folder_path, 0o777)
 
