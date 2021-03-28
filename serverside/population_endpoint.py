@@ -93,6 +93,7 @@ def upload_video():
     #used for people counter
     path_to_image = os.path.join("/", DEFAULT_FILE_PATH, store_path, "output.jpg")
     print(path_to_image)
+    decompression(compressed_file_path, path_to_image)
     # #get the people count array 
     # count = PC.people_counter()
 
