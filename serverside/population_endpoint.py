@@ -89,7 +89,7 @@ def upload_video():
     
     decompression(compressed_file_path, image_file_path)
 
-    convert_frames_to_video(image_file_path, image_file_path + "output.mp4", 1)
+    convert_frames_to_video(store_path, store_path + "/output.mp4", 1)
 
     #used for people counter
     path_to_image = os.path.join("~/", DEFAULT_FILE_PATH, store_path, "output.jpg")
