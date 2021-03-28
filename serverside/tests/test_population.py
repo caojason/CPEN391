@@ -112,9 +112,10 @@ def test_get_image():
         encoded_image = base64.b64encode(img_file.read())
 
     compressed_img = compression(original_path)
-    with open("compressed_img", "ab+") as f:
+    with open("compressed_img.txt", "wb+") as f:
         f.write(compressed_img)
-        compressed_img = f.read()
+        f.flush()
+        compressed_img = f.read().decode("utf-8")
 
     with app.test_client() as testing_client:
         rv = testing_client.post("/upload_video", 
