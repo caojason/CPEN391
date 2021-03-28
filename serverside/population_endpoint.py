@@ -91,7 +91,7 @@ def upload_video():
     decompression(compressed_file_path, image_file_path)
 
     if len(LOCATION_IMAGES_MAP[macAddr]) >= NumofImg:
-        convert_frames_to_video(folder_path, folder_path + "/output.mp4", 1)
+        convert_frames_to_video(folder_path, folder_path + "/output.mp4", NumofImg)
         LOCATION_IMAGES_MAP[macAddr].clear()
         #used for people counter
         # #get the people count array 
