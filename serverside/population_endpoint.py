@@ -59,14 +59,13 @@ DEFAULT_FILE_PATH = "image"
 def upload_video(): 
     global LOCATION_IMAGES_MAP
     global DEFAULT_FILE_PATH
-    #should be a byte stream here instead of a file
-    #wait for the hardware part to be done first
+    NumofImg=1
+
     data_json = request.get_json()
     macAddr = data_json["location"]
-    NumofImg=data_json["NumofImage"]
     img_bytes = data_json["data"]
     store_path = macAddr.replace(":", "_")
-    NumofImg=int(NumofImg)
+
     if not macAddr in LOCATION_IMAGES_MAP.keys():
         file_name = "00.png"
         LOCATION_IMAGES_MAP[macAddr] = [file_name]
@@ -90,22 +89,22 @@ def upload_video():
         f.flush()
    
     decompression(compressed_file_path, image_file_path)
-    print(os.path.getsize(image_file_path))
-    convert_frames_to_video(folder_path, folder_path + "/output.mp4", 1)
-    if len(LOCATION_IMAGES_MAP[macAddr])>=NumofImg:
+
+    if len(LOCATION_IMAGES_MAP[macAddr]) >= NumofImg:
+        convert_frames_to_video(folder_path, folder_path + "/output.mp4", NumofImg)
         LOCATION_IMAGES_MAP[macAddr].clear()
-    #used for people counter
-    # #get the people count array 
-    count = PC.people_counter(folder_path + "/output.mp4")
-    print(count)
-    # masks = FD.facemask_detector()
+        #used for people counter
+        # #get the people count array 
+        count = PC.people_counter(folder_path + "/output.mp4")
+        print(count)
+        # masks = FD.facemask_detector()
 
-    #insert count as a new tuple inside the SQL database
-    PD.insert_table_population(str(macAddr), int(count))
-    #MD.insert_table_mask(str(macAddr), int(count))
+        #insert count as a new tuple inside the SQL database
+        PD.insert_table_population(str(macAddr), int(count))
+        #MD.insert_table_mask(str(macAddr), int(count))
 
-    # #after completing analysis, delete the file to save disk space
-    os.remove(folder_path + "/output.mp4")
+        # #after completing analysis, delete the file to save disk space
+        os.remove(folder_path + "/output.mp4")
 
     return "image received"
         
