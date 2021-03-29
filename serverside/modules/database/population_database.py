@@ -76,6 +76,8 @@ def get_location_analysis(location, year):
     cursor.execute(sql)
     result = cursor.fetchall()
 
+    print(str(result))
+
     if result is None:
         return "no data"
 
