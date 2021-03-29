@@ -76,8 +76,6 @@ def get_location_analysis(location, year):
     cursor.execute(sql)
     result = cursor.fetchall()
 
-    print(str(result))
-
     if result is None:
         return "no data"
 
@@ -107,6 +105,11 @@ def get_location_analysis(location, year):
     lowest_average = min(week_average)
     lowest_weekday = week_average.index(lowest_average) + 1
 
+    if highest_average == 0.0 and lowest_average == 0.0 and highest_weekday == lowest_weekday:
+        return "no data"
+    elif lowest_weekday == highest_weekday:
+        print("error all weekdays equally populated")
+
     daily_high = [0.0] * 24 
     daily_low = [0.0] * 24
 
@@ -115,8 +118,6 @@ def get_location_analysis(location, year):
             daily_high[row[6]] += row[2]     
         elif row[8] == lowest_weekday: 
             daily_low[row[6]] += row[2]
-        else: 
-            print("error highest and lowest weekday on the same day")
     
     highest_hour = daily_high.index(max(daily_high))
     lowest_hour = daily_low.index(min(daily_low))
