@@ -107,7 +107,7 @@ def compression(imgPath):
     return np.array(compressed_arr, dtype=np.uint8)
 
 def test_get_image():
-    original_path = os.path.join("tests", "test.png")
+    original_path = os.path.join("tests", "test2.png")
 
     compressed_img = base64.b64encode(compression(original_path))
     compressed_img = compressed_img.decode("utf-8")

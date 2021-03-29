@@ -92,10 +92,10 @@ module tb_gaussainAccel;
         rd_en = 1'b1;
         addr = 4'd0;
         #10;
-        checkoutput(32'd5);         // 5 
+        checkoutput(32'd_5_000_000);         // 5 
 
 
-        ///////////////////////////////// TEST 2:    output = 14.1811 * 10^6,
+        ///////////////////////////////// TEST 2:    output = 14.1881 * 10^6,
         //
         // img_arr = np.array([
         //     [1, 2, 3],
@@ -137,7 +137,7 @@ module tb_gaussainAccel;
         rd_en = 1'b1;
         addr = 4'd0;
         #10;
-        checkoutput(32'd_14);
+        checkoutput(32'd_14_188_100);
 
         ///////////////////////////////// TEST 3:    output = 255
         //
@@ -181,9 +181,9 @@ module tb_gaussainAccel;
         rd_en = 1'b1;
         addr = 4'd0;
         #10;
-        checkoutput(32'd_255);
+        checkoutput(32'd_255_000_000);
 
-        ///////////////////////////////// TEST 4:    output = 105
+        ///////////////////////////////// TEST 4:    output = 105.267847
         //
         // img_arr = np.array([
         //     [15, 51, 100],
@@ -225,7 +225,7 @@ module tb_gaussainAccel;
         rd_en = 1'b1;
         addr = 4'd0;
         #10;
-        checkoutput(32'd_105);
+        checkoutput(32'd_105_267_847);
 
         ///////////////////////////////// TEST 4:    output = 0
         //

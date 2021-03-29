@@ -197,6 +197,14 @@
          type = "int";
       }
    }
+   element gaussainAccel_0
+   {
+      datum _sortIndex
+      {
+         value = "16";
+         type = "int";
+      }
+   }
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
@@ -1054,6 +1062,7 @@
   <parameter name="gui_refclk" value="50.0" />
   <parameter name="other_boards" value="None" />
  </module>
+ <module name="gaussainAccel_0" kind="gaussainAccel" version="1.0" enabled="1" />
  <connection
    kind="avalon"
    version="18.1"
@@ -1088,6 +1097,15 @@
    end="JTAG_UART_For_ARM1.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x1008" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="ARM_A9_HPS.h2f_lw_axi_master"
+   end="gaussainAccel_0.avalon_slave_0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x2040" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1331,6 +1349,11 @@
    kind="clock"
    version="18.1"
    start="System_PLL.sys_clk"
+   end="gaussainAccel_0.clock" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="System_PLL.sys_clk"
    end="ARM_A9_HPS.f2h_axi_clock" />
  <connection
    kind="clock"
@@ -1439,6 +1462,11 @@
    kind="reset"
    version="18.1"
    start="ARM_A9_HPS.h2f_reset"
+   end="gaussainAccel_0.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="ARM_A9_HPS.h2f_reset"
    end="Onchip_SRAM.reset1" />
  <connection
    kind="reset"
@@ -1505,6 +1533,11 @@
    version="18.1"
    start="System_PLL.reset_source"
    end="SysID.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="System_PLL.reset_source"
+   end="gaussainAccel_0.reset" />
  <connection
    kind="reset"
    version="18.1"
