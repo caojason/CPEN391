@@ -115,7 +115,7 @@ def test_get_image():
     
     original_path2 = os.path.join("tests", "60x60.png")
     c_img = base64.b64encode(compression(original_path2))
-    c_img = compressed_img.decode("utf-8")
+    c_img = c_img.decode("utf-8")
 
     with app.test_client() as testing_client:
         for _ in range(0,20):
