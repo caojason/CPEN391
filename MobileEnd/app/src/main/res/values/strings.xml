@@ -15,6 +15,7 @@
     <string name="create_email">create_email</string>
     <string name="get_image">get_image_analysis</string>
     <string name="get_population">get_population_data/week</string>
+    <string name="get_analysis">get_population_analysis</string>
 
     <string name="client_id">3088778948-19qd3b5ag17p6rde7vb7qbtm2ji9h3iu.apps.googleusercontent.com</string>
 

@@ -131,6 +131,9 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         String encodedImage = OtherUtils.readFromURL(url);
 
+        url = getString(R.string.BASE_URL) + getString(R.string.get_analysis) + "?location=" + storeInfo.getMacAddr();
+        String wordAnalysis = OtherUtils.readFromURL(url);
+
         Bitmap img = OtherUtils.decodeImage(encodedImage);
         if (img != null) {
             runOnUiThread(() -> analysisPic.setImageBitmap(img));
