@@ -96,7 +96,8 @@ def get_location_analysis(location, year):
 
     #divide weekday totals by the number of that weekday for the average. 
     for i in range(7):
-        week_average[i] /= len(unique_weekdays[i])
+        if len(unique_weekdays[i]) > 0:
+            week_average[i] /= len(unique_weekdays[i])
 
     highest_average = max(week_average)
     #102
