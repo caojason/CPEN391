@@ -19,14 +19,14 @@ import population_endpoint
 def home():
     return "Torch"
 
-@app.route("/test", methods = ["GET"])
-def test():
-    # get the actual path to image
-    path_to_image = os.path.join(os.getcwd(), "..", "Hardware", "imageProcessing", "3x3.png")
-    encoded_image = ""
-    with open(path_to_image, "rb+") as img_file:
-        encoded_image = base64.b64encode(img_file.read())
-    return encoded_image
+# @app.route("/test", methods = ["GET"])
+# def test():
+#     # get the actual path to image
+#     path_to_image = os.path.join(os.getcwd(), "..", "Hardware", "imageProcessing", "3x3.png")
+#     encoded_image = ""
+#     with open(path_to_image, "rb+") as img_file:
+#         encoded_image = base64.b64encode(img_file.read())
+#     return encoded_image
 
 
 #usage :

@@ -107,17 +107,18 @@ def compression(imgPath):
     return np.array(compressed_arr, dtype=np.uint8)
 
 def test_get_image():
-    original_path = os.path.join("tests", "test.png")
+    original_path = os.path.join("tests", "test2.png")
 
     compressed_img = base64.b64encode(compression(original_path))
     compressed_img = compressed_img.decode("utf-8")
     
 
     with app.test_client() as testing_client:
-        rv = testing_client.post("/upload_video", 
-                    data=json.dumps({"location":"FF:FF:FF:FF:FF:FF","NumofImage":1,"data":compressed_img}),
-                    content_type="application/json")
-        assert rv.status_code == 200
+        for i in range(0,20):
+            rv = testing_client.post("/upload_video", 
+                        data=json.dumps({"location":"FF:FF:FF:FF:FF:FF","data":compressed_img}),
+                        content_type="application/json")
+            assert rv.status_code == 200
         rv = testing_client.get("/get_image_analysis?macAddr=FF:FF:FF:FF:FF:FF")
         assert rv.status_code == 200
         
