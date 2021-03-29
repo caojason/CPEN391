@@ -56,7 +56,7 @@ def test_get_weekly_data_2():
 
 def test_get_analysis_no_data():
     with app.test_client() as testing_client:
-        rv = testing_client.get("/get_population_analysis?year=2021&location=B")
+        rv = testing_client.get("/get_population_analysis?year=2021&location=C")
         assert rv.status_code == 200
         assert b"no data" in rv.data  
 
