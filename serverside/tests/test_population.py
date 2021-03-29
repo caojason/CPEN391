@@ -30,13 +30,13 @@ def test_get_weekly_data():
         assert b"100" in rv.data
 
 def test_get_weekly_data_1():
-    PD.insert_table_population("A", 100)
+    PD.insert_table_population("A", 93)
 
     with app.test_client() as testing_client:
         rv = testing_client.get("/get_population_data/week?location=FF:FF:FF:FF:FF:FF")
         assert rv.status_code == 200
         print("get population data {0}".format(rv.data))
-        assert b"0" in rv.data
+        assert b"93" not in rv.data
 
 def test_get_weekly_data_2():
     PD.insert_table_population("B", 100)
@@ -113,13 +113,28 @@ def test_get_image():
     compressed_img = base64.b64encode(compression(original_path))
     compressed_img = compressed_img.decode("utf-8")
     
+    original_path2 = os.path.join("tests", "60x60.png")
+    c_img = base64.b64encode(compression(original_path2))
+    c_img = compressed_img.decode("utf-8")
 
     with app.test_client() as testing_client:
-        for i in range(0,20):
+        for _ in range(0,20):
             rv = testing_client.post("/upload_video", 
-                        data=json.dumps({"location":"FF:FF:FF:FF:FF:FF","data":compressed_img}),
+                        data=json.dumps({"location":"X","data":compressed_img}),
                         content_type="application/json")
             assert rv.status_code == 200
-        rv = testing_client.get("/get_image_analysis?macAddr=FF:FF:FF:FF:FF:FF")
+            rv = testing_client.post("/upload_video",
+                        data=json.dumps({"location":"Y","data":c_img}),
+                        content_type="application/json")
+            assert rv.status_code == 200
+        
+        rv = testing_client.get("/get_image_analysis?macAddr=X")
         assert rv.status_code == 200
+        data1 = rv.data
+        
+        rv = testing_client.get("/get_image_analysis?macAddr=Y")
+        assert rv.status_code == 200
+        data2 = rv.data
+        assert data1 != data2
+
         
