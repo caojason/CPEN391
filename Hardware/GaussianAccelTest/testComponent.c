@@ -13,6 +13,14 @@
 
 int main() {
 
+	///////////////////////////////// TEST 4:    output = 105.267847
+	        //
+	        // img_arr = np.array([
+	        //     [15, 51, 100],
+	        //     [20, 241, 95],
+	        //     [152, 75, 82]
+	        //     ])
+
 	*(gaussian_accel_base + 1) = 15;
 	*(gaussian_accel_base + 2) = 51;
 	*(gaussian_accel_base + 3) = 100;
