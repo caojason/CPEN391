@@ -131,12 +131,10 @@ def test_get_image():
         rv = testing_client.get("/get_image_analysis?macAddr=X")
         assert rv.status_code == 200
         data1 = rv.data
-        print(data1)
-        
+
         rv = testing_client.get("/get_image_analysis?macAddr=Y")
         assert rv.status_code == 200
         data2 = rv.data
-        print(data2)
         assert data1 != data2
 
         
