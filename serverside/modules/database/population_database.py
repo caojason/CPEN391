@@ -99,20 +99,21 @@ def get_location_analysis(location, year):
         week_average[i] /= len(unique_weekdays[i])
 
     highest_average = max(week_average)
-    highest_weekday = week_average.index(highest_average)
-
+    #102
+    highest_weekday = week_average.index(highest_average) + 1 
     lowest_average = min(week_average)
-    lowest_weekday = week_average.index(lowest_average)
+    lowest_weekday = week_average.index(lowest_average) + 1
 
     daily_high = [0.0] * 24 
     daily_low = [0.0] * 24
 
     for row in result: 
         if row[8] == highest_weekday: 
-            daily_high[row[6]] += row[2]
-            
-        if row[8] == lowest_weekday: 
+            daily_high[row[6]] += row[2]     
+        elif row[8] == lowest_weekday: 
             daily_low[row[6]] += row[2]
+        else: 
+            print("error highest and lowest weekday on the same day")
     
     highest_hour = daily_high.index(max(daily_high))
     lowest_hour = daily_low.index(min(daily_low))
