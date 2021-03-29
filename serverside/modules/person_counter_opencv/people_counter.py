@@ -62,7 +62,7 @@ def non_max_suppression_fast(boxes, overlapThresh):
 
 
 
-def people_counter(path, imgPath):
+def people_counter(path,imgPath):
     #define the video file here, or put 0 to use your webcam.
     cap = cv2.VideoCapture(path)
     MaxLpc=0
@@ -139,11 +139,12 @@ def people_counter(path, imgPath):
             cv2.imwrite(imgPath,frame)
        
       
-       
+        
         key = cv2.waitKey(1)
         if key == ord('q'):
             break
     
     cv2.destroyAllWindows()
+    object_id_list.clear()
     return OPC
 
