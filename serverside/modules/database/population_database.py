@@ -40,17 +40,14 @@ def update_report(cursor, sql, report, weekday):
         return
     else:
         sum_and_count = numpy.zeros((24, 2), dtype=numpy.int)
-        known_days = []
         for row in result:
             human_count = row[2]
             hour = row[6]
             sum_and_count[hour][0] += human_count
-            if not (row[5] in known_days):
-                known_days.append(row[5])
-                sum_and_count[hour][1] += 1
+            sum_and_count[hour][1] += 1
         for i in range(24):
             if sum_and_count[i][1] != 0:
-                report[weekday][i] = sum_and_count[i][0] / sum_and_count[i][1]
+                report[weekday][i] = int(sum_and_count[i][0] / sum_and_count[i][1])
 
 
 def get_location_data_weekly(location):

@@ -47,12 +47,12 @@ def test_get_weekly_data_2():
         print("get population data {0}".format(rv.data))
         assert b"100" in rv.data  
     
-    PD.insert_table_population("B", 2)
+    PD.insert_table_population("B", 99)
     with app.test_client() as testing_client:
         rv = testing_client.get("/get_population_data/week?location=B")
         assert rv.status_code == 200
         print("get population data {0}".format(rv.data))
-        assert b"102" in rv.data  
+        assert b"99" in rv.data  
 
 def test_get_analysis_no_data():
     with app.test_client() as testing_client:
