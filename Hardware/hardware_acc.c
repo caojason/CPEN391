@@ -4,7 +4,7 @@
 #define HEIGHT 1080
 #define DEPTH 3
 
-volatile unsigned *gaussian_acc = (volatile unsigned *)0x1040; //gaussian filter acceletaor
+volatile unsigned *gaussian_acc = (volatile unsigned *)0xff202040; //gaussian filter acceletaor base address
 volatile unsigned *gaussian_output = (volatile unsigned *)0x1080; //the output value of the accelerator
 volatile unsigned *compression_acc = (volatile unsigned *)0x10c0; //compression accelerator base address
 volatile unsigned *compression_out = (volatile unsigned *)0x10f0; //output of the compression accelerator

@@ -57,7 +57,7 @@ module gaussianAccel (
     always@(*) begin
         if (rd_en == 1) begin
             if (addr == 4'd0) begin // if reading from address 0, get convolution of kernel with 3x3 img
-                readdata = (img00*`K00 + img01*`K01 + img02*`K02 + img10*`K10 + img11*`K11 + img12*`K12 + img20*`K20 + img21*`K21 + img22*`K22) / 32'd_1_000_000;
+                readdata = (img00*`K00 + img01*`K01 + img02*`K02 + img10*`K10 + img11*`K11 + img12*`K12 + img20*`K20 + img21*`K21 + img22*`K22);
             end
         end else begin
             readdata = 32'd0; // default value is 0

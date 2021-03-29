@@ -9,13 +9,13 @@ z2
 cModel Technology
 dC:/Users/caoja/Documents/UBC_Third_Year/CPEN311/labs/lab-3-caojason/task4
 vgaussianAccel
-Z0 !s110 1615236641
+Z0 !s110 1616975970
 !i10b 1
-!s100 l2?DgjH=?Y[GG9h?:zfjm3
-I]C[][Fe<`VK;Da^3`[BPj0
+!s100 lXm8K3iaK;@9m<13D7lc<2
+IlKfBJN?>K=1_<2K<B@dV]0
 Z1 VDg1SIo80bB@j0V0VzS_@n1
 Z2 dC:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp
-w1614843696
+w1616975574
 8C:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/gaussianAccel.v
 FC:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/gaussianAccel.v
 L0 11
@@ -23,7 +23,7 @@ Z3 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z4 !s108 1615236641.000000
+Z4 !s108 1616975970.000000
 !s107 C:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/gaussianAccel.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/gaussianAccel.v|
 !i113 1
@@ -33,11 +33,11 @@ ngaussian@accel
 vtb_gaussainAccel
 R0
 !i10b 1
-!s100 0IgA4ZHFU2]<4AX>>F5[]3
-IFh6ZMbPAV2aalJHGi9T`[3
+!s100 ^YG4Ez2[H9]beNkkk6C7Q3
+II`F@h7d2QSIlEzkCO<2lC1
 R1
 R2
-w1615236634
+w1616975966
 8C:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/tb_gaussianAccel.v
 FC:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/tb_gaussianAccel.v
 L0 1
