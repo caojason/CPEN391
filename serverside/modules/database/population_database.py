@@ -86,10 +86,10 @@ def get_location_analysis(location, year):
         month = row[4]
         #generate a date so we can count how many unique weekdays has passed. 
         date = "{}/{}".format(day, month)  
-        if date not in unique_weekdays[weekday - 1]:
-            unique_weekdays[weekday - 1].append(date)
+        if date not in unique_weekdays[weekday]:
+            unique_weekdays[weekday].append(date)
         #sum up the total in the array element for the weekday 
-        week_average[weekday - 1] += count 
+        week_average[weekday] += count 
 
     #divide weekday totals by the number of that weekday for the average. 
     for i in range(7):

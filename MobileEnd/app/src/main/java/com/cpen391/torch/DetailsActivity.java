@@ -114,7 +114,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void downloadData() {
-        String url = getString(R.string.BASE_URL) + getString(R.string.get_population) + "location=" + storeInfo.getMacAddr();
+        String url = getString(R.string.BASE_URL) + getString(R.string.get_population) + "?location=" + storeInfo.getMacAddr();
 
 //        String data = "{\"Friday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Monday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Saturday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Sunday\":[100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Thursday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Tuesday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Wednesday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}";
         String data = OtherUtils.readFromURL(url);
