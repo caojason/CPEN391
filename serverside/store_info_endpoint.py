@@ -65,7 +65,7 @@ def create_permission_link():
 
 @app.route("/give_permission",methods=["GET"])
 def get_permission():
-    uid = request.args["uid"] if "uid" in request.args else "\"\""
+    uid = request.args["request_user_id"] if "request_user_id" in request.args else "\"\""
     uid=StevenUnHash(uid)
     print("unhashed uid: {0}".format(uid))
     macAddr=request.args["macAddr"] if "macAddr" in request.args else "\"\""
