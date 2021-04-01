@@ -58,8 +58,8 @@ def create_permission_link():
     uid=data_json["uid"]
     uid=StevenHash(int(uid))
     print("hashed uid {0}".format(uid))
-    permissionLink="http://35.233.184.107/give_permission?macAddr={}&request_user_id={}".format(macAddr,uid)
-    msg="Subject: \n"+subject+"\n\nUser {}".format(email)+" send you a request for viewing your store's analytic data. Here is his message: \n" + message+"\n\n Click the following link to give permission:"+permissionLink
+    permissionLink="http://35.233.184.107:5000/give_permission?macAddr={}&request_user_id={}".format(macAddr,uid)
+    msg="Subject: \n"+subject+"\n\nUser {}".format(email)+" send you a request for viewing your store's analytic data. Here is his message: \n" + message+"\n\n Click the following link to give permission: "+permissionLink
     send_email(owner_email,msg)
     return "success"
 
