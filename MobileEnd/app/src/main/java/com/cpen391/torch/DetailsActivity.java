@@ -134,12 +134,21 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         url = getString(R.string.BASE_URL) + getString(R.string.get_analysis) + "?location=" + storeInfo.getMacAddr();
         String wordAnalysis = OtherUtils.readFromURL(url);
 
+        if (OtherUtils.stringIsNullOrEmpty(wordAnalysis) || wordAnalysis.contains("no data")) {
+            wordAnalysis = "There is no analysis data.";
+        }
+
         Bitmap img = OtherUtils.decodeImage(encodedImage);
         if (img != null) {
-            runOnUiThread(() -> analysisPic.setImageBitmap(img));
-        } else {
+            String finalExplainText = wordAnalysis + "\n\n" + getString(R.string.UI_picture_explanation);
             runOnUiThread(() -> {
-                analysisPicExplainText.setText(R.string.UI_no_picture);
+                analysisPic.setImageBitmap(img);
+                analysisPicExplainText.setText(finalExplainText);
+            });
+        } else {
+            String finalExplainText = wordAnalysis + "\n\n" + getString(R.string.UI_no_picture);
+            runOnUiThread(() -> {
+                analysisPicExplainText.setText(finalExplainText);
                 detailsLinearLayout.removeView(analysisPic);
             });
         }
