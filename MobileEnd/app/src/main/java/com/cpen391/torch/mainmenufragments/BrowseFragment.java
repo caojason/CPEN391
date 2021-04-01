@@ -98,7 +98,7 @@ public class BrowseFragment extends Fragment implements OnMapReadyCallback {
         String infoString = OtherUtils.readFromURL(url);
 
         try {
-            testSetup();
+//            testSetup();
             JSONArray jsonArray = new JSONArray(infoString);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
