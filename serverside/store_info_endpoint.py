@@ -83,7 +83,7 @@ def get_permission():
   
     UD.set_favorite_list(uid, favourite_list_str)
 
-    return "success"
+    return "You have successfully given permission"
 
 
 def send_email(receiver, message):
