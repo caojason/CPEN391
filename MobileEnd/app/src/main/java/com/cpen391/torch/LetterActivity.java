@@ -133,8 +133,7 @@ public class LetterActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
         String uid = sp.getString(getString(R.string.UID), "");
         new Thread(()-> {
-            String url = getString(R.string.BASE_URL) + getString(R.string.create_email) + "?uid=" + uid;
-            OtherUtils.uploadToServer(url, uid, dataToSend);
+            OtherUtils.uploadToServer(getString(R.string.create_email), uid, dataToSend);
         }).start();
         finishAffinity();
     }
