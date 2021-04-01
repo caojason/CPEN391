@@ -135,7 +135,7 @@ public class LetterActivity extends AppCompatActivity {
         new Thread(()-> {
             OtherUtils.uploadToServer(getString(R.string.create_email), uid, dataToSend);
         }).start();
-        finishAffinity();
+        finish();
     }
 
     @Override

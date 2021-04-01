@@ -71,16 +71,18 @@ def get_permission():
     macAddr=request.args["macAddr"] if "macAddr" in request.args else "\"\""
     favourite_list_str=UD.get_favorite_list(uid)
     if favourite_list_str != "":
-        favourite_list_str=str(favourite_list_str)
+        favourite_list_str=favourite_list_str[0]
+    print("original {0}".format(favourite_list_str))
     indexOfAddr=favourite_list_str.find(macAddr)
     if indexOfAddr != -1:
         indexOfPermission=favourite_list_str.rfind("false",0,indexOfAddr)
         if indexOfPermission != -1:
             firstPart=favourite_list_str[0:indexOfPermission]
-            secondPart=favourite_list_str[indexOfPermission:-1]
+            secondPart=favourite_list_str[indexOfPermission:]
             secondPart=secondPart.replace("false","true",1)
-            favourite_list_str=firstPart+secondPart
-  
+            favourite_list_str=firstPart + secondPart
+    
+    print(favourite_list_str)
     UD.set_favorite_list(uid, favourite_list_str)
 
     return "You have successfully given permission"
