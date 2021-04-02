@@ -66,7 +66,9 @@ def get_location_data_weekly(location):
     return report 
 
 #get the hour & weekday with the lowest and highest population peak in the year
-def get_location_analysis(location, year):
+def get_location_analysis(location):
+    year = datetime.datetime.today().year
+    
     db = connect_to_database()
     cursor = db.cursor()
     sql = "SELECT * FROM population_data WHERE location = '{}' AND year = {}".format(location, int(year))
