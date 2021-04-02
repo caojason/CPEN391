@@ -1,5 +1,6 @@
 import mysql.connector 
 import datetime 
+import pytz
 import numpy
 
 def connect_to_database():
@@ -21,14 +22,13 @@ def connect_to_database():
 #insert tuple into population table. 
 def insert_table_population(location, count):
     
-    now = datetime.datetime.now()
-    weekday = datetime.datetime.today().weekday()
+    now = datetime.datetime.now(pytz.timezone('US/Pacific'))
 
     db = connect_to_database()
 
     cursor = db.cursor()
     sql = "INSERT INTO population_data (location, count, year, month, day, hour, minute, weekday) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-    val = (location, count, now.year, now.month, now.day, now.hour, now.minute, weekday)
+    val = (location, count, now.year, now.month, now.day, now.hour, now.minute, now.weekday())
 
     cursor.execute(sql, val)
     db.commit()
@@ -52,8 +52,12 @@ def update_report(cursor, sql, report, weekday):
 
 def get_location_data_weekly(location):
 
-    month = datetime.datetime.today().month
-    year = datetime.datetime.today().year
+    current_time = datetime.datetime.now(pytz.timezone('US/Pacific'))
+    print(current_time)
+    
+    month = current_time.month
+    year = current_time.year
+
     db = connect_to_database()
     cursor = db.cursor()
     report = numpy.zeros((7, 24), dtype=numpy.int)
@@ -67,7 +71,7 @@ def get_location_data_weekly(location):
 
 #get the hour & weekday with the lowest and highest population peak in the year
 def get_location_analysis(location):
-    year = datetime.datetime.today().year
+    year = datetime.datetime.now(pytz.timezone('US/Pacific')).year
     
     db = connect_to_database()
     cursor = db.cursor()
