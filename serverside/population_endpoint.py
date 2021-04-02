@@ -47,7 +47,7 @@ def get_population_analysis():
         "lowest hour" : lowest_hour, 
         "lowest average" : lowest_average
     }
-    #returns the highest and lowest average ie Monday at 2 pm is the lowest. Average refers to average visitors on a monday 
+    # needs to return a human readable string here
     return jsonify(report)
 
 LOCATION_IMAGES_MAP = {}
