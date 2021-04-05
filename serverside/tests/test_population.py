@@ -66,7 +66,7 @@ def test_get_analysis():
         rv = testing_client.get("/get_population_analysis?year=2021&location=A")
         print(str(rv.data))
         assert rv.status_code == 200
-        assert b"highest" in rv.data  
+        assert b"Highest" in rv.data  
 
 def compression(imgPath):
     img = Image.open(imgPath)
