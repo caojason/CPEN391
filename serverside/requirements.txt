@@ -9,3 +9,4 @@ Flask
 mysql-connector-python
 pytest_mysql
 tensorflow
+pytz

@@ -82,8 +82,6 @@ public class FavoriteFragment extends Fragment {
         if (!OtherUtils.stringIsNullOrEmpty(favoriteList)) {
             setupFavoriteList(favoriteList);
         }
-
-        setupFavoriteList(favoriteList);
     }
 
 
@@ -121,9 +119,13 @@ public class FavoriteFragment extends Fragment {
                 setupEachBlock(storeInfo);
             }
         } catch (Exception e) {
-            Gson g = new Gson();
-            StoreInfo storeInfo = g.fromJson(favoriteList, StoreInfo.class);
-            setupEachBlock(storeInfo);
+            try {
+                Gson g = new Gson();
+                StoreInfo storeInfo = g.fromJson(favoriteList, StoreInfo.class);
+                setupEachBlock(storeInfo);
+            } catch (Exception e2) {
+                return;
+            }
         }
     }
 

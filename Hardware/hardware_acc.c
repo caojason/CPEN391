@@ -4,8 +4,9 @@
 #define HEIGHT 1080
 #define DEPTH 3
 
-volatile unsigned *gaussian_acc = (volatile unsigned *)0xff202040; //gaussian filter acceletaor base address
-volatile unsigned *gaussian_output = (volatile unsigned *)0x1080; //the output value of the accelerator
+#define gaussian_accel_base (volatile int *) 0xFF202040 // gaussian filter acceletaor base address
+#define component_factor 1000000.0                      // Component calculates value multiplied by a factor of 10^6
+
 volatile unsigned *compression_acc = (volatile unsigned *)0x10c0; //compression accelerator base address
 volatile unsigned *compression_out = (volatile unsigned *)0x10f0; //output of the compression accelerator
 
@@ -18,17 +19,19 @@ void apply_gaussian(unsigned char input[HEIGHT][WIDTH][DEPTH], unsigned char out
                 int bottom = (i == HEIGHT - 1) ? (HEIGHT - 1) : (i + 1);
                 int left = (j == 0) ? 0 : j - 1;
                 int right = (j == WIDTH - 1) ? (WIDTH - 1) : (j + 1);
-                *(gaussian_acc + 1) = input[top][left][d];
-                *(gaussian_acc + 2) = input[top][j][d];
-                *(gaussian_acc + 3) = input[top][right][d];
-                *(gaussian_acc + 4) = input[i][left][d];
-                *(gaussian_acc + 5) = input[i][j][d];
-                *(gaussian_acc + 6) = input[i][right][d];
-                *(gaussian_acc + 7) = input[bottom][left][d];
-                *(gaussian_acc + 8) = input[bottom][j][d];
-                *(gaussian_acc + 9) = input[bottom][right][d];
+                *(gaussian_accel_base + 1) = input[top][left][d];
+                *(gaussian_accel_base + 2) = input[top][j][d];
+                *(gaussian_accel_base + 3) = input[top][right][d];
+                *(gaussian_accel_base + 4) = input[i][left][d];
+                *(gaussian_accel_base + 5) = input[i][j][d];
+                *(gaussian_accel_base + 6) = input[i][right][d];
+                *(gaussian_accel_base + 7) = input[bottom][left][d];
+                *(gaussian_accel_base + 8) = input[bottom][j][d];
+                *(gaussian_accel_base + 9) = input[bottom][right][d];
 
-                output[i][j][d] = *gaussian_output;  //place the output in the correct memory address
+
+                // *(gaussian_accel_base) will return output value scaled up by 10^6
+                output[i][j][d] = (int) round(*(gaussian_accel_base) / component_factor); 
             }
         }
     }

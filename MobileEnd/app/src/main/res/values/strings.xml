@@ -72,7 +72,7 @@
     <string name="picture_for_analyzing">Picture for analyzing</string>
     <string name="UI_Customer_counts">Customer counts</string>
     <string name="UI_Time_in_day">Time in day</string>
-
+    <string name="UI_no_picture">There is no valid image analysis</string>
 
 
     <string name="UI_distance_notification">please refresh after you enabled GPS</string>
@@ -116,6 +116,5 @@
     <string name="UI_fill_justification">Please write your justification</string>
     <string name="UI_email_invalid">Email invalid</string>
     <string name="UI_request_letter_edit_warning">Do you want to discard this request letter?</string>
-    <string name="UI_no_picture">There is no valid image analysis</string>
 
 </resources>

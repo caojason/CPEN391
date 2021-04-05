@@ -33,10 +33,9 @@ def get_week():
 @app.route('/get_population_analysis')
 def get_population_analysis():
     location = request.args["location"]
-    year = request.args["year"]
 
     try:
-        highest_weekday, highest_hour, highest_average, lowest_weekday, lowest_hour, lowest_average = PD.get_location_analysis(location, year)
+        highest_weekday, highest_hour, highest_average, lowest_weekday, lowest_hour, lowest_average = PD.get_location_analysis(location)
     except:
         return "no data"
 
@@ -48,7 +47,7 @@ def get_population_analysis():
         "lowest hour" : lowest_hour, 
         "lowest average" : lowest_average
     }
-    #returns the highest and lowest average ie Monday at 2 pm is the lowest. Average refers to average visitors on a monday 
+    # needs to return a human readable string here
     return jsonify(report)
 
 LOCATION_IMAGES_MAP = {}
