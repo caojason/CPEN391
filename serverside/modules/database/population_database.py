@@ -131,6 +131,7 @@ def get_location_analysis(location):
     lowest = "Lowest Traffic Time: " + weekDays[lowest_weekday] + " at " + str(lowest_hour) + ":00. "
     averages = "Peak Average: " + str(highest_average) + ". Lowest Average: " + str(lowest_average) + "."
 
+    print('hello')
     print(highest + lowest + averages)
 
     return highest + lowest + averages
