@@ -30,6 +30,7 @@ def get_week():
     histogram = dict(zip(WEEKDAY_NAMES, report))
     return jsonify(histogram) 
 
+
 @app.route('/get_population_analysis')
 def get_population_analysis():
     location = request.args["location"]
