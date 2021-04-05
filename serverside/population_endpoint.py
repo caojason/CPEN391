@@ -101,7 +101,6 @@ def upload_video():
     return "image received"
         
 
-
 @app.route("/get_image_analysis", methods=["GET"])
 def get_image():
     # get the actual path to image using mac address as file identifier
