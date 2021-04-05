@@ -35,20 +35,12 @@ def get_population_analysis():
     location = request.args["location"]
 
     try:
-        highest_weekday, highest_hour, highest_average, lowest_weekday, lowest_hour, lowest_average = PD.get_location_analysis(location)
+        report = PD.get_location_analysis(location)
     except:
         return "no data"
 
-    report = {
-        "highest weekday" : highest_weekday,
-        "highest hour" : highest_hour,
-        "highest average" : highest_average, 
-        "lowest weekday" : lowest_weekday, 
-        "lowest hour" : lowest_hour, 
-        "lowest average" : lowest_average
-    }
     # needs to return a human readable string here
-    return jsonify(report)
+    return report
 
 LOCATION_IMAGES_MAP = {}
 DEFAULT_FILE_PATH = "image"
