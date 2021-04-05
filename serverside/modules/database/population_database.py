@@ -125,7 +125,7 @@ def get_location_analysis(location):
     highest_hour = daily_high.index(max(daily_high))
     lowest_hour = daily_low.index(min(daily_low))
 
-    weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+    weekDays = ("None", "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
 
     highest = "Highest Traffic Time: " + weekDays[highest_weekday] + " at " + str(highest_hour) + ":00. " 
     lowest = "Lowest Traffic Time: " + weekDays[lowest_weekday] + " at " + str(lowest_hour) + ":00. "
