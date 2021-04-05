@@ -125,7 +125,13 @@ def get_location_analysis(location):
     highest_hour = daily_high.index(max(daily_high))
     lowest_hour = daily_low.index(min(daily_low))
 
-    return (highest_weekday, highest_hour, highest_average, lowest_weekday, lowest_hour, lowest_average) 
+    weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+
+    highest = "Highest Traffic Time: " + weekDays[highest_weekday] + " at " + str(highest_hour) + ":00. " 
+    lowest = "Lowest Traffic Time: " + weekDays[lowest_weekday] + " at " + str(lowest_hour) + ":00. "
+    averages = "Peak Average: " + str(highest_average) + ". Lowest Average: " + str(lowest_average) + "."
+ 
+    return highest + lowest + averages
 
 # def get_location_data_hourly(location, year, month, day, hour):
 #     db = connect_to_database()
