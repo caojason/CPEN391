@@ -43,12 +43,12 @@ def compression(img_arr):
                 color = newColor
                 count = 1
 
-    if len(compressed_arr) != 0:
+    if color[0] != compressed_arr[-4] and color[1] != compressed_arr[-3] and color[2] != compressed_arr[-2]
         compressed_arr.append(color[0])
         compressed_arr.append(color[1])
         compressed_arr.append(color[2])
         compressed_arr.append(count)
-        
+
     return np.array(compressed_arr, dtype=np.uint8)
 
 try:
