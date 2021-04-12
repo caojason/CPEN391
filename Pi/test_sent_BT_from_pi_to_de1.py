@@ -6,7 +6,7 @@ try:
     size = 256
 
     # initialize serial port
-    ser = serial.Serial('/dev/rfcomm0', 9600)
+    ser = serial.Serial('/dev/rfcomm0', 115200)
     if ser.isOpen == False:
         ser.open()
 

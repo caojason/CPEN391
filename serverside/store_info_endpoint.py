@@ -93,7 +93,7 @@ def send_email(receiver, message):
     fromaddr = 'torchapp1@gmail.com'
     toaddrs  = receiver
     username = 'torchapp1@gmail.com'
-    password = 'ok89010430'
+    password = 'ko89010430'
     server = smtplib.SMTP('smtp.gmail.com:587')
     server.ehlo()
     server.starttls()
