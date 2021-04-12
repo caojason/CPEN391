@@ -51,12 +51,15 @@ def compression(img_arr):
 
     return np.array(compressed_arr, dtype=np.uint8)
 
+
+# start of main code
 try:
     # initialize serial port
     ser = serial.Serial()
     ser.baudrate = 115200
     ser.port = "/dev/rfcomm0"
     ser.open()
+    print("Opened serial port")
 
 
     # capture image and store it in a np array
@@ -72,11 +75,14 @@ try:
     camera = PiCamera()
     camera.resolution = (width, height)
     camera.framerate = 24
-    # allow camera to warm up
     sleep(2)
+    print("Camera initialization complete")
 
+    # array used to store the images sent back from the DE1
+    processed_image = np.empty([height, width, depth], dtype=np.uint8)
 
-    while(True):
+    # number of images to send
+    for i in range(1):
 
         image_data = np.empty((storage_height * storage_width * depth,), dtype=np.uint8)
         camera.capture(image_data, 'rgb')
@@ -87,12 +93,13 @@ try:
         for y in range(height):
             for x in range(width):
                 for z in range(depth):
-                    ser.write(bytes(chr(int(image_data[y][x][z]/2)), "ascii"))
-                    print("sent", image_data[y][x][z], "at", x, y, z)
+                    data_byte = bytes([int(image_data[y][x][z])])
+                    ser.write(data_byte)
+                    print("sent", data_byte, "at", x, y, z)
 
 
         # # wait for DE1-SoC to send image back
-        processed_image = np.empty([height, width, depth], dtype=np.uint8)
+        
         x = 0
         y = 0
         z = 0
@@ -115,12 +122,6 @@ try:
                 y %= height
 
 
-        # finished receiving processed image from DE1-SoC
-        # ser.close()
-
-        # check if image is the same
-        # print("Finished comparing image, images are the same:", (image_data==processed_image).all())
-
         compressed_image = compression(image_data)
         encoded_image = base64.b64encode(compressed_image)
         macAddr = "20:18:11:20:33:41"
@@ -130,5 +131,5 @@ try:
 except KeyboardInterrupt:
     pass
 finally:
-    pass
-    # ser.close()
+    # pass
+    ser.close()
