@@ -116,7 +116,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private void downloadData() {
         String url = getString(R.string.BASE_URL) + getString(R.string.get_population) + "?location=" + storeInfo.getMacAddr();
 
-//        String data = "{\"Friday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Monday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Saturday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Sunday\":[100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Thursday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Tuesday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"Wednesday\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}";
         String data = OtherUtils.readFromURL(url);
         try {
             dataJson = new JSONObject(data);
@@ -258,7 +257,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
 
     private void setupChart(String day) {
-        //BUG: cannot switch day
         chartLinearLayout.removeViewAt(0);
 
         AnyChartView chartView = new AnyChartView(this);
