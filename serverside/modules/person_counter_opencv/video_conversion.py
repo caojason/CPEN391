@@ -6,7 +6,8 @@ from os.path import isfile, join
 
 def convert_frames_to_video(pathIn,pathOut,fps):
     frame_array = []
-    files = [f for f in os.listdir(pathIn) if isfile(join(pathIn, f))]
+
+    files = [f for f in os.listdir(pathIn) if isfile(join(pathIn, f)) and f.find("output") == -1]
     #for sorting the file names properly
     files.sort(key = lambda x: int(x[0:2]))
     for i in range(len(files)):

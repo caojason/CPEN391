@@ -38,6 +38,11 @@ def compression(imgPath):
                 #get the new color
                 color = newColor
                 count = 1
+    if len(compressed_arr) != 0:
+        compressed_arr.append(color[0])
+        compressed_arr.append(color[1])
+        compressed_arr.append(color[2])
+        compressed_arr.append(count)
     return np.array(compressed_arr, dtype=np.uint8)
 
 def reconstruct(img_arr, start_x, start_y, R_value, G_value, B_value, height, width, count):
@@ -89,7 +94,7 @@ def decompression(compressedFilePath):
 
 def main():
     with open("compressed.txt", "wb+") as f:
-        compressedImg = compression("C:\\Users\\yunta\\Desktop\\third_year\\CPEN391\\Torch\\Hardware\\imageProcessing\\3x3.png")
+        compressedImg = compression("C:\\Users\\yunta\\Desktop\\third_year\\CPEN391\\Torch\\Hardware\\imageProcessing\\60x60.png")
         f.write(compressedImg)
         f.flush()
         f.close()

@@ -30,26 +30,18 @@ def get_week():
     histogram = dict(zip(WEEKDAY_NAMES, report))
     return jsonify(histogram) 
 
+
 @app.route('/get_population_analysis')
 def get_population_analysis():
     location = request.args["location"]
-    year = request.args["year"]
 
     try:
-        highest_weekday, highest_hour, highest_average, lowest_weekday, lowest_hour, lowest_average = PD.get_location_analysis(location, year)
+        report = PD.get_location_analysis(location)
     except:
         return "no data"
 
-    report = {
-        "highest weekday" : highest_weekday,
-        "highest hour" : highest_hour,
-        "highest average" : highest_average, 
-        "lowest weekday" : lowest_weekday, 
-        "lowest hour" : lowest_hour, 
-        "lowest average" : lowest_average
-    }
-    #returns the highest and lowest average ie Monday at 2 pm is the lowest. Average refers to average visitors on a monday 
-    return jsonify(report)
+    # needs to return a human readable string here
+    return report
 
 LOCATION_IMAGES_MAP = {}
 DEFAULT_FILE_PATH = "image"
@@ -108,7 +100,6 @@ def upload_video():
 
     return "image received"
         
-
 
 @app.route("/get_image_analysis", methods=["GET"])
 def get_image():

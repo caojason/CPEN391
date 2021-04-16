@@ -36,6 +36,7 @@ def insert_table_user(uid, email):
         db.commit()
 
 def get_email(uid):
+    uid = "\"" + str(uid) + "\""
     db = connect_to_database()
 
     cursor = db.cursor()

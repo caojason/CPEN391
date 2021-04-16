@@ -12,7 +12,7 @@
 - Take pictures using Pi Camera
 - Bluetooth connection with DE1-SoC to transmit images
 - image compression and base 64 encoding
-- WiFi conneciton with the backend
+- WiFi connection with the backend
 
 ## Serverside
 - Receive images from the DE1-SoC
