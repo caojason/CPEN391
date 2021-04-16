@@ -9,7 +9,7 @@ z2
 cModel Technology
 dC:/Users/caoja/Documents/UBC_Third_Year/CPEN311/labs/lab-3-caojason/task4
 vgaussianAccel
-Z0 !s110 1616975970
+Z0 !s110 1617601804
 !i10b 1
 !s100 lXm8K3iaK;@9m<13D7lc<2
 IlKfBJN?>K=1_<2K<B@dV]0
@@ -23,7 +23,7 @@ Z3 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z4 !s108 1616975970.000000
+Z4 !s108 1617601804.000000
 !s107 C:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/gaussianAccel.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/Users/caoja/Documents/UBC_Third_Year/CPEN391/Torch/Hardware/GaussianAccelComp/gaussianAccel.v|
 !i113 1

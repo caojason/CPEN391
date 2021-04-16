@@ -227,7 +227,7 @@ module tb_gaussainAccel;
         #10;
         checkoutput(32'd_105_267_847);
 
-        ///////////////////////////////// TEST 4:    output = 0
+        ///////////////////////////////// TEST 5:    output = 0
         //
         // img_arr = np.array([
         //     [0, 0, 0],
