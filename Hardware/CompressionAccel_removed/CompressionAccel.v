@@ -39,7 +39,11 @@ module CompressionAccel (
 
     always @(posedge clk) begin
         if (reset_n == 0) begin // synchronous reset
-            slave_waitrequest = 1'b1;
+            colour0 = 32'b0;
+            colour1 = 32'b0;
+            colour2 = 32'b0;
+            newColour = 32'b0;
+
         end else if (wr_en) begin
             case(curr_state) begin
                 RESET: begin
@@ -48,7 +52,6 @@ module CompressionAccel (
                 end
                 // SDRAM
                 WAIT_FOR_MASTER: begin
-                    slave_waitrequest = 1'b1;
                     curr_state = READ_COLOUR;
                 end
                 READ_COLOUR: begin
